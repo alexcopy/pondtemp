@@ -1,17 +1,17 @@
 {
-    "name": "laravel/lumen-framework",
-    "description": "The Laravel Lumen Framework.",
-    "keywords": ["framework", "laravel", "lumen"],
+    "name": "PondTemp",
+    "description": "Remote registering Temp and Humidity",
+    "keywords": ["pondTemp", "Humid", "Temperature"],
     "license": "MIT",
-    "homepage": "https://lumen.laravel.com",
+    "homepage": "http://pondtemp.m2mcom.ru/",
     "support": {
-        "issues": "https://github.com/laravel/lumen-framework/issues",
-        "source": "https://github.com/laravel/lumen-framework"
+        "issues": "https://github.com/alexcopy/pondtemp/issues",
+        "source": "https://github.com/alexcopy/pondtemp"
     },
     "authors": [
         {
-            "name": "Taylor Otwell",
-            "email": "taylorotwell@gmail.com"
+            "name": "Alex Red",
+            "email": "alexcopy@mail.ru"
         }
     ],
     "require": {
