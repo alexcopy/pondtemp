@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class TempMeter extends Migration
+class WeatherReading extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,17 @@ class TempMeter extends Migration
      */
     public function up()
     {
-        Schema::create('temp_meter', function (Blueprint $table) {
+        Schema::create('weather_readings', function (Blueprint $table) {
             $table->increments('id');
             $table->dateTimeTz('readingDate');
-            $table->double('tempVal');
+            $table->double('pond');
+            $table->double('shed');
+            $table->double('street');
+            $table->double('shedhumid');
+            $table->double('streethumid');
+            $table->double('room');
+            $table->double('roomhumid');
+            $table->string('location');
             $table->integer('timestamp');
             $table->integer('userId');
 
@@ -30,7 +37,6 @@ class TempMeter extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('temp_meter');
-
+        Schema::dropIfExists('weather_readings');
     }
 }
