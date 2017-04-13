@@ -11,6 +11,21 @@
 |
 */
 
+use Illuminate\Support\Facades\Route;
+
 $app->get('/', function () use ($app) {
-    return $app->version();
+    return 'pondtemp.app';
 });
+
+//Route::group(['prefix' => 'api/v1'], function () {
+//
+//    Route::get('checkchild/{id}', 'ApiController@tempdata');
+//
+//});
+
+/**
+ * Temp Route is valid until platform be reflashed delete afterwards
+ */
+
+$app->get('/receiver/', 'ApiController@tempdata');
+
