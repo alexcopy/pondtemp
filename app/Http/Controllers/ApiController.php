@@ -20,15 +20,19 @@ class ApiController extends Controller
         //
     }
 
+    public function index()
+    {
+        $weather= WeatherReading::all();
+        $tempReader=TempMeter::all();
+        return view('pages.index', compact(['weather', 'tempReader']));
+     }
+
     public function tempdata(Request $request)
     {
         $insertEvery=1200; //seconds
         TempMeter::writeToDb((double)$request->get('ptemp', 0));
         TempMeter::writeToTextFile($request);
         WeatherReading::readDataAndWrite($request);
-        $weather= WeatherReading::all();
-        $tempReader=TempMeter::all();
-        return view('pages.index', compact(['weather', 'tempReader']));
 
     }
 }

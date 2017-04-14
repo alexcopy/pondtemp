@@ -29,3 +29,4 @@ $app->get('/', function () use ($app) {
 
 $app->get('/receiver/', 'ApiController@tempdata');
 
+
