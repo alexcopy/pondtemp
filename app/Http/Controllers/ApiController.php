@@ -22,26 +22,58 @@ class ApiController extends Controller
 
     public function index()
     {
-        $weather = WeatherReading::orderBy('id', 'desc')->limit(300)->get();
-        $tempReader = TempMeter::orderBy('id', 'desc')->limit(300)->get();
+        $weather = WeatherReading::orderBy('id', 'desc')->limit(500)->get();
+        $tempReader = TempMeter::orderBy('id', 'desc')->limit(500)->get();
         return view('pages.index', compact(['weather', 'tempReader']));
     }
 
     public function tempdata(Request $request)
     {
         $insertWeatherEvery = 1200; //seconds
-        $insertTemprEvery = 3600; //seconds
-
+        $insertInToPondDBEvery = 3600; //seconds
         TempMeter::writeToTextFile($request);
+
+        if (!$this->checkDataValidity($request)) {
+            return 'ERROR';
+        }
+
         $weather = WeatherReading::orderBy('id', 'desc')->limit(1)->get()->first();
         $tempReader = TempMeter::orderBy('id', 'desc')->limit(1)->get()->first();
 
-        if ($weather && $weather->timestamp > $insertWeatherEvery) {
+        if ($weather && ($weather->timestamp > $insertWeatherEvery)) {
             WeatherReading::readDataAndWrite($request);
         }
-        if ($tempReader && $tempReader->timestamp > $insertTemprEvery) {
+        if ($tempReader && ($tempReader->timestamp > $insertInToPondDBEvery)) {
             TempMeter::writeToDb((double)$request->get('ptemp', 0));
         }
+
+    }
+
+    public function ping()
+    {
+        $weather = WeatherReading::orderBy('id', 'desc')->limit(2)->get() ;
+        $tempReader = TempMeter::orderBy('id', 'desc')->limit(2)->get() ;
+        return view('pages.index', compact(['weather', 'tempReader']));
+    }
+
+    protected function checkDataValidity(Request $request)
+    {
+        $val = [];
+        $val[] = (int)$request->get('ptemp', 0);
+        $val[] = (int)$request->get('shedtemp', 0);
+        $val[] = (int)$request->get('strtemp', 0);
+        $val[] = (int)$request->get('shedhumid', 0);
+
+        foreach ($val as $key => $value) {
+            if ($value == 0) {
+                unset($val[$key]);
+            }
+        }
+        if (count($val) > 0) {
+            return true;
+        }
+        return false;
+
 
     }
 }
