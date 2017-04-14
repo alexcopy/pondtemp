@@ -13,9 +13,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-$app->get('/', function () use ($app) {
-    return 'pondtemp.app';
-});
+
 
 //Route::group(['prefix' => 'api/v1'], function () {
 //
@@ -28,5 +26,6 @@ $app->get('/', function () use ($app) {
  */
 
 $app->get('/receiver/', 'ApiController@tempdata');
+$app->get('/', 'ApiController@index');
 
 
