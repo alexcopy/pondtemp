@@ -22,8 +22,8 @@ class ApiController extends Controller
 
     public function index()
     {
-        $weather= WeatherReading::all();
-        $tempReader=TempMeter::all();
+        $weather= WeatherReading::orderBy('id', 'desc')->limit(50)->get();
+        $tempReader=TempMeter::orderBy('id', 'desc')->limit(50)->get();
         return view('pages.index', compact(['weather', 'tempReader']));
      }
 

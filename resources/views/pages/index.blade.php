@@ -3,7 +3,7 @@
 
     <div class="row">
         <div class="col-md-5">
-            <table class="table-bordered table-hover table-striped">
+            <table class="table table-bordered table-hover table-striped">
                 <thead>
                 <tr>
                     <th>readingDate</th>
@@ -21,6 +21,27 @@
                         <td>{{$row->shed}}</td>
                         <td>{{$row->shedhumid}}</td>
                         <td>{{$row->timestamp}}</td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-5">
+            <table class="table table-bordered table-hover table-striped">
+                <thead>
+                <tr>
+                    <th>readingDate</th>
+                    <th>pond</th>
+                    <th>timestamp</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($tempReader as $row)
+                    <tr>
+                        <td>{{$row->readingDate}}</td>
+                        <td>{{$row->tempVal}}</td>
+                        <td>{{$row->timestamp}}</td>
+
                     </tr>
                 @endforeach
                 </tbody>
