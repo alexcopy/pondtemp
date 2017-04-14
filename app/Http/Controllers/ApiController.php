@@ -40,10 +40,10 @@ class ApiController extends Controller
         $weather = WeatherReading::orderBy('id', 'desc')->limit(1)->get()->first();
         $tempReader = TempMeter::orderBy('id', 'desc')->limit(1)->get()->first();
 
-        if ($weather && ($weather->timestamp > $insertWeatherEvery)) {
+        if ($weather && ((time() - $insertWeatherEvery) > $weather->timestamp)) {
             WeatherReading::readDataAndWrite($request);
         }
-        if ($tempReader && ($tempReader->timestamp > $insertInToPondDBEvery)) {
+        if ($tempReader && ((time() - $insertInToPondDBEvery) > $tempReader->timestamp)) {
             TempMeter::writeToDb((double)$request->get('ptemp', 0));
         }
 
@@ -51,8 +51,8 @@ class ApiController extends Controller
 
     public function ping()
     {
-        $weather = WeatherReading::orderBy('id', 'desc')->limit(2)->get() ;
-        $tempReader = TempMeter::orderBy('id', 'desc')->limit(2)->get() ;
+        $weather = WeatherReading::orderBy('id', 'desc')->limit(2)->get();
+        $tempReader = TempMeter::orderBy('id', 'desc')->limit(2)->get();
         return view('pages.index', compact(['weather', 'tempReader']));
     }
 
