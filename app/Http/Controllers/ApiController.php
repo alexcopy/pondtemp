@@ -26,5 +26,9 @@ class ApiController extends Controller
         TempMeter::writeToDb((double)$request->get('ptemp', 0));
         TempMeter::writeToTextFile($request);
         WeatherReading::readDataAndWrite($request);
+        $weather= WeatherReading::all();
+        $tempReader=TempMeter::all();
+        return view('pages.index', compact(['weather', 'tempReader']));
+
     }
 }
