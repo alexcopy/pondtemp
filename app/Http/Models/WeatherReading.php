@@ -31,7 +31,7 @@ class WeatherReading extends Model
 
     public $timestamps = false;
 
-    public static function readDataAndWrite(Request $request)
+    public static function parseAndWrite(Request $request)
     {
         self::create([
             'readingDate' => (new DateTime())->format('Y-m-d H:i:s'),

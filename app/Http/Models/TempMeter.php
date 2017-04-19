@@ -42,3 +42,4 @@ class TempMeter extends Model
         ]);
     }
 }
+//http://pondtemp.m2mcom.ru/receiver?fltr3=1&pndlvl=1&ptemp=10.64&shedhumid=37.00&shedtemp=15.00&streethumid=0&strtemp=0
