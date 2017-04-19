@@ -33,6 +33,7 @@ class ApiController extends Controller
         $insertInToPondDBEvery = 3600; //seconds
         TempMeter::writeToTextFile($request);
 
+
         if (!$this->checkDataValidity($request)) {
             return 'ERROR';
         }
@@ -40,11 +41,14 @@ class ApiController extends Controller
         $weather = WeatherReading::orderBy('id', 'desc')->limit(1)->get()->first();
         $tempReader = TempMeter::orderBy('id', 'desc')->limit(1)->get()->first();
 
+
+        WeatherReading::readDataAndWrite($request);
         if ($weather && ((time() - $insertWeatherEvery) > $weather->timestamp)) {
-            WeatherReading::readDataAndWrite($request);
+         //   WeatherReading::readDataAndWrite($request); //uncomment after all hardware tests
         }
-        if ($tempReader && ((time() - $insertInToPondDBEvery) > $tempReader->timestamp)) {
             TempMeter::writeToDb((double)$request->get('ptemp', 0));
+        if ($tempReader && ((time() - $insertInToPondDBEvery) > $tempReader->timestamp)) {
+           // TempMeter::writeToDb((double)$request->get('ptemp', 0)); //umcoment after all hardware tests
         }
 
     }
