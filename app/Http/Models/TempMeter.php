@@ -27,7 +27,7 @@ class TempMeter extends Model
             . "\n";
 
         $fullUri= $request->fullUrl();
-        file_put_contents(storage_path() . "/urilog.txt", $fullUri, FILE_APPEND);
+        file_put_contents(storage_path() . "/urilog.txt". "\n", $fullUri, FILE_APPEND);
         return file_put_contents(storage_path() . "/temp.txt", $fileContent, FILE_APPEND);
 
     }
