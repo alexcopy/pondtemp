@@ -2,15 +2,14 @@
 @section('content')
 
     <div class="row">
-        <div class="col-md-5">
+        <div class="col-md-4">
             <table class="table table-bordered table-hover table-striped">
                 <thead>
                 <tr>
                     <th>readingDate</th>
                     <th>pond</th>
-                    <th>shed</th>
-                    <th>shedhumid</th>
-                    <th>timestamp</th>
+                    <th>str</th>
+                    <th>strHum</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -20,19 +19,18 @@
                         <td>{{$row->pond}}</td>
                         <td>{{$row->shed}}</td>
                         <td>{{$row->shedhumid}}</td>
-                        <td>{{$row->timestamp}}</td>
+
                     </tr>
                 @endforeach
                 </tbody>
             </table>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-3">
             <table class="table table-bordered table-hover table-striped">
                 <thead>
                 <tr>
                     <th>readingDate</th>
                     <th>pond</th>
-                    <th>timestamp</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -40,8 +38,26 @@
                     <tr>
                         <td>{{$row->readingDate}}</td>
                         <td>{{$row->tempVal}}</td>
-                        <td>{{$row->timestamp}}</td>
-
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-3">
+            <table class="table table-bordered table-hover table-striped">
+                <thead>
+                <tr>
+                    <th>readingDate</th>
+                    <th>pondUp</th>
+                    <th>fl3</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($guages as $row)
+                    <tr>
+                        <td>{{$row->readingDate}}</td>
+                        <td>{{$row->pondUpper}}</td>
+                        <td>{{$row->fl3}}</td>
                     </tr>
                 @endforeach
                 </tbody>

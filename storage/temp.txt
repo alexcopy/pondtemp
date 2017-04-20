@@ -17,3 +17,9 @@
 2017-04-14 11:39:19  pond temp: 0  shedTemp: 0  streetTemp: 0  shedhumid: 0  streethumid: 0  roomtemp : 0  roomhumid : 0  location : 0
 2017-04-14 11:39:20  pond temp: 0  shedTemp: 0  streetTemp: 0  shedhumid: 0  streethumid: 0  roomtemp : 0  roomhumid : 0  location : 0
 2017-04-14 11:39:31  pond temp: 56  shedTemp: 23  streetTemp: 0  shedhumid: 212  streethumid: 212  roomtemp : 0  roomhumid : 0  location : 0
+2017-04-20 23:17:42  pond temp: 10.69  shedTemp: 14  streetTemp: 0  shedhumid: 38  streethumid: 0  roomtemp : 0  roomhumid : 0  location : 0
+2017-04-20 23:18:11  pond temp: 10.69  shedTemp: 14  streetTemp: 0  shedhumid: 38  streethumid: 0  roomtemp : 0  roomhumid : 0  location : 0
+2017-04-20 23:18:55  pond temp: 10.69  shedTemp: 14  streetTemp: 0  shedhumid: 38  streethumid: 0  roomtemp : 0  roomhumid : 0  location : 0
+2017-04-20 23:19:36  pond temp: 10.69  shedTemp: 14  streetTemp: 0  shedhumid: 38  streethumid: 0  roomtemp : 0  roomhumid : 0  location : 0
+2017-04-20 23:24:50  pond temp: 10.69  shedTemp: 14  streetTemp: 0  shedhumid: 38  streethumid: 0  roomtemp : 0  roomhumid : 0  location : 0
+2017-04-20 23:24:55  pond temp: 10.69  shedTemp: 14  streetTemp: 0  shedhumid: 38  streethumid: 0  roomtemp : 0  roomhumid : 0  location : 0

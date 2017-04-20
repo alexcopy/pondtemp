@@ -1,0 +1,6 @@
+http://pondtemp.app/receiver?fltr3=1&pndlvl=1&ptemp=10.69&shedhumid=38.00&shedtemp=14.00&streethumid=0&strtemp=0
+http://pondtemp.app/receiver?fltr3=1&pndlvl=1&ptemp=10.69&shedhumid=38.00&shedtemp=14.00&streethumid=0&strtemp=0
+http://pondtemp.app/receiver?fltr3=1&pndlvl=1&ptemp=10.69&shedhumid=38.00&shedtemp=14.00&streethumid=0&strtemp=0
+http://pondtemp.app/receiver?fltr3=1&pndlvl=0&ptemp=10.69&shedhumid=38.00&shedtemp=14.00&streethumid=0&strtemp=0
+http://pondtemp.app/receiver?fltr3=1&pndlvl=0&ptemp=10.69&shedhumid=38.00&shedtemp=14.00&streethumid=0&strtemp=0
+http://pondtemp.app/receiver?fltr3=1&pndlvl=0&ptemp=10.69&shedhumid=38.00&shedtemp=14.00&streethumid=0&strtemp=0

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Models\Gauges;
 use App\Http\Models\TempMeter;
 
 use App\Http\Models\WeatherReading;
@@ -24,7 +25,10 @@ class ApiController extends Controller
     {
         $weather = WeatherReading::orderBy('id', 'desc')->limit(500)->get();
         $tempReader = TempMeter::orderBy('id', 'desc')->limit(500)->get();
-        return view('pages.index', compact(['weather', 'tempReader']));
+        $guages = Gauges::orderBy('id', 'desc')->limit(500)->get();
+
+
+        return view('pages.index', compact(['weather', 'tempReader', 'guages']));
     }
 
     public function tempdata(Request $request)
@@ -40,15 +44,15 @@ class ApiController extends Controller
 
         $weather = WeatherReading::orderBy('id', 'desc')->limit(1)->get()->first();
         $tempReader = TempMeter::orderBy('id', 'desc')->limit(1)->get()->first();
-
+        Gauges::writeToDb($request);
 
         WeatherReading::parseAndWrite($request);
         if ($weather && ((time() - $insertWeatherEvery) > $weather->timestamp)) {
-         //   WeatherReading::readDataAndWrite($request); //uncomment after all hardware tests
+            //   WeatherReading::readDataAndWrite($request); //uncomment after all hardware tests
         }
 
         if ($tempReader && ((time() - $insertInToPondDBEvery) > $tempReader->timestamp)) {
-             TempMeter::writeToDb((double)$request->get('ptemp', 0)); //umcoment after all hardware tests
+            TempMeter::writeToDb((double)$request->get('ptemp', 0)); //umcoment after all hardware tests
         }
 
     }
