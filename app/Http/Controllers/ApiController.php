@@ -11,26 +11,6 @@ use Illuminate\Http\Request;
 class ApiController extends Controller
 {
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    public function index()
-    {
-        $weather = WeatherReading::orderBy('id', 'desc')->limit(500)->get();
-        $tempReader = TempMeter::orderBy('id', 'desc')->limit(500)->get();
-        $guages = Gauges::orderBy('id', 'desc')->limit(500)->get();
-
-
-        return view('pages.index', compact(['weather', 'tempReader', 'guages']));
-    }
-
     public function tempdata(Request $request)
     {
         $insertWeatherEvery = 1200; //seconds
@@ -57,12 +37,7 @@ class ApiController extends Controller
 
     }
 
-    public function ping()
-    {
-        $weather = WeatherReading::orderBy('id', 'desc')->limit(2)->get();
-        $tempReader = TempMeter::orderBy('id', 'desc')->limit(2)->get();
-        return view('pages.index', compact(['weather', 'tempReader']));
-    }
+
 
     protected function checkDataValidity(Request $request)
     {
@@ -82,6 +57,6 @@ class ApiController extends Controller
         }
         return false;
 
-
     }
+
 }

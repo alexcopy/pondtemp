@@ -7,14 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="assets/css/bootstrap.css" >
-
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-
-<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Proj</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.css">
+    <link rel="stylesheet" href="assets/css/awesome.css">
+  @yield('custom_css')
+      <title>PondTemp</title>
 
 </head>
 <body>
@@ -37,6 +33,7 @@
 @section('footer_scripts')
 
     <!-- Latest compiled and minified JavaScript -->
+    <script src="assets/js/jquery.js"></script>
     <script src="assets/js/bootstrap.js"></script>
 
     @yield('custom_scripts')
