@@ -18,6 +18,19 @@
 
     <script>
         var tempdata = {
+//            data: {
+//                xs: {
+//                    'data1': 'x1',
+//                    'data2': 'x2',
+//                },
+//                columns: [
+//                    ['x1', 1, 3, 4, 5, 7, 10],
+//                    ['x2', 3, 5, 7, 10, 12],
+//                    ['data1', 3, 2, 1, 4, 15, 5],
+//                    ['data2', 2, 18, 2, 10, 19]
+//                ]
+//            }
+
             data: {
                 columns: [
                     ['Street Temp', {{ implode(", ", $weather->pluck('shed')->flatten()->all()) }}],
