@@ -36,13 +36,14 @@ class PageController extends Controller
         $shedAver = [];
         $pondAver = [];
         $date = (new DateTime())->format('Y-m-d');
-        $weather = WeatherReading::where('readingDate', 'LIKE', $date . '%')->get()->reverse();
+        $weather = WeatherReading::where('readingDate', 'LIKE', $date . '%')->get();
 
         foreach ($weather->chunk(10) as $item) {
             $shedAver[$item->last()->readingDate] = $item->avg('pond');
             $pondAver[$item->last()->readingDate] = $item->avg('shed');
         }
-
+        $shedAver=array_reverse($shedAver);
+        $pondAver=array_reverse($pondAver);
         return view('pages.graph', compact(['weather', 'pondTemp', 'shedAver', 'pondAver']));
     }
 }
