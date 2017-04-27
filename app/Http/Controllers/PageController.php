@@ -38,9 +38,9 @@ class PageController extends Controller
         $date = (new DateTime())->format('Y-m-d');
         $weather = WeatherReading::where('readingDate', 'LIKE', $date . '%')->get();
 
-        foreach ($weather->chunk(2) as $item) {
-            $shedAver[$item->last()->readingDate] = $item->avg('shed');
-            $pondAver[$item->last()->readingDate] = $item->avg('pond');
+        foreach ($weather->chunk(12) as $item) {
+            $shedAver[$item->last()->readingDate] = round($item->avg('shed'), 1);
+            $pondAver[$item->last()->readingDate] = round($item->avg('pond'),1);
         }
 
         return view('pages.graph', compact(['weather', 'pondTemp', 'shedAver', 'pondAver']));
