@@ -7,6 +7,8 @@ namespace App\Http\Controllers;
 use App\Http\Models\Gauges;
 use App\Http\Models\TempMeter;
 use App\Http\Models\WeatherReading;
+use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
@@ -18,7 +20,7 @@ class PageController extends Controller
         $tempReader = TempMeter::orderBy('id', 'desc')->limit(500)->get();
         $guages = Gauges::orderBy('id', 'desc')->limit(500)->get();
 
-
+//        Input::get('email')
         return view('pages.index', compact(['weather', 'tempReader', 'guages']));
     }
 
@@ -29,10 +31,19 @@ class PageController extends Controller
         return view('pages.index', compact(['weather', 'tempReader']));
     }
 
-    public function graph()
+    public function graph(Request $request)
     {
-        $weather = WeatherReading::orderBy('id', 'desc')->limit(100)->get(['pond','shed', 'readingDate']);
-        $pondTemp =TempMeter::orderBy('id', 'desc')->limit(100)->get(['tempVal']);
-        return view('pages.graph', compact(['weather', 'pondTemp']));
+        $shedAver = [];
+        $pondAver = [];
+
+        $date = (new DateTime())->format('Y-m-d');
+        $weather = WeatherReading::where('readingDate', 'LIKE', $date . '%')->orderBy('id', 'desc')->get(['pond', 'shed', 'readingDate']);
+
+        foreach ($weather->chunk(10) as $item) {
+            $shedAver[$item->last()->readingDate] = $item->avg('pond');
+            $pondAver[$item->last()->readingDate] = $item->avg('shed');
+        }
+
+        return view('pages.graph', compact(['weather', 'pondTemp', 'shedAver', 'pondAver']));
     }
 }
