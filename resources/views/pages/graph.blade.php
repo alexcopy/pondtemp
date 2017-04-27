@@ -33,8 +33,8 @@
 
             data: {
                 columns: [
-                    ['Street Temp', {{ implode(", ", $weather->pluck('shed')->flatten()->all()) }}],
-                    ['Pond Temp',{{ implode(", ", $pondTemp->pluck('tempVal')->flatten()->all()) }}]
+                    ['Street Temp', {{ implode(", ", $weather->pluck('shed')->reverse()->flatten()->all()) }}],
+                    ['Pond Temp',{{ implode(", ", $pondTemp->pluck('tempVal')->reverse()->flatten()->all()) }}]
                 ]
             }
         }
