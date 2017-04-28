@@ -1,6 +1,6 @@
 @extends('layouts.main')
 @section('content')
-
+<h3>Temp Results</h3>
     <div class="row">
         <div class="col-md-4">
             <table class="table table-bordered table-hover table-striped">

@@ -17,3 +17,15 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'email' => $faker->email,
     ];
 });
+
+$factory->define(App\Http\Models\Gauges::class, function (Faker\Generator $faker) {
+    return [
+        'readingDate' => $faker->date('Y-m-d H:i:s'),
+        'pondLower' => $faker->randomDigit,
+        'pondUpper' => $faker->randomDigit,
+        'fl1' => $faker->randomDigit,
+        'fl2' => $faker->randomDigit,
+        'fl3' => $faker->randomDigit,
+        'strlow' => $faker->randomDigit,
+        'timestamp' =>time()  ];
+});

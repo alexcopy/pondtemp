@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class ApiController extends Controller
 {
 
-    public function tempdata(Request $request)
+    public function tempData(Request $request)
     {
         $insertWeatherEvery = 1200; //seconds
         $insertInToPondDBEvery = 1200; //seconds
@@ -27,6 +27,7 @@ class ApiController extends Controller
         Gauges::writeToDb($request);
 
         WeatherReading::parseAndWrite($request);
+
         if ($weather && ((time() - $insertWeatherEvery) > $weather->timestamp)) {
             //   WeatherReading::readDataAndWrite($request); //uncomment after all hardware tests
         }
