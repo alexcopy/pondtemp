@@ -28,8 +28,6 @@ class PageController extends Controller
     {
         $weather = WeatherReading::orderBy('id', 'desc')->limit(2)->get();
         $tempReader = TempMeter::orderBy('id', 'desc')->limit(2)->get();
-
-        dd($weather->first->readingDate);
         return view('pages.index', compact(['weather', 'tempReader']));
     }
 
