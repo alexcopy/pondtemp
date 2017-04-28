@@ -1,13 +1,27 @@
 language: php
 
 php:
-  - 5.6
-  - 7.0
+#  - 5.6
+#  - 7.0
   - 7.1
-  - hhvm
+#  - hhvm
 
 sudo: false
 
-install: travis_retry composer install --no-interaction --prefer-source
+#install: travis_retry composer install --no-interaction --prefer-source
+
+before_script:
+  - cp .env.travis .env
+  - mysql -e 'create database pond_testing;'
+  - composer self-update
+  - composer install --no-interaction
+  - php artisan migrate
 
 script: vendor/bin/phpunit
+
+cache:
+  directories:
+    - vendor
+
+services:
+  - mysql
