@@ -27,5 +27,6 @@ $factory->define(App\Http\Models\Gauges::class, function (Faker\Generator $faker
         'fl2' => $faker->randomDigit,
         'fl3' => $faker->randomDigit,
         'strlow' => $faker->randomDigit,
-        'timestamp' =>time()  ];
+        'timestamp' =>time()
+    ];
 });
