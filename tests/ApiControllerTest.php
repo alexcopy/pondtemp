@@ -77,7 +77,7 @@ class ApiControllerTest extends \TestCase
             'strlow' => rand(1, 10)
         ];
 
-        $crawler = $this->call('GET', '/receiver?' . http_build_query($params));
+        $crawler = $this->get('/receiver?',$params);
         $gauges = Gauges::all()->first()->toArray();
         $weather = WeatherReading::all()->first()->toArray();
         $this->assertEquals(
