@@ -35,7 +35,7 @@ class ApiController extends Controller
         if ($tempReader && ((time() - $insertInToPondDBEvery) > $tempReader->timestamp)) {
             TempMeter::writeToDb((double)$request->get('ptemp', 0)); //umcoment after all hardware tests
         }
-
+      return time();
     }
 
 

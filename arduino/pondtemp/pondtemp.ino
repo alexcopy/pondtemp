@@ -55,7 +55,7 @@ void loop() {
     }
 
     // отправлять на сервер каждые  counter / 10 = секунд 
-    if (counter > 600) {
+    if (counter > 400) {
         sendData();
         counter = 1;
         totalPond = 0;
