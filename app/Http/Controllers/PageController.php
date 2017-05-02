@@ -35,8 +35,7 @@ class PageController extends Controller
     {
         $shedAver = [];
         $pondAver = [];
-        $date = (new DateTime())->format('Y-m-d');
-        $weather = WeatherReading::where('readingDate', 'LIKE', $date . '%')->get();
+        $weather = WeatherReading::orderBy('id', 'desc')->limit(600)->get();
 
         foreach ($weather->chunk(12) as $item) {
             $shedAver[$item->last()->readingDate] = round($item->avg('shed'), 1);
