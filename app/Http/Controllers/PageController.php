@@ -16,9 +16,9 @@ class PageController extends Controller
 
     public function index()
     {
-        $weather = WeatherReading::orderBy('id', 'desc')->limit(500)->get();
-        $tempReader = TempMeter::orderBy('id', 'desc')->limit(500)->get();
-        $guages = Gauges::orderBy('id', 'desc')->limit(500)->get();
+        $weather = WeatherReading::orderBy('id', 'desc')->limit(50)->get();
+        $tempReader = TempMeter::orderBy('id', 'desc')->limit(50)->get();
+        $guages = Gauges::orderBy('id', 'desc')->limit(50)->get();
 
 //        Input::get('email')
         return view('pages.index', compact(['weather', 'tempReader', 'guages']));
