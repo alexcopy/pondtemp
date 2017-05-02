@@ -1,44 +1,45 @@
 
-#include <IRremote.h>
-#include <IRremoteInt.h>
- 
 #include <SoftwareSerial.h>
-#include <Wire.h> 
-#include <LiquidCrystal_I2C.h> //ЖК дисплей 
-#include <DHT.h> // Сенсор на улице  
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+#include <DHT.h>
+#include <IRremote.h>
+
 
 // set the DHT Pin
 #define DHTPIN 8
 #define DHTTYPE DHT11
 #define DST_IP "192.168.50.58"
 
+int tempPin = 0; //pond analog pin
+bool backlght = true;
+int prevSensorVal = 0;
+bool pond = false;
+int counter = 0;
+float totalPond = 0; // the running total
+float averagePond = 0; // the average
+int RECV_PIN = 11;
 
-int tempPin = 0;        //pond analog pin
-int RECV_PIN = 11;      //Пин для ИК порта 
-int prevSensorVal = 0;  //
-bool pond = false;      //
-int counter = 0;        //
-float totalPond = 0;    // the running total
-float averagePond = 0;  // the averageint prevSensorVal = 0;
 
-IRrecv irrecv(RECV_PIN);            //инициализация ик порта 
-decode_results results;             // create instance of 'decode_results'
+DHT dht(DHTPIN, DHTTYPE);
 LiquidCrystal_I2C lcd(0x27, 20, 4); // set the LCD address to 0x27 for a 16 chars and 2 line display
-SoftwareSerial esp8266(2, 3);       // RX, TX
-DHT dht(DHTPIN, DHTTYPE);  
+SoftwareSerial esp8266(2, 3); // RX, TX
+IRrecv irrecv(RECV_PIN);
+decode_results results;
 
 
 void setup() {
   lcd.init();
   lcd.backlight();
   dht.begin();
-  Serial.begin(19200);
-  irrecv.enableIRIn(); // Start the IR receiver
+  Serial.begin(115200);
   esp8266.begin(115200);
   readEsp(); // read comport output from esp(wifi module)
   wifiModulePrepare();
+
   prevSensorVal = digitalRead(7);
   lcd.clear();
+  irrecv.enableIRIn();
   pinMode(7, INPUT_PULLUP); //button
   pinMode(6, INPUT_PULLUP); //fltr3
   pinMode(5, INPUT_PULLUP); //pond level
@@ -52,39 +53,34 @@ void loop() {
     pond = pond ? false : true;
     prevSensorVal = 1;
     lcd.clear();
-    delay(1000);
+    delay(500);
   }
 
   // отправлять на сервер каждые  counter / 10 = секунд
-  if (counter > 300) {
+  if (counter > 600) {
     sendData();
     counter = 1;
-    totalPond =  averagePond;
+    totalPond = 0;
+    averagePond = 0;
     lcd.clear();
   }
 
+  // if we get a IFR signal
+  if (irrecv.decode(&results)) {
+    irrecv.resume();
+    delay(1000);
+    translateIR();
+  }
+  backlght?lcd.backlight():lcd.noBacklight(); // lcd balcklight off/on
   totalPond += pondTemp();
-  counter++;
   averagePond = totalPond / counter;
 
- 
-  if (irrecv.decode(&results)) // have we received an IR signal?
-  {
-    translateIR(); 
-    lglcd("Got IR Sygnal...");
-    delay(1000);
-    lcd.clear();
-    lcd.setCursor(1, 1);
-    lcd.print(results.value);
-    Serial.println(results.value,HEX);
-    delay(1000);
-    irrecv.resume(); // receive the next value
-    lcd.clear();
-    showTempAndHumid();
-  } 
-   prevSensorVal = digitalRead(7);
-   delay(100);
+  prevSensorVal = digitalRead(7);
+  delay(100);
+  counter++;
 }
+
+
 
 void showTempAndHumid() {
 
@@ -114,21 +110,21 @@ float pondTemp() {
 
 void wifiModulePrepare() {
 
-  lglcd("Starting WIFI...");
+  lglcd("Starting WIFI...", 0);
   delay(2000);
   esp8266.println("AT+RST"); // сброс и проверка, если модуль готов
   readEsp();
-  lglcd("Reseting WiFi....");
+  lglcd("Reseting WiFi", 0);
   delay(2000);
   esp8266.println("AT+CWMODE=1");
   delay(2000);
   if (esp8266.available()) {
     Serial.println("WiFi - Module is ready");
-    lglcd("WiFi - Module is ready");
+    lglcd("WiFi - Module is ready", 0);
 
   } else {
     Serial.println("Module dosn't respond.");
-    lglcd("Module dosn't respond.");
+    lglcd("Module dosn't respond.", 0);
     lcd.setCursor(1, 1);
     lcd.println("Please reset.");
     while (1);
@@ -141,29 +137,26 @@ void wifiModulePrepare() {
   for (int i = 0; i < 10; i++) {
     if (connectWiFi()) {
       connected = true;
-      lglcd("Wi-Fi connected");
+      lglcd("Wi-Fi connected", 0);
       break;
     }
   }
-  if (!connected) {
-    lglcd("WiFi failed");
-    while (1);
-  }
+ 
   delay(2000);
   esp8266.println("AT+CIPMUX=0");
 }
 
-void lglcd(String txt) {
+void lglcd(String txt, int i) {
   lcd.clear();
-  lcd.setCursor(0, 0);
+  lcd.setCursor(i, 0);
   txt.trim();
   lcd.println(txt);
 }
 
 bool connectWiFi() {
-  lglcd("Conn to WIFI....");
+  lglcd("Conn to WIFI....", 0);
   readEsp();
-  esp8266.println("AT+CWJAP=\"redkot\",\"Gorkogo177\"");
+  esp8266.println("AT+CWJAP=\"redkot\",\"Gor\"");
   delay(2000);
   return true;
 }
@@ -184,11 +177,11 @@ String readEsp() { //rename to check for wifi status read
 
 
 
-String sendData() {
-  lglcd("Sending Data....");
+void sendData() {
+  lglcd("Sending Data....", 0);
   esp8266.println("AT+CIPMUX=0");
   //Open a connection to the web server
-  String cmd = "AT+CIPSTART=\"TCP\",\""; 
+  String cmd = "AT+CIPSTART=\"TCP\",\""; //make this command: AT+CPISTART="TCP","192.168.50.58",80
   cmd += DST_IP;
   cmd += "\",80";
   esp8266.println(cmd);
@@ -211,132 +204,93 @@ String sendData() {
   cmd += "Host: pondtemp.m2mcom.ru\r\n\r\n";
 
   esp8266.print("AT+CIPSEND=");
-  esp8266.println(cmd.length());
-
-  //Look for the > prompt from the esp8266
-  if (esp8266.find(">")) {
-    //Send our http GET request
+ 
+    esp8266.println(cmd.length());
+    delay(1000);
     esp8266.println(cmd);
-    delay(7000);
+    Serial.println(cmd);
+    delay(5000);
     esp8266.println("\r\n");
     delay(1000);
     esp8266.println("AT+CIPCLOSE");
-  } else {
-    //Something not work...
-    esp8266.println("AT+CIPCLOSE");
-  }
-  delay(1000);
-  String resp = readEsp();
-  
-  lglcd(resp);
-  return resp;
+    delay(1000);
 }
 
-void translateIR() // takes action based on IR code received
 
-// describing Car MP3 IR codes 
+void translateIR() {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Got IR Signal...");
+    lcd.setCursor(1, 1);
+    lcd.print(results.value);
+    Serial.println(results.value, HEX);
+    lcd.clear();
+     sendData();
 
-{
+  switch(results.value) {
 
-  switch(results.value)
-
-  {
-
-  case 0xFFA25D:  
-    Serial.println(" CH-            "); 
+  case 0xFFA25D:
+     backlght = backlght ? false:true;
     break;
 
-  case 0xFF629D:  
-    Serial.println(" CH             "); 
+  case 0xFF629D: //mode is a type of work
+
     break;
 
   case 0xFFE21D:  
-    Serial.println(" CH+            "); 
     break;
 
   case 0xFF22DD:  
-    Serial.println(" PREV           "); 
     break;
 
   case 0xFF02FD:  
-    Serial.println(" NEXT           "); 
     break;
 
   case 0xFFC23D:  
-    Serial.println(" PLAY/PAUSE     "); 
     break;
-
+    
   case 0xFFE01F:  
-    Serial.println(" VOL-           "); 
     break;
-
+    
   case 0xFFA857:  
-    Serial.println(" VOL+           "); 
     break;
 
+  
   case 0xFF906F:  
-    Serial.println(" EQ             "); 
     break;
-
-  case 0xFF6897:  
-    Serial.println(" 0              "); 
-    break;
-
-  case 0xFF9867:  
-    Serial.println(" 100+           "); 
-    break;
-
-  case 0xFFB04F:  
-    Serial.println(" 200+           "); 
-    break;
-
-  case 0xFF30CF:  
-    Serial.println(" 1              "); 
-    break;
-
-  case 0xFF18E7:  
-    Serial.println(" 2              "); 
-    break;
-
-  case 0xFF7A85:  
-    Serial.println(" 3              "); 
-    break;
-
-  case 0xFF10EF:  
-    Serial.println(" 4              "); 
-    break;
-
-  case 0xFF38C7:  
-    Serial.println(" 5              "); 
-    break;
-
-  case 0xFF5AA5:  
-    Serial.println(" 6              "); 
-    break;
-
-  case 0xFF42BD:  
-    Serial.println(" 7              "); 
-    break;
-
-  case 0xFF4AB5:  
-    Serial.println(" 8              "); 
-    break;
-
-  case 0xFF52AD:  
-    Serial.println(" 9              "); 
-    break;
-
   default: 
-    Serial.println(" other button   ");
-
+  break;
   }
 
   delay(500);
 
+}
 
-} //END translateIR
+int getIfrNumber(){
+  switch(results.value) {
 
+  case 0xFFA25D:
+      
+    break;
+  
+  default: 
+  break;
+  }
+  return 0;
+  }
 
+void ifrMode(){
+  
+  lglcd("Select mode:", 0);
+
+  for (int i=0; i<100; i++){
+       if (irrecv.decode(&results)) {
+       delay(100);
+     }
+     delay(100);
+  }
+ 
+ }
 
 
 

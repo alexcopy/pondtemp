@@ -12,6 +12,7 @@
 #define DST_IP "192.168.50.58"
 
 int tempPin = 0; //pond analog pin
+bool backlght = true;
 int prevSensorVal = 0;
 bool pond = false;
 int counter = 0;
@@ -31,7 +32,7 @@ void setup() {
   lcd.init();
   lcd.backlight();
   dht.begin();
-  Serial.begin(9600);
+  Serial.begin(115200);
   esp8266.begin(115200);
   readEsp(); // read comport output from esp(wifi module)
   wifiModulePrepare();
@@ -56,7 +57,7 @@ void loop() {
   }
 
   // отправлять на сервер каждые  counter / 10 = секунд
-  if (counter > 400) {
+  if (counter > 600) {
     sendData();
     counter = 1;
     totalPond = 0;
@@ -66,18 +67,11 @@ void loop() {
 
   // if we get a IFR signal
   if (irrecv.decode(&results)) {
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Got IR Signal...");
-    lcd.setCursor(1, 1);
-    lcd.print(results.value);
-    Serial.println(results.value, HEX);
-    translateIR();
     irrecv.resume();
     delay(1000);
-    lcd.clear();
+    translateIR();
   }
-
+  backlght?lcd.backlight():lcd.noBacklight(); // lcd balcklight off/on
   totalPond += pondTemp();
   averagePond = totalPond / counter;
 
@@ -86,10 +80,7 @@ void loop() {
   counter++;
 }
 
-void  translateIR() {
 
-
-}
 
 void showTempAndHumid() {
 
@@ -119,21 +110,21 @@ float pondTemp() {
 
 void wifiModulePrepare() {
 
-  lglcd("Starting WIFI...");
+  lglcd("Starting WIFI...", 0);
   delay(2000);
   esp8266.println("AT+RST"); // сброс и проверка, если модуль готов
   readEsp();
-  lglcd("Reseting WiFi");
+  lglcd("Reseting WiFi", 0);
   delay(2000);
   esp8266.println("AT+CWMODE=1");
   delay(2000);
   if (esp8266.available()) {
     Serial.println("WiFi - Module is ready");
-    lglcd("WiFi - Module is ready");
+    lglcd("WiFi - Module is ready", 0);
 
   } else {
     Serial.println("Module dosn't respond.");
-    lglcd("Module dosn't respond.");
+    lglcd("Module dosn't respond.", 0);
     lcd.setCursor(1, 1);
     lcd.println("Please reset.");
     while (1);
@@ -146,27 +137,27 @@ void wifiModulePrepare() {
   for (int i = 0; i < 10; i++) {
     if (connectWiFi()) {
       connected = true;
-      lglcd("Wi-Fi connected");
+      lglcd("Wi-Fi connected", 0);
       break;
     }
   }
   if (!connected) {
-    lglcd("WiFi failed");
+    lglcd("WiFi failed", 0);
     while (1);
   }
   delay(2000);
   esp8266.println("AT+CIPMUX=0");
 }
 
-void lglcd(String txt) {
+void lglcd(String txt, int i) {
   lcd.clear();
-  lcd.setCursor(0, 0);
+  lcd.setCursor(i, 0);
   txt.trim();
   lcd.println(txt);
 }
 
 bool connectWiFi() {
-  lglcd("Conn to WIFI....");
+  lglcd("Conn to WIFI....", 0);
   readEsp();
   esp8266.println("AT+CWJAP=\"redkot\",\"Gor\"");
   delay(2000);
@@ -189,8 +180,8 @@ String readEsp() { //rename to check for wifi status read
 
 
 
-String sendData() {
-  lglcd("Sending Data....");
+void sendData() {
+  lglcd("Sending Data....", 0);
   esp8266.println("AT+CIPMUX=0");
   //Open a connection to the web server
   String cmd = "AT+CIPSTART=\"TCP\",\""; //make this command: AT+CPISTART="TCP","192.168.50.58",80
@@ -216,26 +207,59 @@ String sendData() {
   cmd += "Host: pondtemp.m2mcom.ru\r\n\r\n";
 
   esp8266.print("AT+CIPSEND=");
-  esp8266.println(cmd.length());
-
-  //Look for the > prompt from the esp8266
-  if (esp8266.find(">")) {
-    //Send our http GET request
+ 
+    esp8266.println(cmd.length());
+    delay(1000);
     esp8266.println(cmd);
-    delay(500);
+    Serial.println(cmd);
+    delay(5000);
     esp8266.println("\r\n");
     delay(1000);
     esp8266.println("AT+CIPCLOSE");
-  } else {
-    //Something didn't work...
-    esp8266.println("AT+CIPCLOSE");
-  }
-  delay(1000);
-  String resp = readEsp();
-  lglcd(resp);
-  return resp;
+    delay(1000);
 }
 
+
+void translateIR() {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Got IR Signal...");
+    lcd.setCursor(1, 1);
+    lcd.print(results.value);
+    Serial.println(results.value, HEX);
+    lcd.clear();
+     sendData();
+
+  switch(results.value) {
+
+  case 0xFFA25D:
+     backlght = backlght ? false:true;
+    break;
+
+  case 0xFF629D: //mode is a type of work
+
+    break;
+
+  case 0xFFE21D:  
+    break;
+
+  case 0xFF22DD:  
+    break;
+
+  case 0xFF02FD:  
+    break;
+
+  case 0xFFC23D:  
+    break;
+
+  default: 
+  break;
+  }
+
+  delay(500);
+
+
+}
 
 
 
