@@ -38,8 +38,11 @@ class PageController extends Controller
         $weather = WeatherReading::orderBy('id', 'desc')->limit(600)->get();
 
         foreach ($weather->chunk(12) as $item) {
-            $shedAver[$item->last()->readingDate] = round($item->avg('shed'), 1);
-            $pondAver[$item->last()->readingDate] = round($item->avg('pond'),1);
+
+
+            $readingDate =Carbon::createFromFormat('Y-m-d H:m:s', $item->last()->readingDate)->format('H:m');
+            $shedAver[$readingDate] = round($item->avg('shed'), 1);
+            $pondAver[$readingDate] = round($item->avg('pond'),1);
         }
 
         return view('pages.graph', compact(['weather', 'pondTemp', 'shedAver', 'pondAver']));
