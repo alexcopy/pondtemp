@@ -46,6 +46,8 @@ class PageController extends Controller
             $shedAver[$readingDate] = round($item->avg('shed'), 1);
             $pondAver[$readingDate] = round($item->avg('pond'),1);
         }
+        $shedAver=array_reverse( $shedAver);
+        $pondAver=array_reverse( $pondAver);
 
         return view('pages.graph', compact(['weather', 'pondTemp', 'shedAver', 'pondAver']));
     }
