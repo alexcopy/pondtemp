@@ -35,9 +35,9 @@ class PageController extends Controller
     {
         $shedAver = [];
         $pondAver = [];
-        $weather = WeatherReading::orderBy('id', 'desc')->limit(400)->get();
+        $weather = WeatherReading::orderBy('id', 'desc')->limit(800)->get();
 
-        $chunkSize = 10;
+        $chunkSize = 16;
         foreach ($weather->chunk($chunkSize) as $item) {
 
 
