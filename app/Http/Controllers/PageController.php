@@ -37,10 +37,12 @@ class PageController extends Controller
         $pondAver = [];
         $weather = WeatherReading::orderBy('id', 'desc')->limit(600)->get();
 
-        foreach ($weather->chunk(12) as $item) {
+        $chunkSize = 10;
+        foreach ($weather->chunk($chunkSize) as $item) {
 
 
-            $readingDate =Carbon::createFromFormat('Y-m-d H:m:s', $item->last()->readingDate)->format('H:m');
+            $date = $item->slice( $chunkSize/2, 1)->last()->readingDate;
+            $readingDate =Carbon::createFromFormat('Y-m-d H:m:s', $date)->format('H:m');
             $shedAver[$readingDate] = round($item->avg('shed'), 1);
             $pondAver[$readingDate] = round($item->avg('pond'),1);
         }
