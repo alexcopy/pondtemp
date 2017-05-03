@@ -29,7 +29,6 @@
 
 
         var humid = {
-
             data: {
                 x: 'x',
                 columns: [
@@ -80,15 +79,13 @@
                 },
                 axis: {
                     x: {
-                        type: 'category' // this needed to load string x value
+                        type: 'category'
                     }
                 }
             }).element);
 
-
-            //var humid = c3.generate(humid);
-            //$("#humid").append(temp.element);
-//            $("#humid").append(humid.element);
+            console.log({{ implode(", ", array_values($shedAver)) }});
+            console.log({{ implode(", ", array_values($pondAver)) }});
 
             $('#daterange').daterangepicker({
                 "autoApply": true,
