@@ -84,8 +84,8 @@
                 }
             }).element);
 
-            console.log("street: " {{ implode(" - ", array_values($shedAver)) }});
-            console.log("pond:  " {{ implode(" - ", array_values($pondAver)) }});
+            console.log("street: " + "{{ implode(" - ", array_values($shedAver)) }} ");
+            console.log("pond:  "  + "{{ implode(" - ", array_values($pondAver)) }} ");
 
             $('#daterange').daterangepicker({
                 "autoApply": true,
