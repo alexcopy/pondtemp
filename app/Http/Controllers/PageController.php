@@ -35,20 +35,21 @@ class PageController extends Controller
     {
         $shedAver = [];
         $pondAver = [];
-        $weather = WeatherReading::orderBy('id', 'desc')->limit(800)->get();
+        $humAver=[];
+        $weather = WeatherReading::orderBy('id', 'desc')->limit(600)->get();
 
-        $chunkSize = 16;
+        $chunkSize = 10;
         foreach ($weather->chunk($chunkSize) as $item) {
-
-
             $date = $item->slice( $chunkSize/2, 1)->last()->readingDate;
             $readingDate =Carbon::createFromFormat('Y-m-d H:m:s', $date)->format('H:m');
             $shedAver[$readingDate] = round($item->avg('shed'), 1);
             $pondAver[$readingDate] = round($item->avg('pond'),1);
+            $humAver[$readingDate] = round($item->avg('shedhumid'),1);
         }
         $shedAver=array_reverse( $shedAver);
         $pondAver=array_reverse( $pondAver);
+        $humAver=array_reverse( $humAver);
 
-        return view('pages.graph', compact(['weather', 'pondTemp', 'shedAver', 'pondAver']));
+        return view('pages.graph', compact(['humAver','weather', 'pondTemp', 'shedAver', 'pondAver']));
     }
 }

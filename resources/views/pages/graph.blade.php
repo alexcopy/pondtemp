@@ -10,19 +10,30 @@
     <br/>
     <div class="row">
         <div class="chart">
-            <div id="chart"></div>
+            <div id="temp"></div>
+        </div>
+    </div>
+    <br/>
+    <br/>
+
+
+    <div class="row">
+        <div class="chart">
+            <div id="humid"></div>
         </div>
     </div>
 
-<?php $dates= implode("\", \"", array_keys($shedAver))?>
+    <?php $dates = implode("\", \"", array_keys($shedAver))?>
 
     <script>
-        var tempdata = {
+
+
+        var humid = {
 
             data: {
                 x: 'x',
                 columns: [
-                    ['x',   "{!! $dates !!}" ],
+                    ['x', "{!! $dates !!}"],
                     ['Street Temp', {{ implode(", ", array_values($shedAver)) }}],
                     ['Pond Temp',{{ implode(", ", array_values($pondAver)) }}]
                 ]
@@ -32,7 +43,8 @@
                     type: 'category' // this needed to load string x value
                 }
             }
-        }
+        };
+
     </script>
 
 
@@ -40,7 +52,43 @@
 @section('custom_scripts')
     <script>
         $(document).ready(function () {
-            var chart = c3.generate(tempdata);
+            $("#temp").append(c3.generate({
+
+                data: {
+                    x: 'x',
+                    columns: [
+                        ['x', "{!! $dates !!}"],
+                        ['Street Temp', {{ implode(", ", array_values($shedAver)) }}],
+                        ['Pond Temp',{{ implode(", ", array_values($pondAver)) }}]
+                    ]
+                },
+                axis: {
+                    x: {
+                        type: 'category' // this needed to load string x value
+                    }
+                }
+            }).element);
+
+            $("#humid").append(c3.generate({
+
+                data: {
+                    x: 'x',
+                    columns: [
+                        ['x', "{!! $dates !!}"],
+                        ['Humidity', {{ implode(", ", array_values($humAver)) }}]
+                    ]
+                },
+                axis: {
+                    x: {
+                        type: 'category' // this needed to load string x value
+                    }
+                }
+            }).element);
+
+
+            //var humid = c3.generate(humid);
+            //$("#humid").append(temp.element);
+//            $("#humid").append(humid.element);
 
             $('#daterange').daterangepicker({
                 "autoApply": true,
