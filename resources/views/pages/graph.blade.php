@@ -5,7 +5,7 @@
 @stop
 @section('content')
     <div class="row">
-        <input type="text" id="daterange" value="01/01/2015 - 01/31/2015"/>
+        <input type="text" id="daterange" value="{{\Carbon\Carbon::now()->subDays(1)->format('d/m/Y g:i A') }} - {{ \Carbon\Carbon::now()->format('d/m/Y g:i A') }} "/>
     </div>
     <br/>
     <div class="row">
@@ -88,10 +88,14 @@
             console.log("pond:  "  + "{{ implode(" - ", array_values($pondAver)) }} ");
 
             $('#daterange').daterangepicker({
-                "autoApply": true,
-                "startDate": "04/01/2017",
-                "endDate": "04/21/2017"
+                timePicker: true,
+                timePickerIncrement: 30,
+                locale: {
+                    format: 'DD/MM/YYYY h:mm A'
+                }
             }, function (start, end, label) {
+
+                console.log(start._d, end._d, label);
             });
         });
     </script>

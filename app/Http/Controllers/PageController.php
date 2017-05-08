@@ -36,9 +36,11 @@ class PageController extends Controller
         $shedAver = [];
         $pondAver = [];
         $humAver=[];
-        $weather = WeatherReading::orderBy('id', 'desc')->limit(300)->get();
 
-        $chunkSize = 10;
+
+        $weather = WeatherReading::where('timestamp', '>',  Carbon::yesterday()->timestamp)->orderBy('id', 'desc')->get();
+
+        $chunkSize = round($weather->count()/24, 0);
         foreach ($weather->chunk($chunkSize) as $item) {
             $date = $item->slice( $chunkSize/2, 1)->last()->readingDate;
             $readingDate =Carbon::createFromFormat('Y-m-d H:m:s', $date)->format('H:m');
@@ -50,6 +52,7 @@ class PageController extends Controller
         $pondAver=array_reverse( $pondAver);
         $humAver=array_reverse( $humAver);
 
-        return view('pages.graph', compact(['humAver','weather', 'pondTemp', 'shedAver', 'pondAver']));
+
+        return view('pages.graph', compact(['humAver', 'shedAver', 'pondAver']));
     }
 }
