@@ -66,11 +66,20 @@ class ApiController extends Controller
         if (!$request->ajax()) {
             return "Not Allowed";
         }
-        $startDate = Carbon::parse(Input::get('startDate', Carbon::yesterday()))->timestamp;
-        $endDate = Carbon::parse(Input::get('endDate', Carbon::now()))->timestamp;
+        $startDate = (string)$request->get('startDate', Carbon::yesterday()->toFormattedDateString());
+        $endDate = (string)$request->get('endDate', Carbon::now()->toFormattedDateString());
+
+        if ($startDate == 0 || $endDate == 0) {
+            $startDate = Carbon::yesterday()->toFormattedDateString();
+            $endDate = Carbon::now()->toFormattedDateString();
+        }
+        $startDate = Carbon::parse($startDate)->timestamp;
+        $endDate = Carbon::parse($endDate)->timestamp;
+
+
         if (($startDate > $endDate) || (($endDate - $startDate) > 5076000)) {
             return response()->json([
-                'data' => ['x' => [], 'StreetTemp' => [], 'PondTemp' => [], 'humid'=>[]],
+                'data' => ['x' => [], 'StreetTemp' => [], 'PondTemp' => [], 'humid' => []],
             ], 400);
         }
         list($shedAver, $pondAver, $humAver) = WeatherReading::getWetherAverege($startDate, $endDate);

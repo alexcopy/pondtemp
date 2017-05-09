@@ -68,7 +68,7 @@ ALEX.humid = c3.generate({
 });
 
 $(document).ready(function () {
-    ALEX.sendData(null, null);
+    ALEX.sendData(false, false);
     $('#daterange').daterangepicker({
         timePicker: true,
         dateLimit: {
