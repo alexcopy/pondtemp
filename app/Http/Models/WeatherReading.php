@@ -98,6 +98,10 @@ class WeatherReading extends Model
         if (!$end) {
             $end = time();
         }
+        $timeFormat = 'H:m';
+        if ($end - $start >86400) {
+            $timeFormat = 'd/m H:m';
+        }
         $shedAver = [];
         $pondAver = [];
         $humAver = [];
@@ -107,7 +111,7 @@ class WeatherReading extends Model
         foreach ($weather->chunk($chunkSize) as $item) {
             if (!$item->slice($chunkSize / 2, 1)->last()) continue;
             $date = $item->slice($chunkSize / 2, 1)->last()->readingDate;
-            $readingDate = Carbon::createFromFormat('Y-m-d H:m:s', $date)->format('H:m');
+            $readingDate = Carbon::createFromFormat('Y-m-d H:m:s', $date)->format($timeFormat);
             $shedAver[$readingDate] = round($item->avg('shed'), 1);
             $pondAver[$readingDate] = round($item->avg('pond'), 1);
             $humAver[$readingDate] = round($item->avg('shedhumid'), 1);
