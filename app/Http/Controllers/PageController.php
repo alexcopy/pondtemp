@@ -26,15 +26,19 @@ class PageController extends Controller
 
     public function ping()
     {
-        $weather = WeatherReading::orderBy('id', 'desc')->limit(2)->get();
-        $tempReader = TempMeter::orderBy('id', 'desc')->limit(2)->get();
+        $weather = WeatherReading::orderBy('id', 'desc')->limit(10)->get();
+        $tempReader = TempMeter::orderBy('id', 'desc')->limit(10)->get();
         return view('pages.index', compact(['weather', 'tempReader']));
     }
 
     public function graph(Request $request)
     {
+        $weather = WeatherReading::orderBy('id', 'desc')->limit(10)->get();
+        $shed=round($weather->avg('shed'), 1);
+        $pond=round($weather->avg('pond'), 1);
+
         list($shedAver, $pondAver, $humAver) = WeatherReading::getWetherAverege(Carbon::yesterday()->timestamp);
-        return view('pages.graph', compact(['humAver', 'shedAver', 'pondAver']));
+        return view('pages.graph', compact(['humAver', 'shedAver', 'pondAver', 'shed', 'pond']));
     }
 
 
