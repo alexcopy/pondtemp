@@ -5,7 +5,8 @@
 @stop
 @section('content')
     <div class="row">
-        <input type="text" id="daterange" value="{{\Carbon\Carbon::now()->subDays(1)->format('d/m/Y g:i A') }} - {{ \Carbon\Carbon::now()->format('d/m/Y g:i A') }} "/>
+        <input type="text" id="daterange"
+               value="{{\Carbon\Carbon::now()->subDays(1)->format('d/m/Y g:i A') }} - {{ \Carbon\Carbon::now()->format('d/m/Y g:i A') }} "/>
     </div>
     <br/>
     <div class="row">
@@ -51,8 +52,9 @@
 @section('custom_scripts')
     <script>
         $(document).ready(function () {
-            $("#temp").append(c3.generate({
 
+            var temps = c3.generate({
+                bindto: '#temp',
                 data: {
                     x: 'x',
                     columns: [
@@ -66,10 +68,9 @@
                         type: 'category' // this needed to load string x value
                     }
                 }
-            }).element);
-
-            $("#humid").append(c3.generate({
-
+            });
+            var humid = c3.generate({
+                bindto: '#humid',
                 data: {
                     x: 'x',
                     columns: [
@@ -82,20 +83,57 @@
                         type: 'category'
                     }
                 }
-            }).element);
+            });
 
             console.log("street: " + "{{ implode(" - ", array_values($shedAver)) }} ");
-            console.log("pond:  "  + "{{ implode(" - ", array_values($pondAver)) }} ");
+            console.log("pond:  " + "{{ implode(" - ", array_values($pondAver)) }} ");
 
             $('#daterange').daterangepicker({
                 timePicker: true,
-                timePickerIncrement: 30,
+                dateLimit: {
+                    "days": 60
+                },
+                timePickerIncrement: 20,
                 locale: {
                     format: 'DD/MM/YYYY h:mm A'
                 }
             }, function (start, end, label) {
 
-                console.log(start._d, end._d, label);
+                $.ajax({
+                    method: "POST",
+                    url: "/api/v3/getdate",
+                    data: {startDate: start._d, endDate: end._d}
+                })
+                    .done(function (msg) {
+
+                        setTimeout(function () {
+                            msg.data.x.unshift('x');
+                            msg.data.StreetTemp.unshift('Street Temp');
+                            msg.data.PondTemp.unshift('Pond Temp');
+                            msg.data.humid.unshift('Humidity')
+                            temps.load({
+                                columns: [
+                                    msg.data.x,
+                                    msg.data.StreetTemp,
+                                    msg.data.PondTemp
+                                ],
+                                length: 0,
+                                duration: 8500,
+                            });
+                            humid.load({
+                                columns: [
+                                    msg.data.x,
+                                    msg.data.humid,
+                                ],
+                                length: 0,
+                                duration: 8500,
+                            });
+                        });
+                    })
+                    .error(function (msg, status) {
+                        alert(msg.statusText);
+                    });
+
             });
         });
     </script>

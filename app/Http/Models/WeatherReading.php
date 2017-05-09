@@ -9,6 +9,7 @@
 namespace App\Http\Models;
 
 
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -16,6 +17,7 @@ use Illuminate\Support\Collection;
 
 class WeatherReading extends Model
 {
+
     protected $fillable = [
         'readingDate',
         'pond',
@@ -88,5 +90,33 @@ class WeatherReading extends Model
         return $fieldCoeff;
     }
 
+    /**
+     * @return array
+     */
+    public static function getWetherAverege($start, $end = null)
+    {
+        if (!$end) {
+            $end = time();
+        }
+        $shedAver = [];
+        $pondAver = [];
+        $humAver = [];
+        $weather = self::whereBetween('timestamp', [$start, $end])->orderBy('id', 'desc')->get();
+        $chunkSize = round($weather->count() / 24, 0);
+
+        foreach ($weather->chunk($chunkSize) as $item) {
+            if (!$item->slice($chunkSize / 2, 1)->last()) continue;
+            $date = $item->slice($chunkSize / 2, 1)->last()->readingDate;
+            $readingDate = Carbon::createFromFormat('Y-m-d H:m:s', $date)->format('H:m');
+            $shedAver[$readingDate] = round($item->avg('shed'), 1);
+            $pondAver[$readingDate] = round($item->avg('pond'), 1);
+            $humAver[$readingDate] = round($item->avg('shedhumid'), 1);
+        }
+        $shedAver = array_reverse($shedAver);
+        $pondAver = array_reverse($pondAver);
+        $humAver = array_reverse($humAver);
+
+        return array($shedAver, $pondAver, $humAver);
+    }
 
 }
