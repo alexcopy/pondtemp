@@ -36,9 +36,7 @@ class PageController extends Controller
         $weather = WeatherReading::orderBy('id', 'desc')->limit(10)->get();
         $shed=round($weather->avg('shed'), 1);
         $pond=round($weather->avg('pond'), 1);
-
-        list($shedAver, $pondAver, $humAver) = WeatherReading::getWetherAverege(Carbon::yesterday()->timestamp);
-        return view('pages.graph', compact(['humAver', 'shedAver', 'pondAver', 'shed', 'pond']));
+        return view('pages.graph', compact(['shed', 'pond']));
     }
 
 

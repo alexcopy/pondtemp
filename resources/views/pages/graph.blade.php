@@ -31,7 +31,6 @@
         </div>
     </div>
 
-    <?php $dates = implode("\", \"", array_keys($shedAver))?>
 
 
 

@@ -28,7 +28,7 @@ class ApiController extends Controller
         $tempReader = TempMeter::orderBy('id', 'desc')->limit(1)->get()->first();
         Gauges::writeToDb($request);
 
-//        WeatherReading::parseAndWrite($request); -- uncomment   during test lifecycle
+        WeatherReading::parseAndWrite($request);// -- uncomment   during test lifecycle
 
         if ($weather && ((time() - $insertWeatherEvery) > $weather->timestamp)) {
             WeatherReading::parseAndWrite($request); //uncomment after all hardware tests
@@ -66,13 +66,14 @@ class ApiController extends Controller
         if (!$request->ajax()) {
             return "Not Allowed";
         }
-        $startDate = (string)$request->get('startDate', Carbon::yesterday()->toFormattedDateString());
-        $endDate = (string)$request->get('endDate', Carbon::now()->toFormattedDateString());
+        $startDate =  $request->get('startDate', Carbon::yesterday()->toFormattedDateString());
+        $endDate =  $request->get('endDate', Carbon::now()->toFormattedDateString());
 
-        if ($startDate == 0 || $endDate == 0) {
+        if ($startDate == '' || $endDate == '') {
             $startDate = Carbon::yesterday()->toFormattedDateString();
             $endDate = Carbon::now()->toFormattedDateString();
         }
+
         $startDate = Carbon::parse($startDate)->timestamp;
         $endDate = Carbon::parse($endDate)->timestamp;
 
@@ -83,7 +84,6 @@ class ApiController extends Controller
             ], 400);
         }
         list($shedAver, $pondAver, $humAver) = WeatherReading::getWetherAverege($startDate, $endDate);
-
 
         return response()->json([
             'data' => ['x' => array_keys($shedAver), 'StreetTemp' => array_values($shedAver), 'PondTemp' => array_values($pondAver), 'humid' => array_values($humAver)],
