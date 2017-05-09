@@ -4,10 +4,11 @@
     <link rel="stylesheet" href="assets/css/c3.min.css">
 @stop
 @section('subtabs')
+
     <div class="row">
         <div class="col-xs-3 pull-left">
             <input type="text" id="daterange" class="form-control"
-                   value="{{\Carbon\Carbon::now()->subDays(1)->format('d/m/Y g:i A') }} - {{ \Carbon\Carbon::now()->format('d/m/Y g:i A') }} "/>
+                   value="{{\Carbon\Carbon::yesterday()->format('d/m/Y H:i') }} - {{ \Carbon\Carbon::now()->format('d/m/Y H:i') }} "/>
         </div>
         <div class="col-xs-2 pull-right">
             <h5 class="text-success">Current Str: {{$shed}}</h5>

@@ -71,12 +71,13 @@ $(document).ready(function () {
     ALEX.sendData(null, null);
     $('#daterange').daterangepicker({
         timePicker: true,
+        timePicker24Hour: true,
         dateLimit: {
             "days": 60
         },
         timePickerIncrement: 20,
         locale: {
-            format: 'DD/MM/YYYY h:mm A'
+            format: 'DD/MM/YYYY H:mm'
         }
     }, function (start, end, label) {
         ALEX.sendData(start._d, end._d);
