@@ -99,7 +99,7 @@ class WeatherReading extends Model
             $end = time();
         }
         $timeFormat = 'H:m';
-        if ($end - $start >86400) {
+        if (($end - $start) >172800) {
             $timeFormat = 'd/m H:m';
         }
         $shedAver = [];
