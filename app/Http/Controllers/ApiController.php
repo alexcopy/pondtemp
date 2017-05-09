@@ -70,7 +70,7 @@ class ApiController extends Controller
         $endDate =  $request->get('endDate', Carbon::now()->toDateTimeString());
 
         if ($startDate == '' || $endDate == '') {
-            $startDate = Carbon::yesterday()->subHours(5)->toDateTimeString();
+            $startDate = Carbon::yesterday()->toDateTimeString();
             $endDate = Carbon::now()->toDateTimeString();
         }
 
