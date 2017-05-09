@@ -66,11 +66,11 @@ class ApiController extends Controller
         if (!$request->ajax()) {
             return "Not Allowed";
         }
-        $startDate =  $request->get('startDate', Carbon::yesterday()->toFormattedDateString());
-        $endDate =  $request->get('endDate', Carbon::now()->toFormattedDateString());
+        $startDate =  $request->get('startDate', Carbon::yesterday()->toDateTimeString());
+        $endDate =  $request->get('endDate', Carbon::now()->toDateTimeString());
 
         if ($startDate == '' || $endDate == '') {
-            $startDate = Carbon::yesterday()->subHours(12)->toDateTimeString();
+            $startDate = Carbon::yesterday()->subHours(5)->toDateTimeString();
             $endDate = Carbon::now()->toDateTimeString();
         }
 
