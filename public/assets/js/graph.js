@@ -1,5 +1,4 @@
 var ALEX = ALEX || {};
-
 ALEX.sendData = function (start, end) {
     $.ajax({
         method: "POST",

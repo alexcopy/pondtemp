@@ -28,7 +28,7 @@ class ApiController extends Controller
         $tempReader = TempMeter::orderBy('id', 'desc')->limit(1)->get()->first();
         Gauges::writeToDb($request);
 
-        WeatherReading::parseAndWrite($request);// -- uncomment   during test lifecycle
+      //  WeatherReading::parseAndWrite($request);// -- uncomment   during test lifecycle
 
         if ($weather && ((time() - $insertWeatherEvery) > $weather->timestamp)) {
             WeatherReading::parseAndWrite($request); //uncomment after all hardware tests
