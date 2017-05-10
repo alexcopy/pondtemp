@@ -106,7 +106,10 @@ class WeatherReading extends Model
         $pondAver = [];
         $humAver = [];
         $weather = self::whereBetween('timestamp', [$start, $end])->orderBy('id', 'desc')->get();
-        $chunkSize = round($weather->count() / 24, 0);
+        $chunkSize=4;
+        if ($weather->count() > 72) {
+            $chunkSize = round($weather->count() / 24, 0);
+        }
 
         foreach ($weather->chunk($chunkSize) as $item) {
             if (!$item->slice($chunkSize / 2, 1)->last()) continue;
