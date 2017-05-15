@@ -94,8 +94,8 @@ class ApiController extends Controller
             "minstr"=>round($weather->min('shed'), 1),
             "maxpnd"=>round($weather->max('pond'), 1),
             "minpnd"=>round($weather->min('pond'), 1),
-            "avgcurstr"=>round($weather->avg('shed'), 1),
-            "avgcurpnd"=>round($weather->avg('pond'), 1)
+            "avgstr"=>round($weather->avg('shed'), 1),
+            "avgpnd"=>round($weather->avg('pond'), 1)
         ];
 
         return response()->json([
