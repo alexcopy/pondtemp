@@ -23,8 +23,8 @@ class ApiController extends Controller
             return 'ERROR';
         }
 
-        $weather = WeatherReading::orderBy('id', 'desc')->limit(1)->get()->first();
-        $tempReader = TempMeter::orderBy('id', 'desc')->limit(1)->get()->first();
+        $weather = WeatherReading::orderBy('timestamp', 'desc')->limit(1)->get()->first();
+        $tempReader = TempMeter::orderBy('timestamp', 'desc')->limit(1)->get()->first();
         Gauges::writeToDb($request);
 
         //  WeatherReading::parseAndWrite($request);// -- uncomment   during test lifecycle
@@ -77,7 +77,7 @@ class ApiController extends Controller
         $startDate = Carbon::parse($startDate)->timestamp;
         $endDate = Carbon::parse($endDate)->timestamp;
         //TODO change later (it's not proper date, get current date)
-        $current = WeatherReading::orderBy('id', 'desc')->limit(10)->get();
+        $current = WeatherReading::orderBy('timestamp', 'desc')->limit(10)->get();
 
 
         if (($startDate > $endDate) || (($endDate - $startDate) > 5076000)) {
