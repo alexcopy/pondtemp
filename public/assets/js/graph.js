@@ -74,8 +74,8 @@ ALEX.avgMinMax = function (data) {
         "minstr",
         "maxpnd",
         "minpnd",
-        "avgcurstr",
-        "avgcurpnd"];
+        "avgstr",
+        "avgpnd"];
 
     for(var i in ids){
         id = ids[i];
