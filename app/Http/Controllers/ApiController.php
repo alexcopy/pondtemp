@@ -8,7 +8,6 @@ use App\Http\Models\TempMeter;
 use App\Http\Models\WeatherReading;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
 
 class ApiController extends Controller
 {
@@ -28,7 +27,7 @@ class ApiController extends Controller
         $tempReader = TempMeter::orderBy('id', 'desc')->limit(1)->get()->first();
         Gauges::writeToDb($request);
 
-      //  WeatherReading::parseAndWrite($request);// -- uncomment   during test lifecycle
+        //  WeatherReading::parseAndWrite($request);// -- uncomment   during test lifecycle
 
         if ($weather && ((time() - $insertWeatherEvery) > $weather->timestamp)) {
             WeatherReading::parseAndWrite($request); //uncomment after all hardware tests
@@ -39,6 +38,7 @@ class ApiController extends Controller
         }
         return time();
     }
+
 
 
     protected function checkDataValidity(Request $request)
@@ -66,8 +66,8 @@ class ApiController extends Controller
         if (!$request->ajax()) {
             return "Not Allowed";
         }
-        $startDate =  $request->get('startDate', Carbon::yesterday()->toDateTimeString());
-        $endDate =  $request->get('endDate', Carbon::now()->toDateTimeString());
+        $startDate = $request->get('startDate', Carbon::yesterday()->toDateTimeString());
+        $endDate = $request->get('endDate', Carbon::now()->toDateTimeString());
 
         if ($startDate == '' || $endDate == '') {
             $startDate = Carbon::yesterday()->toDateTimeString();

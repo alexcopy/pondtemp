@@ -54,6 +54,23 @@ class WeatherReading extends Model
         ]);
     }
 
+    public static function restoreFromTextFile(array $data)
+    {
+        self::create([
+            'readingDate' =>$data['date'],
+            'pond' => (double)$data['pt'],
+            'shed' => (double)$data['sht'],
+            'street' => (double)$data['strT'],
+            'shedhumid' => (double)$data['humid'],
+            'streethumid' => 0,
+            'room' => 0,
+            'roomhumid' => 0,
+            'location' => 0,
+            'timestamp' => $data['timestamp'],
+            'userId' => 10
+        ]);
+    }
+
     /**
      * Validate results from data received assume data could't change on 2 units in giving time slot
      *
@@ -106,7 +123,7 @@ class WeatherReading extends Model
         $pondAver = [];
         $humAver = [];
         $weather = self::whereBetween('timestamp', [$start, $end])->orderBy('id', 'desc')->get();
-        $chunkSize=2;
+        $chunkSize = 2;
         if ($weather->count() > 72) {
             $chunkSize = round($weather->count() / 24, 0);
         }

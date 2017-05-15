@@ -1,3 +1,6 @@
+#include <Adafruit_BMP280.h>
+#include <Adafruit_Sensor.h>
+ 
 
 #include <SoftwareSerial.h>
 #include <Wire.h>
@@ -83,21 +86,21 @@ void loop() {
 
 
 void showTempAndHumid() {
-
+ lcd.setCursor(0, 1);
   if (pond == true) {
     lcd.print("PondTemp: ");
     lcd.print(averagePond);
   } else {
-    lcd.print("Temp: ");
-    lcd.print(dht.readTemperature());
-  }
-
-  lcd.print((char) 223);
-  lcd.print("C");
-  lcd.setCursor(0, 1);
   lcd.print("Humidity: ");
   lcd.print(dht.readHumidity());
-  lcd.print("%");
+  lcd.print("%");   
+  }
+  
+  lcd.setCursor(0, 0);
+  lcd.print("Temp: ");
+  lcd.print(dht.readTemperature());
+  lcd.print((char) 223);
+  lcd.print("C");
 
 }
 
