@@ -140,7 +140,7 @@ class WeatherReading extends Model
         $pondAver = array_reverse($pondAver);
         $humAver = array_reverse($humAver);
 
-        return [$shedAver, $pondAver, $humAver];
+        return [$shedAver, $pondAver, $humAver, $weather];
     }
 
 }

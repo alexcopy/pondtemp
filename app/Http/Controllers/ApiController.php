@@ -76,6 +76,8 @@ class ApiController extends Controller
 
         $startDate = Carbon::parse($startDate)->timestamp;
         $endDate = Carbon::parse($endDate)->timestamp;
+        //TODO change later (it's not proper date, get current date)
+        $current = WeatherReading::orderBy('id', 'desc')->limit(10)->get();
 
 
         if (($startDate > $endDate) || (($endDate - $startDate) > 5076000)) {
@@ -83,10 +85,27 @@ class ApiController extends Controller
                 'data' => ['x' => [], 'StreetTemp' => [], 'PondTemp' => [], 'humid' => []],
             ], 400);
         }
-        list($shedAver, $pondAver, $humAver) = WeatherReading::getWetherAverege($startDate, $endDate);
+        list($shedAver, $pondAver, $humAver, $weather) = WeatherReading::getWetherAverege($startDate, $endDate);
+        $ids = [
+            "curstr"=>round($current->avg('shed'), 1),
+            "curpnd"=>round($current->avg('pond'), 1),
+
+            "maxstr"=>round($weather->max('shed'), 1),
+            "minstr"=>round($weather->min('shed'), 1),
+            "maxpnd"=>round($weather->max('pond'), 1),
+            "minpnd"=>round($weather->min('pond'), 1),
+            "avgcurstr"=>round($weather->avg('shed'), 1),
+            "avgcurpnd"=>round($weather->avg('pond'), 1)
+        ];
 
         return response()->json([
-            'data' => ['x' => array_keys($shedAver), 'StreetTemp' => array_values($shedAver), 'PondTemp' => array_values($pondAver), 'humid' => array_values($humAver)],
+            'data' => [
+                'x' => array_keys($shedAver),
+                'StreetTemp' => array_values($shedAver),
+                'PondTemp' => array_values($pondAver),
+                'humid' => array_values($humAver),
+                'extr'=>$ids
+            ],
         ], 200);
     }
 

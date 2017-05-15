@@ -6,6 +6,7 @@ ALEX.sendData = function (start, end) {
         data: {startDate: start, endDate: end}
     })
         .done(function (msg) {
+            ALEX.avgMinMax(msg.data.extr);
             setTimeout(function () {
                 msg.data.x.unshift('x');
                 msg.data.StreetTemp.unshift('Street Temp');
@@ -65,6 +66,22 @@ ALEX.humid = c3.generate({
         }
     }
 });
+ALEX.avgMinMax = function (data) {
+    var ids = [
+        "curstr",
+        "curpnd",
+        "maxstr",
+        "minstr",
+        "maxpnd",
+        "minpnd",
+        "avgcurstr",
+        "avgcurpnd"];
+
+    for(var i in ids){
+        id = ids[i];
+        $('#'+id).text(' '+ data[id]);
+    }
+}
 
 $(document).ready(function () {
     ALEX.sendData(null, null);
