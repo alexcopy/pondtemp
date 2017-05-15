@@ -34,9 +34,7 @@ class PageController extends Controller
     public function graph(Request $request)
     {
         $weather = WeatherReading::orderBy('id', 'desc')->limit(10)->get();
-        $shed=round($weather->avg('shed'), 1);
-        $pond=round($weather->avg('pond'), 1);
-        return view('pages.graph', compact(['shed', 'pond']));
+        return view('pages.graph', compact(['weather']));
     }
 
 

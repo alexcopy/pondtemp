@@ -3,6 +3,9 @@
     <link rel="stylesheet" href="assets/css/daterangepicker.css">
     <link rel="stylesheet" href="assets/css/c3.min.css">
 @stop
+
+@section('tabs')
+@stop
 @section('subtabs')
 
     <div class="row">
@@ -10,12 +13,21 @@
             <input type="text" id="daterange" class="form-control"
                    value="{{\Carbon\Carbon::yesterday()->format('d/m/Y H:i') }} - {{ \Carbon\Carbon::now()->format('d/m/Y H:i') }} "/>
         </div>
-        <div class="col-xs-2 pull-right">
-            <h5 class="text-success">Current Str: {{$shed}}.0 &deg;C</h5>
-            <h5 class="text-primary">Current Pnd: {{$pond}} &deg;C</h5>
+        <div class="col-sm-2 pull-right">
+            <h5 class="text-success">Max Str: {{round($weather->max('shed'), 1)}} &deg;C</h5>
+            <h5 class="text-primary">Min Str: {{round($weather->min('shed'), 1)}} &deg;C</h5>
         </div>
+        <div class="col-sm-2 pull-right">
+            <h5 class="text-success">Max Pnd: {{round($weather->max('pond'), 1)}} &deg;C</h5>
+            <h5 class="text-primary">Min Pnd: {{round($weather->min('pond'), 1)}} &deg;C</h5>
+        </div>
+        <div class="col-sm-2 pull-right">
+            <h5 class="text-success">Current Str: {{round($weather->avg('shed'), 1)}} &deg;C</h5>
+            <h5 class="text-primary">Current Pnd: {{round($weather->avg('pond'), 1)}} &deg;C</h5>
 
+        </div>
     </div>
+
 @stop
 
 @section('content')
