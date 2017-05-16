@@ -129,8 +129,10 @@ class WeatherReading extends Model
         }
 
         foreach ($weather->chunk($chunkSize) as $item) {
-            if (!$item->slice($chunkSize / 2, 1)->last()) continue;
-            $date = $item->slice($chunkSize / 2, 1)->last()->readingDate;
+            $dateNum = round($item->count()/2, 0); //get middle date
+            $vals= array_values($item->toArray());
+            if(!isset($vals[$dateNum]['readingDate'])) continue;
+            $date=$vals[$dateNum]['readingDate'];
             $readingDate = Carbon::parse($date)->format($timeFormat);
             $shedAver[$readingDate] = round($item->avg('shed'), 1);
             $pondAver[$readingDate] = round($item->avg('pond'), 1);

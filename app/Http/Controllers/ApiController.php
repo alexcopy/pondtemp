@@ -88,7 +88,6 @@ class ApiController extends Controller
         $ids = [
             "curstr"=>round($current->avg('shed'), 1),
             "curpnd"=>round($current->avg('pond'), 1),
-
             "maxstr"=>round($weather->max('shed'), 1),
             "minstr"=>round($weather->min('shed'), 1),
             "maxpnd"=>round($weather->max('pond'), 1),
