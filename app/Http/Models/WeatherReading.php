@@ -133,10 +133,13 @@ class WeatherReading extends Model
             $vals= array_values($item->toArray());
             if(!isset($vals[$dateNum]['readingDate'])) continue;
             $date=$vals[$dateNum]['readingDate'];
+            $shColl=clone $item;
+            $pndTemp= clone $item;
+            $humTmp=clone $item;
             $readingDate = Carbon::parse($date)->format($timeFormat);
-            $shedAver[$readingDate] = round($item->avg('shed'), 1);
-            $pondAver[$readingDate] = round($item->avg('pond'), 1);
-            $humAver[$readingDate] = round($item->avg('shedhumid'), 1);
+            $shedAver[$readingDate] = round($shColl->avg('shed'), 1);
+            $pondAver[$readingDate] = round($pndTemp->avg('pond'), 1);
+            $humAver[$readingDate] = round($humTmp->avg('shedhumid'), 1);
         }
         $shedAver = array_reverse($shedAver);
         $pondAver = array_reverse($pondAver);
