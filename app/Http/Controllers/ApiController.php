@@ -76,7 +76,7 @@ class ApiController extends Controller
 
         $startDate = Carbon::parse($startDate)->timestamp;
         $endDate = Carbon::parse($endDate)->timestamp;
-        $current = WeatherReading::where('timestamp',">", time()-3600)->orderBy('timestamp', 'desc')->limit(10)->get();
+        $current = WeatherReading::where('timestamp',">", time()-1200)->orderBy('timestamp', 'desc')->limit(10)->get();
 
 
         if (($startDate > $endDate) || (($endDate - $startDate) > 5076000)) {
