@@ -57,7 +57,7 @@ class WeatherReading extends Model
     public static function restoreFromTextFile(array $data)
     {
         self::create([
-            'readingDate' =>$data['date'],
+            'readingDate' => $data['date'],
             'pond' => (double)$data['pt'],
             'shed' => (double)$data['sht'],
             'street' => (double)$data['strT'],
@@ -115,30 +115,37 @@ class WeatherReading extends Model
         if (!$end) {
             $end = time();
         }
-        $timeFormat = 'H:m';
+        $timeFormat = 'h:i';
         if (($end - $start) > 172800) {
-            $timeFormat = 'd/m H:m';
-        }
-        $shedAver = [];
-        $pondAver = [];
-        $humAver = [];
-        $weather = self::whereBetween('timestamp', [$start, $end])->orderBy('timestamp', 'desc')->get();
-        $chunkSize = 2;
-        if ($weather->count() > 72) {
-            $chunkSize = round($weather->count() / 24, 0);
+            $timeFormat = 'd/m h:i';
         }
 
+        $weather = self::whereBetween('timestamp', [$start, $end])->orderBy('timestamp', 'desc')->get();
+        $lastTen = $weather->take(10);
+        $chunkSize = 4;
+        if ($weather->count() > 120) {
+            $chunkSize = round($weather->count() / 30, 0);
+        }
+        $shedAver = [];
+        $humAver = [];
+        $pondAver = [];
+
+        $lastTenDate = Carbon::parse($lastTen->first()->readingDate)->format($timeFormat);
+        $shedAver [$lastTenDate] = $lastTen->avg('shed');
+        $pondAver [$lastTenDate] = $lastTen->avg('pond');
+        $humAver [$lastTenDate] = $lastTen->avg('shedhumid');
+
         foreach ($weather->chunk($chunkSize) as $item) {
-            $dateNum = round($item->count()/2, 0); //get middle date
-            $vals= array_values($item->toArray());
-            if(!isset($vals[$dateNum]['readingDate'])) continue;
-            $date=$vals[$dateNum]['readingDate'];
+            $dateNum = round($item->count() / 2, 0); //get middle date
+            $vals = array_values($item->toArray());
+            if (!isset($vals[$dateNum]['readingDate'])) continue;
+            $date = $vals[$dateNum]['readingDate'];
             $readingDate = Carbon::parse($date)->format($timeFormat);
             $shedAver[$readingDate] = round($item->avg('shed'), 1);
             $pondAver[$readingDate] = round($item->avg('pond'), 1);
             $humAver[$readingDate] = round($item->avg('shedhumid'), 1);
         }
-        $weather2= clone $weather;
+        $weather2 = clone $weather;
         $shedAver = array_reverse($shedAver);
         $pondAver = array_reverse($pondAver);
         $humAver = array_reverse($humAver);
