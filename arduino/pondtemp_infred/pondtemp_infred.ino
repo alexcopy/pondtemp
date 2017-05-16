@@ -1,7 +1,5 @@
-#include <Adafruit_BMP280.h>
+#include <Adafruit_BME280.h>
 #include <Adafruit_Sensor.h>
- 
-
 #include <SoftwareSerial.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
@@ -13,6 +11,12 @@
 #define DHTPIN 8
 #define DHTTYPE DHT11
 #define DST_IP "192.168.50.58"
+#define ALTITUDE 53.0 // Altitude in sutton uk 
+
+
+float temperature;
+float humidity;
+float pressure;
 
 int tempPin = 0; //pond analog pin
 bool backlght = true;
@@ -22,6 +26,7 @@ int counter = 0;
 float totalPond = 0; // the running total
 float averagePond = 0; // the average
 int RECV_PIN = 11;
+bool status;
 
 
 DHT dht(DHTPIN, DHTTYPE);
@@ -29,14 +34,18 @@ LiquidCrystal_I2C lcd(0x27, 20, 4); // set the LCD address to 0x27 for a 16 char
 SoftwareSerial esp8266(2, 3); // RX, TX
 IRrecv irrecv(RECV_PIN);
 decode_results results;
+Adafruit_BME280 bme; // I2C
 
 
 void setup() {
+
+  status = bme.begin(0x76);
   lcd.init();
   lcd.backlight();
   dht.begin();
   Serial.begin(115200);
   esp8266.begin(115200);
+  showBmeStatus(status);
   readEsp(); // read comport output from esp(wifi module)
   wifiModulePrepare();
 
@@ -46,6 +55,7 @@ void setup() {
   pinMode(7, INPUT_PULLUP); //button
   pinMode(6, INPUT_PULLUP); //fltr3
   pinMode(5, INPUT_PULLUP); //pond level
+
 }
 
 void loop() {
@@ -74,7 +84,7 @@ void loop() {
     delay(1000);
     translateIR();
   }
-  backlght?lcd.backlight():lcd.noBacklight(); // lcd balcklight off/on
+  backlght ? lcd.backlight() : lcd.noBacklight(); // lcd balcklight off/on
   totalPond += pondTemp();
   averagePond = totalPond / counter;
 
@@ -86,23 +96,39 @@ void loop() {
 
 
 void showTempAndHumid() {
- lcd.setCursor(0, 1);
+
+  getBmePressure();
+  getBmeHumidity();
+  getBmeTemperature();
+
   if (pond == true) {
-    lcd.print("PondTemp: ");
+    lcd.setCursor(0, 0);
+    lcd.print("StrTemp: ");
+    lcd.print(dht.readTemperature());
+    prntTemp();
+    lcd.setCursor(0, 1);
+    lcd.print("PndTemp: ");
     lcd.print(averagePond);
+    prntTemp();
   } else {
-  lcd.print("Humidity: ");
-  lcd.print(dht.readHumidity());
-  lcd.print("%");   
+    lcd.setCursor(0, 0);
+    String temperatureString = String(temperature, 1);
+    lcd.print("ShdTemp:");
+    lcd.print(temperatureString);
+    prntTemp();
+    lcd.setCursor(0, 1);
+    lcd.print("Press: ");
+    String pressureString = String(pressure, 2);
+    lcd.print(pressureString);
+    lcd.print(" hPa");
   }
-  
-  lcd.setCursor(0, 0);
-  lcd.print("Temp: ");
-  lcd.print(dht.readTemperature());
-  lcd.print((char) 223);
-  lcd.print("C");
 
 }
+
+void prntTemp(){
+   lcd.print((char) 223);
+   lcd.print("C"); 
+ }
 
 float pondTemp() {
   float val = analogRead(tempPin);
@@ -144,7 +170,7 @@ void wifiModulePrepare() {
       break;
     }
   }
- 
+
   delay(2000);
   esp8266.println("AT+CIPMUX=0");
 }
@@ -159,7 +185,7 @@ void lglcd(String txt, int i) {
 bool connectWiFi() {
   lglcd("Conn to WIFI....", 0);
   readEsp();
-  esp8266.println("AT+CWJAP=\"redkot\",\"Gor\"");
+  esp8266.println("AT+CWJAP=\"redkot\",\"Gorkogo177\"");
   delay(2000);
   return true;
 }
@@ -179,6 +205,7 @@ String readEsp() { //rename to check for wifi status read
 }
 
 
+ 
 
 void sendData() {
   lglcd("Sending Data....", 0);
@@ -192,13 +219,15 @@ void sendData() {
   cmd = "GET /receiver?ptemp=";
   cmd += averagePond;
   cmd += "&shedtemp=";
-  cmd += dht.readTemperature();
+  cmd +=  String(temperature,1);
   cmd += "&strtemp=";
-  cmd += 0;
+  cmd += dht.readTemperature();
   cmd += "&shedhumid=";
-  cmd += dht.readHumidity();
+  cmd +=  String(humidity,0);
   cmd += "&streethumid=";
-  cmd += 0;
+  cmd += dht.readHumidity();
+  cmd += "&press=";
+  cmd +=  String(pressure,2);
   cmd += "&fltr3=";
   cmd += digitalRead(6);
   cmd += "&pndlvl=";
@@ -207,93 +236,125 @@ void sendData() {
   cmd += "Host: pondtemp.m2mcom.ru\r\n\r\n";
 
   esp8266.print("AT+CIPSEND=");
- 
-    esp8266.println(cmd.length());
-    delay(1000);
-    esp8266.println(cmd);
-    Serial.println(cmd);
-    delay(5000);
-    esp8266.println("\r\n");
-    delay(1000);
-    esp8266.println("AT+CIPCLOSE");
-    delay(1000);
+
+  esp8266.println(cmd.length());
+  delay(1000);
+  esp8266.println(cmd);
+  Serial.println(cmd);
+  delay(5000);
+  esp8266.println("\r\n");
+  delay(1000);
+  esp8266.println("AT+CIPCLOSE");
+  delay(1000);
 }
 
 
 void translateIR() {
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Got IR Signal...");
-    lcd.setCursor(1, 1);
-    lcd.print(results.value);
-    Serial.println(results.value, HEX);
-    lcd.clear();
-     sendData();
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Got IR Signal...");
+  lcd.setCursor(1, 1);
+  lcd.print(results.value);
+  Serial.println(results.value, HEX);
+  lcd.clear();
+  sendData();
 
-  switch(results.value) {
+  switch (results.value) {
 
-  case 0xFFA25D:
-     backlght = backlght ? false:true;
-    break;
+    case 0xFFA25D:
+      backlght = backlght ? false : true;
+      break;
 
-  case 0xFF629D: //mode is a type of work
+    case 0xFF629D: //mode is a type of work
 
-    break;
+      break;
 
-  case 0xFFE21D:  
-    break;
+    case 0xFFE21D:
+      break;
 
-  case 0xFF22DD:  
-    break;
+    case 0xFF22DD:
+      break;
 
-  case 0xFF02FD:  
-    break;
+    case 0xFF02FD:
+      break;
 
-  case 0xFFC23D:  
-    break;
-    
-  case 0xFFE01F:  
-    break;
-    
-  case 0xFFA857:  
-    break;
+    case 0xFFC23D:
+      break;
 
-  
-  case 0xFF906F:  
-    break;
-  default: 
-  break;
+    case 0xFFE01F:
+      break;
+
+    case 0xFFA857:
+      break;
+
+
+    case 0xFF906F:
+      break;
+    default:
+      break;
   }
 
   delay(500);
 
 }
 
-int getIfrNumber(){
-  switch(results.value) {
+int getIfrNumber() {
+  switch (results.value) {
 
-  case 0xFFA25D:
-      
-    break;
-  
-  default: 
-  break;
+    case 0xFFA25D:
+
+      break;
+
+    default:
+      break;
   }
   return 0;
-  }
+}
 
-void ifrMode(){
-  
+void ifrMode() {
+
   lglcd("Select mode:", 0);
 
-  for (int i=0; i<100; i++){
-       if (irrecv.decode(&results)) {
-       delay(100);
-     }
-     delay(100);
+  for (int i = 0; i < 100; i++) {
+    if (irrecv.decode(&results)) {
+      delay(100);
+    }
+    delay(100);
   }
- 
- }
+}
+
+void showBmeStatus(bool status) {
+  if (!status) {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("BME Error. Check");
+    lcd.setCursor(0, 1);
+    lcd.print("connections");
+    while (1);
+  }
+  lcd.clear();
+  lcd.print("BME is OK!");
+  delay(1500);
+}
+//BME Measurments
+float getBmeTemperature()
+{
+  temperature = bme.readTemperature();
+}
+
+float getBmeHumidity()
+{
+  humidity = bme.readHumidity();
+}
+
+float getBmePressure()
+{
+  pressure = bme.readPressure();
+  pressure = bme.seaLevelForAltitude(ALTITUDE, pressure);
+  pressure = pressure / 100.0F;
+}
+
+
 
 
 

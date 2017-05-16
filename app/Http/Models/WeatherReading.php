@@ -21,13 +21,14 @@ class WeatherReading extends Model
     protected $fillable = [
         'readingDate',
         'pond',
-        'street',
-        'shed',
+        'streettemp',
+        'shedtemp',
         'shedhumid',
         'streethumid',
         'room',
         'roomhumid',
         'location',
+        'pressure',
         'timestamp',
         'userId'];
 
@@ -42,12 +43,13 @@ class WeatherReading extends Model
         self::create([
             'readingDate' => (new DateTime())->format('Y-m-d H:i:s'),
             'pond' => (double)$request->get('ptemp', 0),
-            'shed' => (double)$request->get('shedtemp', 0),
+            'shedtemp' => (double)$request->get('shedtemp', 0),
             'street' => (double)$request->get('strtemp', 0),
             'shedhumid' => (double)$request->get('shedhumid', 0),
             'streethumid' => (double)$request->get('streethumid', 0),
             'room' => (double)$request->get('roomtemp', 0),
             'roomhumid' => (double)$request->get('roomhumid', 0),
+            'pressure' => (double)$request->get('press', 0),
             'location' => (string)$request->get('location', 0),
             'timestamp' => time(),
             'userId' => 10
@@ -59,13 +61,14 @@ class WeatherReading extends Model
         self::create([
             'readingDate' => $data['date'],
             'pond' => (double)$data['pt'],
-            'shed' => (double)$data['sht'],
-            'street' => (double)$data['strT'],
+            'shedtemp' => (double)$data['sht'],
+            'streettemp' => (double)$data['strT'],
             'shedhumid' => (double)$data['humid'],
             'streethumid' => 0,
             'room' => 0,
             'roomhumid' => 0,
             'location' => 0,
+            'pressure' => (double)$data['press'],
             'timestamp' => $data['timestamp'],
             'userId' => 10
         ]);
@@ -83,13 +86,14 @@ class WeatherReading extends Model
     {
 
         $fieldCoeff = [
-            'shedtemp' => ['dbfield' => 'shed', 'time' => 120, 'isValid' => true],
+            'shedtemp' => ['dbfield' => 'shedtemp', 'time' => 120, 'isValid' => true],
             'ptemp' => ['dbfield' => 'pond', 'time' => 3600, 'isValid' => true],
             'strtemp' => ['dbfield' => 'street', 'time' => 1800, 'isValid' => true],
             'shedhumid' => ['dbfield' => 'shedhumid', 'time' => 3600, 'isValid' => true],
             'roomtemp' => ['dbfield' => 'room', 'time' => 600, 'isValid' => true],
             'streethumid' => ['dbfield' => 'streethumid', 'time' => 600, 'isValid' => true],
             'roomhumid' => ['dbfield' => 'roomhumid', 'time' => 3600, 'isValid' => true],
+            'pressure' => ['dbfield' => 'pressure', 'time' => 3600, 'isValid' => true],
         ];
 
         array_walk($fieldCoeff, function ($reqField, $values) use ($request, $prevResults) {
@@ -131,7 +135,7 @@ class WeatherReading extends Model
         $pondAver = [];
 
         $lastTenDate = Carbon::parse($lastTen->first()->readingDate)->format($timeFormat);
-        $shedAver [$lastTenDate] =   round($lastTen->avg('shed'),1);
+        $shedAver [$lastTenDate] =   round($lastTen->avg('shedtemp'),1);
         $pondAver [$lastTenDate] =  round($lastTen->avg('pond'),1);
         $humAver [$lastTenDate] =  round($lastTen->avg('shedhumid'),1);
 
@@ -141,7 +145,7 @@ class WeatherReading extends Model
             if (!isset($vals[$dateNum]['readingDate'])) continue;
             $date = $vals[$dateNum]['readingDate'];
             $readingDate = Carbon::parse($date)->format($timeFormat);
-            $shedAver[$readingDate] = round($item->avg('shed'), 1);
+            $shedAver[$readingDate] = round($item->avg('shedtemp'), 1);
             $pondAver[$readingDate] = round($item->avg('pond'), 1);
             $humAver[$readingDate] = round($item->avg('shedhumid'), 1);
         }

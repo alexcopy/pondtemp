@@ -17,12 +17,13 @@ class WeatherReading extends Migration
             $table->increments('id');
             $table->dateTimeTz('readingDate');
             $table->double('pond');
-            $table->double('shed');
-            $table->double('street');
+            $table->double('shedtemp');
+            $table->double('streettemp');
             $table->double('shedhumid');
             $table->double('streethumid');
             $table->double('room');
             $table->double('roomhumid');
+            $table->double('pressure');
             $table->string('location');
             $table->integer('timestamp');
             $table->integer('userId');

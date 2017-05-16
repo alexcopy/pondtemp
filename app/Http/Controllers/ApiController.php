@@ -48,7 +48,7 @@ class ApiController extends Controller
         $val[] = (int)$request->get('shedtemp', 0);
         $val[] = (int)$request->get('strtemp', 0);
         $val[] = (int)$request->get('shedhumid', 0);
-
+        return true;
         foreach ($val as $key => $value) {
             if ($value == 0) {
                 unset($val[$key]);
@@ -86,13 +86,13 @@ class ApiController extends Controller
         }
         list($shedAver, $pondAver, $humAver, $weather) = WeatherReading::getWetherAverege($startDate, $endDate);
         $ids = [
-            "curstr"=>round($current->avg('shed'), 1),
+            "curstr"=>round($current->avg('streettemp'), 1),
             "curpnd"=>round($current->avg('pond'), 1),
-            "maxstr"=>round($weather->max('shed'), 1),
-            "minstr"=>round($weather->min('shed'), 1),
+            "maxstr"=>round($weather->max('streettemp'), 1),
+            "minstr"=>round($weather->min('streettemp'), 1),
             "maxpnd"=>round($weather->max('pond'), 1),
             "minpnd"=>round($weather->min('pond'), 1),
-            "avgstr"=>round($weather->avg('shed'), 1),
+            "avgstr"=>round($weather->avg('streettemp'), 1),
             "avgpnd"=>round($weather->avg('pond'), 1)
         ];
 

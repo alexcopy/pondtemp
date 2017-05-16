@@ -23,6 +23,7 @@ class TempMeter extends Model
             . "  streethumid: " . (double)$request->get('streethumid', 0)
             . "  roomtemp : " . (double)$request->get('roomtemp', 0)
             . "  roomhumid : " . (double)$request->get('roomhumid', 0)
+            . "  pressure : ".(double)$request->get('press', 0)
             . "  location : " . (string)$request->get('location', 0)
             . "\n";
 
