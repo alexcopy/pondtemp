@@ -15,22 +15,22 @@
         </div>
 
         <div class="col-sm-2 pull-right">
-            <h5 class="text-danger">Min Str:<i id="minstr"> {{ round($weather->min('shed'), 1) }} </i> &deg;C</h5>
+            <h5 class="text-danger">Min Str:<i id="minstr"> {{ round($weather->min('streettemp'), 1) }} </i> &deg;C</h5>
             <h5 class="text-info">Min Pnd:<i id="minpnd"> {{ round($weather->min('pond'), 1) }} </i> &deg;C</h5>
         </div>
 
         <div class="col-sm-2 pull-right">
-            <h5 class="text-danger">Avg Str:<i id="avgstr"> {{ round($weather->avg('shed'), 1) }} </i> &deg;C</h5>
+            <h5 class="text-danger">Avg Str:<i id="avgstr"> {{ round($weather->avg('streettemp'), 1) }} </i> &deg;C</h5>
             <h5 class="text-info">Avg Pnd:<i id="avgpnd"> {{ round($weather->avg('pond'), 1) }} </i> &deg;C</h5>
         </div>
 
         <div class="col-sm-2 pull-right">
-            <h5 class="text-danger">Max Str:<i id="maxstr"> {{ round($weather->max('shed'), 1) }} </i> &deg;C</h5>
+            <h5 class="text-danger">Max Str:<i id="maxstr"> {{ round($weather->max('streettemp'), 1) }} </i> &deg;C</h5>
             <h5 class="text-info">Max Pnd:<i id="maxpnd"> {{ round($weather->max('pond'), 1) }} </i> &deg;C</h5>
         </div>
 
         <div class="col-sm-2 pull-right">
-            <h5 class="text-danger">Current Str:<i id="curstr"> {{ round($weather->avg('shed'), 1) }} </i> &deg;C</h5>
+            <h5 class="text-danger">Current Str:<i id="curstr"> {{ round($weather->avg('streettemp'), 1) }} </i> &deg;C</h5>
             <h5 class="text-info">Current Pnd:<i id="curpnd"> {{ round($weather->avg('pond'), 1) }} </i> &deg;C</h5>
         </div>
     </div>

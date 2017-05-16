@@ -17,7 +17,7 @@
                     <tr>
                         <td>{{$row->readingDate}}</td>
                         <td>{{$row->pond}}</td>
-                        <td>{{$row->shed}}</td>
+                        <td>{{$row->streettemp}}</td>
                         <td>{{$row->shedhumid}}</td>
 
                     </tr>
