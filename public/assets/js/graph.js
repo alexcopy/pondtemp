@@ -20,16 +20,16 @@ ALEX.sendData = function (start, end) {
                         msg.data.PondTemp
                     ],
                     length: 0,
-                    duration: 8500,
+                    duration: 8500
                 });
                 ALEX.humid.load({
                     columns: [
                         msg.data.x,
                         msg.data.StreetHum,
-                        msg.data.ShedHum,
+                        msg.data.ShedHum
                     ],
                     length: 0,
-                    duration: 8500,
+                    duration: 8500
                 });
             });
         })
