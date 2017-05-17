@@ -84,7 +84,7 @@ class ApiController extends Controller
                 'data' => ['x' => [], 'StreetTemp' => [], 'PondTemp' => [], 'humid' => []],
             ], 400);
         }
-        list($shedAver, $pondAver, $humAver, $weather) = WeatherReading::getWetherAverege($startDate, $endDate);
+        list($shedAver, $pondAver, $humShed, $humStr, $weather) = WeatherReading::getWetherAverege($startDate, $endDate);
         $ids = [
             "curstr"=>round($current->avg('streettemp'), 1),
             "curpnd"=>round($current->avg('pond'), 1),
@@ -101,7 +101,8 @@ class ApiController extends Controller
                 'x' => array_keys($shedAver),
                 'StreetTemp' => array_values($shedAver),
                 'PondTemp' => array_values($pondAver),
-                'humid' => array_values($humAver),
+                'ShedHum' => array_values($humShed),
+                'StreetHum' => array_values($humStr),
                 'extr'=>$ids
             ],
         ], 200);
