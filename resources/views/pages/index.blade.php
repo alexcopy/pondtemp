@@ -2,14 +2,16 @@
 @section('content')
 <h3>Temp Results</h3>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-5">
             <table class="table table-bordered table-hover table-striped">
                 <thead>
                 <tr>
                     <th>readingDate</th>
-                    <th>pond</th>
-                    <th>str</th>
+                    <th>pondT</th>
+                    <th>strTemp</th>
                     <th>strHum</th>
+                    <th>shedHum</th>
+                    <th>pressure</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -18,7 +20,9 @@
                         <td>{{$row->readingDate}}</td>
                         <td>{{$row->pond}}</td>
                         <td>{{$row->streettemp}}</td>
+                        <td>{{$row->streethumid}}</td>
                         <td>{{$row->shedhumid}}</td>
+                        <td>{{$row->pressure}}</td>
 
                     </tr>
                 @endforeach
