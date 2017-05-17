@@ -51,6 +51,12 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="chart">
+            <div id="press"></div>
+        </div>
+    </div>
+
 
 
 

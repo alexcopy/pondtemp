@@ -134,12 +134,14 @@ class WeatherReading extends Model
         $humShed = [];
         $humStr = [];
         $pondAver = [];
+        $pressure = [];
 
         $lastTenDate = Carbon::parse($lastTen->first()->readingDate)->format($timeFormat);
         $shedAver [$lastTenDate] = round($lastTen->avg('streettemp'), 1);
         $pondAver [$lastTenDate] = round($lastTen->avg('pond'), 1);
         $humShed [$lastTenDate] = round($lastTen->avg('shedhumid'), 1);
         $humStr [$lastTenDate] = round($lastTen->avg('streethumid'), 1);
+        $pressure [$lastTenDate] = round($lastTen->avg('pressure'), 1);
 
         foreach ($weather->chunk($chunkSize) as $item) {
             $dateNum = round($item->count() / 2, 0); //get middle date
@@ -151,14 +153,16 @@ class WeatherReading extends Model
             $pondAver[$readingDate] = round($item->avg('pond'), 1);
             $humShed[$readingDate] = round($item->avg('shedhumid'), 1);
             $humStr[$readingDate] = round($item->avg('streethumid'), 1);
+            $pressure[$readingDate] = round($item->avg('pressure'), 1);
         }
 
         $shedAver = array_reverse($shedAver);
         $pondAver = array_reverse($pondAver);
         $humShed = array_reverse($humShed);
         $humStr = array_reverse($humStr);
+        $pressure = array_reverse($pressure);
 
-        return [$shedAver, $pondAver, $humShed, $humStr, $weather];
+        return [$shedAver, $pondAver, $humShed, $humStr, $pressure, $weather];
     }
 
 }

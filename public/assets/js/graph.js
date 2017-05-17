@@ -13,6 +13,7 @@ ALEX.sendData = function (start, end) {
                 msg.data.PondTemp.unshift('Pond Temp');
                 msg.data.StreetHum.unshift('StreetHum');
                 msg.data.ShedHum.unshift('ShedHum');
+                msg.data.Pressure.unshift('Pressure');
                 ALEX.temps.load({
                     columns: [
                         msg.data.x,
@@ -27,6 +28,14 @@ ALEX.sendData = function (start, end) {
                         msg.data.x,
                         msg.data.StreetHum,
                         msg.data.ShedHum
+                    ],
+                    length: 0,
+                    duration: 8500
+                });
+                ALEX.press.load({
+                    columns: [
+                        msg.data.x,
+                        msg.data.Pressure
                     ],
                     length: 0,
                     duration: 8500
@@ -61,6 +70,22 @@ ALEX.humid = c3.generate({
             ['x', []],
             ['StreetHum', []],
             ['ShedHum', []]
+        ]
+    },
+    axis: {
+        x: {
+            type: 'category'
+        }
+    }
+});
+
+ALEX.press = c3.generate({
+    bindto: '#press',
+    data: {
+        x: 'x',
+        columns: [
+            ['x', []],
+            ['Pressure', []],
         ]
     },
     axis: {

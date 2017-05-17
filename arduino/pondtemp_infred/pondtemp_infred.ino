@@ -11,7 +11,7 @@
 #define DHTPIN 8
 #define DHTTYPE DHT11
 #define DST_IP "192.168.50.58"
-#define ALTITUDE 53.0 // Altitude in sutton uk 
+#define ALTITUDE 38.0 // Altitude in sutton uk
 
 
 float temperature;
