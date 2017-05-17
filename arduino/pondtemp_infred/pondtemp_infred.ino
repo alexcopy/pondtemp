@@ -125,10 +125,10 @@ void showTempAndHumid() {
 
 }
 
-void prntTemp(){
-   lcd.print((char) 223);
-   lcd.print("C"); 
- }
+void prntTemp() {
+  lcd.print((char) 223);
+  lcd.print("C");
+}
 
 float pondTemp() {
   float val = analogRead(tempPin);
@@ -138,12 +138,11 @@ float pondTemp() {
 
 
 void wifiModulePrepare() {
-
   lglcd("Starting WIFI...", 0);
   delay(2000);
   esp8266.println("AT+RST"); // сброс и проверка, если модуль готов
   readEsp();
-  lglcd("Reseting WiFi", 0);
+  lglcd("Reseting WiFi...", 0);
   delay(2000);
   esp8266.println("AT+CWMODE=1");
   delay(2000);
@@ -166,7 +165,7 @@ void wifiModulePrepare() {
   for (int i = 0; i < 10; i++) {
     if (connectWiFi()) {
       connected = true;
-      lglcd("Wi-Fi connected", 0);
+      lglcd("Wi-Fi connected.", 0);
       break;
     }
   }
@@ -205,7 +204,7 @@ String readEsp() { //rename to check for wifi status read
 }
 
 
- 
+
 
 void sendData() {
   lglcd("Sending Data....", 0);
@@ -219,15 +218,15 @@ void sendData() {
   cmd = "GET /receiver?ptemp=";
   cmd += averagePond;
   cmd += "&shedtemp=";
-  cmd +=  String(temperature,1);
+  cmd +=  String(temperature, 1);
   cmd += "&strtemp=";
   cmd += dht.readTemperature();
   cmd += "&shedhumid=";
-  cmd +=  String(humidity,0);
+  cmd +=  String(humidity, 0);
   cmd += "&streethumid=";
   cmd += dht.readHumidity();
   cmd += "&press=";
-  cmd +=  String(pressure,2);
+  cmd +=  String(pressure, 2);
   cmd += "&fltr3=";
   cmd += digitalRead(6);
   cmd += "&pndlvl=";
@@ -322,20 +321,22 @@ void ifrMode() {
     delay(100);
   }
 }
-
+//show BME status on LCD  based on return val status
 void showBmeStatus(bool status) {
   if (!status) {
+    lglcd("BME Error. Check", 0);
+    lglcd("connections", 1);
+    delay(4000);
+    lglcd("Starts w/o BME", 1);
+    delay(10000);
+    
+  } else {
     lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("BME Error. Check");
-    lcd.setCursor(0, 1);
-    lcd.print("connections");
-    while (1);
+    lcd.print("BME is OK!");
+    delay(1500);
   }
-  lcd.clear();
-  lcd.print("BME is OK!");
-  delay(1500);
 }
+
 //BME Measurments
 float getBmeTemperature()
 {

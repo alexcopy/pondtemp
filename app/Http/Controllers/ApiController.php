@@ -34,7 +34,7 @@ class ApiController extends Controller
         }
 
         if ($tempReader && ((time() - $insertInToPondDBEvery) > $tempReader->timestamp)) {
-            TempMeter::writeToDb((double)$request->get('ptemp', 0)); //umcoment after all hardware tests
+            TempMeter::writeToDb((double)$request->get('ptemp', 0));
         }
         return time();
     }
@@ -44,11 +44,11 @@ class ApiController extends Controller
     protected function checkDataValidity(Request $request)
     {
         $val = [];
-        $val[] = (int)$request->get('ptemp', 0);
+        $val[] = (int)$request->get('pressure', 0);
         $val[] = (int)$request->get('shedtemp', 0);
-        $val[] = (int)$request->get('strtemp', 0);
+        $val[] = (int)$request->get('streettemp', 0);
         $val[] = (int)$request->get('shedhumid', 0);
-        return true;
+
         foreach ($val as $key => $value) {
             if ($value == 0) {
                 unset($val[$key]);
@@ -61,7 +61,7 @@ class ApiController extends Controller
 
     }
 
-    public function dateInterval(Request $request)
+    public function jsonGraph(Request $request)
     {
         if (!$request->ajax()) {
             return "Not Allowed";

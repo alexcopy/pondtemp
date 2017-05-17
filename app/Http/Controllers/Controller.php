@@ -15,7 +15,7 @@ class Controller extends BaseController
     {
         $local_file = storage_path() . "/temp.txt";
         $tint = 300;
-        $pattern = '~(?P<date>\d{1,}-\d{1,}-\d{1,}\s+\d{1,2}\:\d{1,2}\:\d{1,2})\s+pond temp:(?P<pt>[^\:]+)shedTemp:(?P<sht>[^\:]+)streetTemp:(?P<strT>[^\:]+)shedhumid:(?P<humid>[^\:]+)streethumid~iU';
+        $pattern = '~(?P<date>\d{1,}-\d{1,}-\d{1,}\s+\d{1,2}\:\d{1,2}\:\d{1,2})\s+pond temp:(?P<pt>[^\:]+)shedTemp:(?P<sht>[^\:]+)streetTemp:(?P<strT>[^\:]+)shedhumid:(?P<humid>[^\:]+)streethumid:(?P<strH>[^\:]+)roomtemp.+pressure(\s)?:(?P<press>[^\:]+)location~iU';
         $file = new SplFileObject ($local_file, "r");
 
         while (!$file->eof()) {
