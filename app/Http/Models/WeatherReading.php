@@ -44,7 +44,7 @@ class WeatherReading extends Model
             'readingDate' => (new DateTime())->format('Y-m-d H:i:s'),
             'pond' => (double)$request->get('ptemp', 0),
             'shedtemp' => (double)$request->get('shedtemp', 0),
-            'street' => (double)$request->get('strtemp', 0),
+            'streettemp' => (double)$request->get('strtemp', 0),
             'shedhumid' => (double)$request->get('shedhumid', 0),
             'streethumid' => (double)$request->get('streethumid', 0),
             'room' => (double)$request->get('roomtemp', 0),
@@ -88,7 +88,7 @@ class WeatherReading extends Model
         $fieldCoeff = [
             'shedtemp' => ['dbfield' => 'shedtemp', 'time' => 120, 'isValid' => true],
             'ptemp' => ['dbfield' => 'pond', 'time' => 3600, 'isValid' => true],
-            'strtemp' => ['dbfield' => 'street', 'time' => 1800, 'isValid' => true],
+            'strtemp' => ['dbfield' => 'streettemp', 'time' => 1800, 'isValid' => true],
             'shedhumid' => ['dbfield' => 'shedhumid', 'time' => 3600, 'isValid' => true],
             'roomtemp' => ['dbfield' => 'room', 'time' => 600, 'isValid' => true],
             'streethumid' => ['dbfield' => 'streethumid', 'time' => 600, 'isValid' => true],
