@@ -62,7 +62,7 @@ class WeatherReading extends Model
             'readingDate' => $data['date'],
             'pond' => (double)$data['pt'],
             'shedtemp' => (double)$data['sht'],
-            'streettemp' => (double)$data['strT'],
+            'streettemp' => ((int)$data['chkstr']) ? (int)$data['chkstr'] : (double)$data['strT'],
             'shedhumid' => (double)$data['humid'],
             'streethumid' => (double)$data['strH'],
             'room' => 0,

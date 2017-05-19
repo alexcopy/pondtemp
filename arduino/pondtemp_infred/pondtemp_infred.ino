@@ -11,7 +11,7 @@
 #define DHTPIN 8
 #define DHTTYPE DHT11
 #define DST_IP "192.168.50.58"
-#define ALTITUDE 38.0 // Altitude in sutton uk
+#define ALTITUDE 53.0 // Altitude in sutton uk 
 
 
 float temperature;
@@ -220,13 +220,17 @@ void sendData() {
   cmd += "&shedtemp=";
   cmd +=  String(temperature, 1);
   cmd += "&strtemp=";
-  cmd += dht.readTemperature();
+  cmd += String(temperature, 1);  // change to dht.readTemperature(); after DHT to be fixed
   cmd += "&shedhumid=";
   cmd +=  String(humidity, 0);
   cmd += "&streethumid=";
-  cmd += dht.readHumidity();
+  cmd += String(humidity, 0);  // change to  dht.readHumidity(); after DHT to be fixed
   cmd += "&press=";
   cmd +=  String(pressure, 2);
+  
+  cmd += "&chkstr=";
+  cmd +=  dht.readTemperature();
+  
   cmd += "&fltr3=";
   cmd += digitalRead(6);
   cmd += "&pndlvl=";
