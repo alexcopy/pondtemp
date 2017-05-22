@@ -151,7 +151,7 @@ class WeatherReading extends Model
         $humShed [$lastTenDate] = round($lastTen->avg('shedhumid'), 1);
         $humStr [$lastTenDate] = round($lastTen->avg('streethumid'), 1);
         $shedTemp [$lastTenDate] = round($lastTen->avg('shedtemp'), 1);
-        $pressure [$lastTenDate] = self::convertToMercuryScale(round($lastTen->avg('pressure'), 1));
+        $pressure [$lastTenDate] = round(self::convertToMercuryScale($lastTen->avg('pressure')), 1);
 
         foreach ($weather->chunk($chunkSize) as $item) {
             $dateNum = round($item->count() / 2, 0); //get middle date
@@ -163,7 +163,7 @@ class WeatherReading extends Model
             $pondAver[$readingDate] = round($item->avg('pond'), 1);
             $humShed[$readingDate] = round($item->avg('shedhumid'), 1);
             $humStr[$readingDate] = round($item->avg('streethumid'), 1);
-            $pressure[$readingDate] = self::convertToMercuryScale(round($item->avg('pressure'), 1));
+            $pressure[$readingDate] = round(self::convertToMercuryScale($item->avg('pressure')), 1);
             $shedTemp[$readingDate] = round($item->avg('shedtemp'), 1);
         }
 
@@ -179,6 +179,6 @@ class WeatherReading extends Model
 
     protected static function convertToMercuryScale($pascalValue)
     {
-        return $pascalValue / 1.3332239;
+        return (double) $pascalValue / 1.3332239;
     }
 }
