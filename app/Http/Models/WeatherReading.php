@@ -150,7 +150,8 @@ class WeatherReading extends Model
         $pondAver [$lastTenDate] = round($lastTen->avg('pond'), 1);
         $humShed [$lastTenDate] = round($lastTen->avg('shedhumid'), 1);
         $humStr [$lastTenDate] = round($lastTen->avg('streethumid'), 1);
-        $pressure [$lastTenDate] = round($lastTen->avg('pressure'), 1);
+        $shedTemp [$lastTenDate] = round($lastTen->avg('shedtemp'), 1);
+        $pressure [$lastTenDate] = self::convertToMercuryScale(round($lastTen->avg('pressure'), 1));
 
         foreach ($weather->chunk($chunkSize) as $item) {
             $dateNum = round($item->count() / 2, 0); //get middle date
