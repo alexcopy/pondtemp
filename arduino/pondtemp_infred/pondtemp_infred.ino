@@ -204,17 +204,25 @@ String readEsp() { //rename to check for wifi status read
 }
 
 
-
+// ---------------START OF WIFI SECTION -----------------//
 
 void sendData() {
   lglcd("Sending Data....", 0);
+  prepToSend();
+  delay(500);
+  addHeaderAndSend(tempUrl(""));
+}
+
+
+void prepToSend() {
   esp8266.println("AT+CIPMUX=0");
-  //Open a connection to the web server
-  String cmd = "AT+CIPSTART=\"TCP\",\""; //make this command: AT+CPISTART="TCP","192.168.50.58",80
+  String cmd = "AT+CIPSTART=\"TCP\",\"";
   cmd += DST_IP;
   cmd += "\",80";
   esp8266.println(cmd);
-  delay(600);
+}
+
+String tempUrl(String cmd) {
   cmd = "GET /receiver?ptemp=";
   cmd += averagePond;
   cmd += "&shedtemp=";
@@ -224,22 +232,22 @@ void sendData() {
   cmd += "&shedhumid=";
   cmd +=  String(humidity, 0);
   cmd += "&streethumid=";
-  cmd += String(humidity, 0);  // change to  dht.readHumidity(); after DHT to be fixed
+  cmd +=  dht.readHumidity();
   cmd += "&press=";
   cmd +=  String(pressure, 2);
-  
   cmd += "&chkstr=";
   cmd +=  dht.readTemperature();
-  
   cmd += "&fltr3=";
   cmd += digitalRead(6);
   cmd += "&pndlvl=";
   cmd += digitalRead(5);
+  return cmd;
+}
+
+void addHeaderAndSend(String cmd) {
   cmd += " HTTP/1.0\r\n";
   cmd += "Host: pondtemp.m2mcom.ru\r\n\r\n";
-
   esp8266.print("AT+CIPSEND=");
-
   esp8266.println(cmd.length());
   delay(1000);
   esp8266.println(cmd);
@@ -251,19 +259,10 @@ void sendData() {
   delay(1000);
 }
 
+// ---------------END OF WIFI SECTION -----------------//
 
 void translateIR() {
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print("Got IR Signal...");
-  lcd.setCursor(1, 1);
-  lcd.print(results.value);
-  Serial.println(results.value, HEX);
-  lcd.clear();
-  sendData();
-
   switch (results.value) {
-
     case 0xFFA25D:
       backlght = backlght ? false : true;
       break;
@@ -333,7 +332,7 @@ void showBmeStatus(bool status) {
     delay(4000);
     lglcd("Starts w/o BME", 1);
     delay(10000);
-    
+
   } else {
     lcd.clear();
     lcd.print("BME is OK!");
@@ -360,9 +359,60 @@ float getBmePressure()
 }
 
 
+int parseIfrNum() {
+  switch (results.value)
+  {
+    case 0xFF6897:
+      return 0;
+      break;
 
+    case 0xFF9867:
+      return 100;
+      break;
 
+    case 0xFFB04F:
+      return 200;
+      break;
 
+    case 0xFF30CF:
+      return 1;
+      break;
+
+    case 0xFF18E7:
+      return 2;
+      break;
+
+    case 0xFF7A85:
+      return 3;
+      break;
+
+    case 0xFF10EF:
+      return 4;
+      break;
+
+    case 0xFF38C7:
+      return 5;
+      break;
+
+    case 0xFF5AA5:
+      return 6;
+      break;
+
+    case 0xFF42BD:
+      return 7;
+      break;
+
+    case 0xFF4AB5:
+      return  8;
+      break;
+
+    case 0xFF52AD:
+      return 9;
+      break;
+
+  }
+  return 1000;
+}
 
 
 

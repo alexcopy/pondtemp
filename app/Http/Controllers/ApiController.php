@@ -84,16 +84,18 @@ class ApiController extends Controller
                 'data' => ['x' => [], 'StreetTemp' => [], 'PondTemp' => [], 'humid' => []],
             ], 400);
         }
-        list($shedAver, $pondAver, $humShed, $humStr, $pressure, $weather) = WeatherReading::getWetherAverege($startDate, $endDate);
+        list($shedAver, $pondAver, $humShed, $humStr, $pressure, $shedTemp, $weather) = WeatherReading::getWetherAverege($startDate, $endDate);
+
+       //Max, Aver, Min data above the charts
         $ids = [
-            "curstr"=>round($current->avg('streettemp'), 1),
-            "curpnd"=>round($current->avg('pond'), 1),
             "maxstr"=>round($weather->max('streettemp'), 1),
-            "minstr"=>round($weather->min('streettemp'), 1),
-            "maxpnd"=>round($weather->max('pond'), 1),
-            "minpnd"=>round($weather->min('pond'), 1),
             "avgstr"=>round($weather->avg('streettemp'), 1),
-            "avgpnd"=>round($weather->avg('pond'), 1)
+            "minstr"=>round($weather->min('streettemp'), 1),
+            "curstr"=>round($current->avg('streettemp'), 1),
+            "maxpnd"=>round($weather->max('pond'), 1),
+            "avgpnd"=>round($weather->avg('pond'), 1),
+            "minpnd"=>round($weather->min('pond'), 1),
+            "curpnd"=>round($current->avg('pond'), 1)
         ];
 
         return response()->json([
@@ -104,6 +106,7 @@ class ApiController extends Controller
                 'ShedHum' => array_values($humShed),
                 'StreetHum' => array_values($humStr),
                 'Pressure' => array_values($pressure),
+                'shedTemp' => array_values($shedTemp),
                 'extr'=>$ids
             ],
         ], 200);

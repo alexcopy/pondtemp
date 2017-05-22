@@ -14,6 +14,7 @@ ALEX.sendData = function (start, end) {
                 msg.data.StreetHum.unshift('StreetHum');
                 msg.data.ShedHum.unshift('ShedHum');
                 msg.data.Pressure.unshift('Pressure');
+                msg.data.shedTemp.unshift('Shed Temp');
                 ALEX.temps.load({
                     columns: [
                         msg.data.x,
@@ -53,7 +54,8 @@ ALEX.temps = c3.generate({
         columns: [
             ['x', []],
             ['Street Temp', []],
-            ['Pond Temp', []]
+            ['Pond Temp', []],
+            ['Shed Temp', []]
         ]
     },
     axis: {

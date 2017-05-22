@@ -40,12 +40,12 @@ class WeatherReading extends Model
      */
     public static function parseAndWrite(Request $request)
     {
-        $strTemp=  (int)$request->get('chkstr') ? (double)$request->get('chkstr') : (double)$request->get('strT');
+        $strTemp = (int)$request->get('chkstr') ? (double)$request->get('chkstr') : (double)$request->get('strT');
         self::create([
             'readingDate' => (new DateTime())->format('Y-m-d H:i:s'),
             'pond' => (double)$request->get('ptemp', 0),
             'shedtemp' => (double)$request->get('shedtemp', 0),
-            'streettemp' =>  $strTemp,
+            'streettemp' => $strTemp,
             'shedhumid' => (double)$request->get('shedhumid', 0),
             'streethumid' => (double)$request->get('streethumid', 0),
             'room' => (double)$request->get('roomtemp', 0),
@@ -117,6 +117,14 @@ class WeatherReading extends Model
      */
     public static function getWetherAverege($start, $end = null)
     {
+        $shedAver = [];
+        $humShed = [];
+        $humStr = [];
+        $pondAver = [];
+        $pressure = [];
+        $shedTemp = [];
+
+
         if (!$end) {
             $end = time();
         }
@@ -126,16 +134,16 @@ class WeatherReading extends Model
         }
 
         $weather = self::whereBetween('timestamp', [$start, $end])->orderBy('timestamp', 'desc')->get();
+
+        if (!$weather->count()) {
+            return [$shedAver, $pondAver, $humShed, $humStr, $pressure, $shedTemp, $weather];
+        }
+
         $lastTen = $weather->take(10);
         $chunkSize = 4;
         if ($weather->count() > 120) {
             $chunkSize = round($weather->count() / 30, 0);
         }
-        $shedAver = [];
-        $humShed = [];
-        $humStr = [];
-        $pondAver = [];
-        $pressure = [];
 
         $lastTenDate = Carbon::parse($lastTen->first()->readingDate)->format($timeFormat);
         $shedAver [$lastTenDate] = round($lastTen->avg('streettemp'), 1);
@@ -155,6 +163,7 @@ class WeatherReading extends Model
             $humShed[$readingDate] = round($item->avg('shedhumid'), 1);
             $humStr[$readingDate] = round($item->avg('streethumid'), 1);
             $pressure[$readingDate] = round($item->avg('pressure'), 1);
+            $shedTemp[$readingDate] = round($item->avg('shedtemp'), 1);
         }
 
         $shedAver = array_reverse($shedAver);
@@ -163,7 +172,7 @@ class WeatherReading extends Model
         $humStr = array_reverse($humStr);
         $pressure = array_reverse($pressure);
 
-        return [$shedAver, $pondAver, $humShed, $humStr, $pressure, $weather];
+        return [$shedAver, $pondAver, $humShed, $humStr, $pressure, $shedTemp, $weather];
     }
 
 }
