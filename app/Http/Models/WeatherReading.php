@@ -162,7 +162,7 @@ class WeatherReading extends Model
             $pondAver[$readingDate] = round($item->avg('pond'), 1);
             $humShed[$readingDate] = round($item->avg('shedhumid'), 1);
             $humStr[$readingDate] = round($item->avg('streethumid'), 1);
-            $pressure[$readingDate] = round($item->avg('pressure'), 1);
+            $pressure[$readingDate] = self::convertToMercuryScale(round($item->avg('pressure'), 1));
             $shedTemp[$readingDate] = round($item->avg('shedtemp'), 1);
         }
 
@@ -176,4 +176,8 @@ class WeatherReading extends Model
         return [$shedAver, $pondAver, $humShed, $humStr, $pressure, $shedTemp, $weather];
     }
 
+    protected static function convertToMercuryScale($pascalValue)
+    {
+        return $pascalValue / 1.3332239;
+    }
 }
