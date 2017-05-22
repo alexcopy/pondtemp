@@ -40,11 +40,12 @@ class WeatherReading extends Model
      */
     public static function parseAndWrite(Request $request)
     {
+        $strTemp=  (int)$request->get('chkstr') ? (double)$request->get('chkstr') : (double)$request->get('strT');
         self::create([
             'readingDate' => (new DateTime())->format('Y-m-d H:i:s'),
             'pond' => (double)$request->get('ptemp', 0),
             'shedtemp' => (double)$request->get('shedtemp', 0),
-            'streettemp' => (double)$request->get('strtemp', 0),
+            'streettemp' =>  $strTemp,
             'shedhumid' => (double)$request->get('shedhumid', 0),
             'streethumid' => (double)$request->get('streethumid', 0),
             'room' => (double)$request->get('roomtemp', 0),
