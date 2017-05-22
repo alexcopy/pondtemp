@@ -171,6 +171,7 @@ class WeatherReading extends Model
         $humShed = array_reverse($humShed);
         $humStr = array_reverse($humStr);
         $pressure = array_reverse($pressure);
+        $shedTemp = array_reverse($shedTemp);
 
         return [$shedAver, $pondAver, $humShed, $humStr, $pressure, $shedTemp, $weather];
     }
