@@ -19,7 +19,8 @@ ALEX.sendData = function (start, end) {
                     columns: [
                         msg.data.x,
                         msg.data.StreetTemp,
-                        msg.data.PondTemp
+                        msg.data.PondTemp,
+                        msg.data.shedTemp
                     ],
                     length: 0,
                     duration: 8500
