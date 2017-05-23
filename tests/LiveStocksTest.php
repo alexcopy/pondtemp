@@ -21,9 +21,14 @@ class LiveStocksTest extends \TestCase
     }
 
 
-    public function testExample()
+    public function testLiveStocks()
     {
+        foreach (range(1, 10) as $item) {
+            factory(LiveStocks::class)->create();
 
+        }
+        $resutl = LiveStocks::all()->toArray();
+        $this->assertCount(10, $resutl);
     }
 
     public function tearDown()

@@ -21,9 +21,14 @@ class MeterReadingsTest extends \TestCase
     }
 
 
-    public function testExample()
+    public function testMeterReadings()
     {
+        foreach (range(1, 10) as $item) {
+            factory(MeterReadings::class)->create();
 
+        }
+        $resutl = MeterReadings::all()->toArray();
+        $this->assertCount(10, $resutl);
     }
 
     public function tearDown()

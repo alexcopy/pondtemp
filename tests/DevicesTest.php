@@ -21,9 +21,14 @@ class DevicesTest extends \TestCase
     }
 
 
-    public function testExample()
+    public function testDevices()
     {
+        foreach (range(1, 10) as $item) {
+            factory(Devices::class)->create();
 
+        }
+        $resutl = Devices::all()->toArray();
+        $this->assertCount(10, $resutl);
     }
 
     public function tearDown()

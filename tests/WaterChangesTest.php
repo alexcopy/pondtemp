@@ -21,9 +21,14 @@ class WaterChangesTest extends \TestCase
     }
 
 
-    public function testExample()
+    public function testWaterChanges()
     {
+        foreach (range(1, 10) as $item) {
+            factory(WaterChanges::class)->create();
 
+        }
+        $resutl = WaterChanges::all()->toArray();
+        $this->assertCount(10, $resutl);
     }
 
     public function tearDown()

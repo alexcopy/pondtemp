@@ -21,9 +21,14 @@ class FilterPumpCleaningsTest extends \TestCase
     }
 
 
-    public function testExample()
+    public function testFilterPumpCleanings()
     {
+        foreach (range(1, 10) as $item) {
+            factory(FilterPumpCleanings::class)->create();
 
+        }
+        $resutl = FilterPumpCleanings::all()->toArray();
+        $this->assertCount(10, $resutl);
     }
 
     public function tearDown()

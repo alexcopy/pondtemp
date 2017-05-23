@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class WaterMeterReadings extends Migration
+class MeterReadings extends Migration
 {
 
     /**
@@ -14,7 +14,7 @@ class WaterMeterReadings extends Migration
      */
     public function up()
     {
-        Schema::create('water_meter_readings', function (Blueprint $table) {
+        Schema::create('meter_readings', function (Blueprint $table) {
             $table->increments('id');
             $table->dateTimeTz('readingDate');
             $table->double('readings');
@@ -30,6 +30,6 @@ class WaterMeterReadings extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('water_meter_readings');
+        Schema::dropIfExists('meter_readings');
     }
 }

@@ -24,7 +24,14 @@ class ChemicalsTest extends \TestCase
     public function testChemicals()
     {
 
+        foreach (range(1, 10) as $item) {
+            factory(Chemicals::class)->create();
+
+        }
+        $resutl = Chemicals::all()->toArray();
+        $this->assertCount(10, $resutl);
     }
+
 
     public function tearDown()
     {
