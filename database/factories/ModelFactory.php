@@ -30,3 +30,19 @@ $factory->define(App\Http\Models\Gauges::class, function (Faker\Generator $faker
         'timestamp' =>time()
     ];
 });
+$factory->define(App\Http\Models\WeatherReading::class, function (Faker\Generator $faker) {
+    return [
+        'readingDate'=>$faker->date('Y-m-d H:i:s'),
+        'pond'=> $faker->randomDigit,
+        'streettemp'=> $faker->randomDigit,
+        'shedtemp'=> $faker->randomDigit,
+        'shedhumid'=> $faker->randomDigit,
+        'streethumid'=> $faker->randomDigit,
+        'room'=> $faker->randomDigit,
+        'roomhumid'=> $faker->randomDigit,
+        'location'=> $faker->randomDigit,
+        'pressure'=> $faker->randomDigit,
+        'timestamp' => $faker->randomDigit,
+        'userId'=> $faker->randomDigit
+    ];
+});
