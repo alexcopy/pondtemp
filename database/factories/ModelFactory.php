@@ -19,30 +19,32 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(App\Http\Models\Gauges::class, function (Faker\Generator $faker) {
+    $date = $faker->date('Y-m-d H:i:s');
     return [
-        'readingDate' => $faker->date('Y-m-d H:i:s'),
+        'readingDate' => $date,
         'pondLower' => $faker->randomDigit,
         'pondUpper' => $faker->randomDigit,
         'fl1' => $faker->randomDigit,
         'fl2' => $faker->randomDigit,
         'fl3' => $faker->randomDigit,
-        'strlow' => $faker->randomDigit,
-        'timestamp' =>time()
+        'strlow' => $faker->randomFloat(),
+        'timestamp' => \Carbon\Carbon::parse($date)->timestamp,
     ];
 });
 $factory->define(App\Http\Models\WeatherReading::class, function (Faker\Generator $faker) {
+    $date = $faker->date('Y-m-d H:i:s');
     return [
-        'readingDate'=>$faker->date('Y-m-d H:i:s'),
-        'pond'=> $faker->randomDigit,
-        'streettemp'=> $faker->randomDigit,
-        'shedtemp'=> $faker->randomDigit,
-        'shedhumid'=> $faker->randomDigit,
-        'streethumid'=> $faker->randomDigit,
-        'room'=> $faker->randomDigit,
-        'roomhumid'=> $faker->randomDigit,
-        'location'=> $faker->randomDigit,
-        'pressure'=> $faker->randomDigit,
-        'timestamp' => $faker->randomDigit,
-        'userId'=> $faker->randomDigit
+        'readingDate' => $date,
+        'pond' => $faker->randomFloat(),
+        'streettemp' => $faker->randomFloat(),
+        'shedtemp' => $faker->randomFloat(),
+        'shedhumid' => $faker->randomFloat(),
+        'streethumid' => $faker->randomFloat(),
+        'room' => $faker->randomFloat(),
+        'roomhumid' => $faker->randomFloat(),
+        'location' => $faker->randomFloat(),
+        'pressure' => $faker->randomFloat(),
+        'timestamp' => \Carbon\Carbon::parse($date)->timestamp,
+        'userId' => $faker->randomDigit
     ];
 });

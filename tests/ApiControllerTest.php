@@ -66,7 +66,6 @@ class ApiControllerTest extends \TestCase
     {
         foreach (range(1, 10) as $item) {
             factory(WeatherReading::class)->create();
-
         }
         $pars = [
             'readingDate' => (new DateTime())->format('Y-m-d H:i:s'),
@@ -79,7 +78,7 @@ class ApiControllerTest extends \TestCase
             'roomhumid' => 10,
             'location' => 10,
             'pressure' => 10,
-            'timestamp' => 10,
+            'timestamp' => time(),
             'userId' => 10
         ];
 
@@ -108,9 +107,26 @@ class ApiControllerTest extends \TestCase
         $this->assertCount(12, $weather);
     }
 
+    public function testAverege()
+    {
+        foreach (range(1, 55) as $item) {
+            factory(WeatherReading::class)->create();
+        }
+        $aver = WeatherReading::getWetherAverege(0, time());
+        list($shedAver, $pondAver, $humShed, $humStr, $pressure, $shedTemp, $weather) = WeatherReading::getWetherAverege(0, time());
+        $this->assertCount(15, $shedAver);
+        $this->assertCount(15, $pondAver);
+        $this->assertCount(15, $humShed);
+        $this->assertCount(15, $humStr);
+        $this->assertCount(15, $pressure);
+        $this->assertCount(15, $shedTemp);
+        $this->assertCount(7, $aver);
+    }
+
     public function tearDown()
     {
         Artisan::call('migrate:reset');
         parent::tearDown();
     }
+
 }
