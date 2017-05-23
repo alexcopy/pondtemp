@@ -18,6 +18,16 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
     ];
 });
 
+
+$factory->define(App\Http\Models\WaterChanges::class, function (Faker\Generator $faker) {
+    return [
+        'changeDate' => $faker->date('Y-m-d H:i:s'),
+        'description' => $faker->text(),
+        'readingBefore' => $faker->randomFloat(),
+        'readingAfter' => $faker->randomFloat(),
+    ];
+});
+
 $factory->define(App\Http\Models\Gauges::class, function (Faker\Generator $faker) {
     $date = $faker->date('Y-m-d H:i:s');
     return [
@@ -48,3 +58,73 @@ $factory->define(App\Http\Models\WeatherReading::class, function (Faker\Generato
         'userId' => $faker->randomDigit
     ];
 });
+
+
+$factory->define(App\Http\Models\ChemicalAnalysis::class, function (Faker\Generator $faker) {
+    return [
+        'date' => $faker->date('Y-m-d H:i:s'),
+        'nO2' => $faker->randomFloat(),
+        'nO3' => $faker->randomFloat(),
+        'nH4' => $faker->randomFloat(),
+        'ph' => $faker->randomFloat(),
+    ];
+});
+$factory->define(App\Http\Models\Chemicals::class, function (Faker\Generator $faker) {
+    return [
+        'date' => $faker->date('Y-m-d H:i:s'),
+        'qty' => $faker->randomDigit,
+        'reason' => $faker->text(100),
+        'type' => $faker->text(100),
+    ];
+});
+$factory->define(App\Http\Models\Devices::class, function (Faker\Generator $faker) {
+    return [
+        'deviceName' => $faker->text(100),
+        'deviceType' => $faker->text(100),
+        'description' => $faker->text(100),
+    ];
+});
+$factory->define(App\Http\Models\FilterPumpCleanings::class, function (Faker\Generator $faker) {
+    return [
+        'cleaningDate' => $faker->date('Y-m-d H:i:s'),
+        'description' => $faker->text(100),
+        'pumpid' => $faker->randomDigit,
+        'readings' => $faker->randomFloat(),
+    ];
+});
+
+$factory->define(App\Http\Models\Locations::class, function (Faker\Generator $faker) {
+    return [
+        'streetAddress' => $faker->streetAddress,
+        'postalCode' => $faker->postcode,
+        'city' => $faker->city,
+        'county' => $faker->country,
+    ];
+});
+
+$factory->define(App\Http\Models\Tanks::class, function (Faker\Generator $faker) {
+    return [
+        'tankName' => $faker->name,
+        'tankType' => $faker->text(100),
+        'description' => $faker->text(100),
+    ];
+});
+
+$factory->define(App\Http\Models\MeterReadings::class, function (Faker\Generator $faker) {
+    return [
+        'readingDate' => $faker->date('Y-m-d H:i:s'),
+        'readings' => $faker->randomFloat()
+    ];
+});
+
+
+$factory->define(App\Http\Models\LiveStocks::class, function (Faker\Generator $faker) {
+    return [
+        'date' => $faker->date('Y-m-d H:i:s'),
+        'reason' => $faker->text(100),
+        'description' => $faker->text(100),
+        'qty' => $faker->randomDigit,
+        'readings' => $faker->randomFloat(),
+    ];
+});
+

@@ -20,7 +20,6 @@ class WaterChanges extends Migration
             $table->string('description');
             $table->double('readingBefore');
             $table->double('readingAfter');
-            $table->double('readings');
             $table->integer('timestamp')->default(time());
         });
 

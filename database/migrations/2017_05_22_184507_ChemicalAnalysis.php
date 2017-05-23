@@ -18,10 +18,10 @@ class ChemicalAnalysis extends Migration
         Schema::create('chemical_analysis', function (Blueprint $table) {
             $table->increments('id');
             $table->dateTimeTz('date');
-            $table->string('nO2');
-            $table->string('nO3');
-            $table->string('nH4');
-            $table->string('ph');
+            $table->double('nO2');
+            $table->double('nO3');
+            $table->double('nH4');
+            $table->double('ph');
             $table->integer('timestamp')->default(time());
         });
     }

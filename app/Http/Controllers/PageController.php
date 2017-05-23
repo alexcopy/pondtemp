@@ -19,8 +19,6 @@ class PageController extends Controller
         $weather = WeatherReading::orderBy('timestamp', 'desc')->limit(50)->get();
         $tempReader = TempMeter::orderBy('timestamp', 'desc')->limit(50)->get();
         $guages = Gauges::orderBy('timestamp', 'desc')->limit(50)->get();
-
-//        Input::get('email')
         return view('pages.index', compact(['weather', 'tempReader', 'guages']));
     }
 

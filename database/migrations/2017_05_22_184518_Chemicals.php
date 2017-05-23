@@ -19,6 +19,7 @@ class Chemicals extends Migration
             $table->dateTimeTz('date');
             $table->integer('qty'); //foreign key to devices
             $table->string('reason');
+            $table->string('type');
             $table->integer('timestamp')->default(time());
         });
     }
