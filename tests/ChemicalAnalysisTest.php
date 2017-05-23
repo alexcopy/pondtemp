@@ -1,10 +1,17 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: alexredko
+ * Date: 23/05/2017
+ * Time: 13:17
+ */
+
+namespace App\Http\Models;
+
 
 use Illuminate\Support\Facades\Artisan;
-use Laravel\Lumen\Testing\DatabaseMigrations;
-use Laravel\Lumen\Testing\DatabaseTransactions;
 
-class ExampleTest extends TestCase
+class ChemicalAnalysisTest extends \TestCase
 {
 
     public function setUp()
@@ -14,7 +21,7 @@ class ExampleTest extends TestCase
     }
 
 
-    public function testExample()
+    public function testChemicalAnalysis()
     {
 
     }

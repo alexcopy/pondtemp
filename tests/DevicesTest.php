@@ -1,10 +1,17 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: alexredko
+ * Date: 23/05/2017
+ * Time: 13:18
+ */
+
+namespace App\Http\Models;
+
 
 use Illuminate\Support\Facades\Artisan;
-use Laravel\Lumen\Testing\DatabaseMigrations;
-use Laravel\Lumen\Testing\DatabaseTransactions;
 
-class ExampleTest extends TestCase
+class DevicesTest extends \TestCase
 {
 
     public function setUp()

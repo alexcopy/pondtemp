@@ -19,7 +19,6 @@ use Laravel\Lumen\Testing\DatabaseTransactions;
 class ApiControllerTest extends \TestCase
 {
 
-
     public function setUp()
     {
         parent::setUp();
@@ -30,7 +29,6 @@ class ApiControllerTest extends \TestCase
     {
         factory(Gauges::class)->create();
         factory(Gauges::class)->create();
-
 
         $gauges = Gauges::all()->toArray();
         $this->assertCount(2, $gauges);
