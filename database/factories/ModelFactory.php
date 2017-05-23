@@ -60,7 +60,7 @@ $factory->define(App\Http\Models\WeatherReading::class, function (Faker\Generato
 });
 
 
-$factory->define(App\Http\Models\ChemicalAnalysis::class, function (Faker\Generator $faker) {
+$factory->define(App\Http\Models\ChemicalAnalyses::class, function (Faker\Generator $faker) {
     return [
         'date' => $faker->date('Y-m-d H:i:s'),
         'nO2' => $faker->randomFloat(),

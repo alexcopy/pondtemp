@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class WaterChanges extends Model
 {
 
+    public $timestamps = false;
     protected $fillable = [
         'changeDate',
         'description',

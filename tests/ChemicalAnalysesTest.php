@@ -11,7 +11,7 @@ namespace App\Http\Models;
 
 use Illuminate\Support\Facades\Artisan;
 
-class ChemicalAnalysisTest extends \TestCase
+class ChemicalAnalysesTest extends \TestCase
 {
 
     public function setUp()
@@ -23,7 +23,12 @@ class ChemicalAnalysisTest extends \TestCase
 
     public function testChemicalAnalysis()
     {
+        foreach (range(1, 10) as $item) {
+            factory(ChemicalAnalyses::class)->create();
 
+        }
+        $resutl = ChemicalAnalyses::all()->toArray();
+        $this->assertCount(10, $resutl);
     }
 
     public function tearDown()

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ChemicalAnalysis extends Migration
+class ChemicalAnalyses extends Migration
 {
 
     /**
@@ -15,7 +15,7 @@ class ChemicalAnalysis extends Migration
     public function up()
     {
 
-        Schema::create('chemical_analysis', function (Blueprint $table) {
+        Schema::create('chemical_analyses', function (Blueprint $table) {
             $table->increments('id');
             $table->dateTimeTz('date');
             $table->double('nO2');
@@ -33,6 +33,6 @@ class ChemicalAnalysis extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('chemical_analysis');
+        Schema::dropIfExists('chemical_analyses');
     }
 }

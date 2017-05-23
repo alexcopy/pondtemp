@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Tanks extends Model
 {
 
+    public $timestamps = false;
     protected $fillable = [
         'tankName',
         'tankType',

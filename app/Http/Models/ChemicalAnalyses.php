@@ -5,9 +5,10 @@ namespace App\Http\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ChemicalAnalysis extends Model
+class ChemicalAnalyses extends Model
 {
 
+    public $timestamps = false;
     protected $fillable = [
         'date',
         'nO2',
