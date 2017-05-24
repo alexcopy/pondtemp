@@ -9,8 +9,8 @@
                     <th>readingDate</th>
                     <th>pondT</th>
                     <th>strTemp</th>
+                    <th>shedTemp</th>
                     <th>strHum</th>
-                    <th>shedHum</th>
                     <th>pressure</th>
                 </tr>
                 </thead>
@@ -20,8 +20,8 @@
                         <td>{{$row->readingDate}}</td>
                         <td>{{$row->pond}}</td>
                         <td>{{$row->streettemp}}</td>
+                        <td>{{$row->shedtemp}}</td>
                         <td>{{$row->streethumid}}</td>
-                        <td>{{$row->shedhumid}}</td>
                         <td>{{$row->pressure}}</td>
 
                     </tr>

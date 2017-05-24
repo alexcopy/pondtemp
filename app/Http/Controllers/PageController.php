@@ -16,9 +16,9 @@ class PageController extends Controller
 
     public function index()
     {
-        $weather = WeatherReading::orderBy('timestamp', 'desc')->limit(50)->get();
-        $tempReader = TempMeter::orderBy('timestamp', 'desc')->limit(50)->get();
-        $guages = Gauges::orderBy('timestamp', 'desc')->limit(50)->get();
+        $weather = WeatherReading::orderBy('timestamp', 'desc')->limit(100)->get();
+        $tempReader = TempMeter::orderBy('timestamp', 'desc')->limit(100)->get();
+        $guages = Gauges::orderBy('timestamp', 'desc')->limit(100)->get();
         return view('pages.index', compact(['weather', 'tempReader', 'guages']));
     }
 
