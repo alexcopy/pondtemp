@@ -39,6 +39,10 @@ class ApiController extends Controller
         return time();
     }
 
+    public function chemicalAnalyse(Request $request)
+    {
+
+    }
 
 
     protected function checkDataValidity(Request $request)
@@ -76,7 +80,7 @@ class ApiController extends Controller
 
         $startDate = Carbon::parse($startDate)->timestamp;
         $endDate = Carbon::parse($endDate)->timestamp;
-        $current = WeatherReading::where('timestamp',">", time()-1200)->orderBy('timestamp', 'desc')->limit(10)->get();
+        $current = WeatherReading::where('timestamp', ">", time() - 1200)->orderBy('timestamp', 'desc')->limit(10)->get();
 
 
         if (($startDate > $endDate) || (($endDate - $startDate) > 5076000)) {
@@ -86,16 +90,16 @@ class ApiController extends Controller
         }
         list($shedAver, $pondAver, $humShed, $humStr, $pressure, $shedTemp, $weather) = WeatherReading::getWetherAverege($startDate, $endDate);
 
-       //Max, Aver, Min data above the charts
+        //Max, Aver, Min data above the charts
         $ids = [
-            "maxstr"=>round($weather->max('streettemp'), 1),
-            "avgstr"=>round($weather->avg('streettemp'), 1),
-            "minstr"=>round($weather->min('streettemp'), 1),
-            "curstr"=>round($current->avg('streettemp'), 1),
-            "maxpnd"=>round($weather->max('pond'), 1),
-            "avgpnd"=>round($weather->avg('pond'), 1),
-            "minpnd"=>round($weather->min('pond'), 1),
-            "curpnd"=>round($current->avg('pond'), 1)
+            "maxstr" => round($weather->max('streettemp'), 1),
+            "avgstr" => round($weather->avg('streettemp'), 1),
+            "minstr" => round($weather->min('streettemp'), 1),
+            "curstr" => round($current->avg('streettemp'), 1),
+            "maxpnd" => round($weather->max('pond'), 1),
+            "avgpnd" => round($weather->avg('pond'), 1),
+            "minpnd" => round($weather->min('pond'), 1),
+            "curpnd" => round($current->avg('pond'), 1)
         ];
 
         return response()->json([
@@ -107,7 +111,7 @@ class ApiController extends Controller
                 'StreetHum' => array_values($humStr),
                 'Pressure' => array_values($pressure),
                 'shedTemp' => array_values($shedTemp),
-                'extr'=>$ids
+                'extr' => $ids
             ],
         ], 200);
     }

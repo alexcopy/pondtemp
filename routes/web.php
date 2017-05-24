@@ -18,7 +18,8 @@ $app->get('/receiver/', 'ApiController@tempData');
 $app->get('/', 'PageController@index');
 $app->get('/ping', 'PageController@ping');
 $app->get('/graph', 'PageController@graph');
-$app->post('/api/v3/getdate', 'ApiController@jsonGraph');
 $app->get('/restoredata', 'Controller@restoreData');
+$app->post('/api/v3/getdate', 'ApiController@jsonGraph');
+$app->post('/api/v3/chemicalanalyse', 'ApiController@chemicalAnalyse');
 
 
