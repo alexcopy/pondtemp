@@ -153,6 +153,7 @@ class WeatherReading extends Model
             if (!isset($vals[$dateNum]['readingDate'])) continue;
             $date = $vals[$dateNum]['readingDate'];
             $readingDate = Carbon::parse($date)->format($timeFormat);
+            if (isset($shedAver[$readingDate])) continue;
             $shedAver[$readingDate] = round($item->avg('streettemp'), 1);
             $pondAver[$readingDate] = round($item->avg('pond'), 1);
             $humShed[$readingDate] = round($item->avg('shedhumid'), 1);
@@ -173,6 +174,6 @@ class WeatherReading extends Model
 
     protected static function convertToMercuryScale($pascalValue)
     {
-        return (double) $pascalValue / 1.3332239;
+        return (double)$pascalValue / 1.3332239;
     }
 }
