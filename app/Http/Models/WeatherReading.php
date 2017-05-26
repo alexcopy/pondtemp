@@ -122,9 +122,9 @@ class WeatherReading extends Model
         if (!$end) {
             $end = time();
         }
-        $timeFormat = 'h:i';
+        $timeFormat = 'H:i';
         if (($end - $start) > 172800) {
-            $timeFormat = 'd/m h:i';
+            $timeFormat = 'd/m H:i';
         }
 
         $weather = self::whereBetween('timestamp', [$start, $end])->orderBy('timestamp', 'desc')->get();

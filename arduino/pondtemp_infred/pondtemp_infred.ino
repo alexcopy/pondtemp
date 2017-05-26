@@ -267,7 +267,7 @@ void translateIR() {
       backlght = backlght ? false : true;
       break;
 
-    case 0xFF629D: //mode is a type of work
+    case 0xFF629D: //mode is a type of work CH
 
       break;
 
@@ -297,20 +297,6 @@ void translateIR() {
   }
 
   delay(500);
-
-}
-
-int getIfrNumber() {
-  switch (results.value) {
-
-    case 0xFFA25D:
-
-      break;
-
-    default:
-      break;
-  }
-  return 0;
 }
 
 void ifrMode() {
