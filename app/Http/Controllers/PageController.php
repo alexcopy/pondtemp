@@ -49,7 +49,7 @@ class PageController extends Controller
 
             $dirFiles['files'][$dir] = File::allFiles($filesPath);
             $dirFiles['dirs'][$dir] = File::directories($ftpDir . '/' . $dir);
-            $dirFiles['changed'][$dir] = Carbon::createFromTimestamp(File::lastModified($filesPath))->format('d/m H:i');
+            $dirFiles['changed'][$dir] = File::lastModified($filesPath);
         }
 
         return view('pages.camfiles', compact(['dirFiles']));

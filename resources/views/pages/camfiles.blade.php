@@ -15,7 +15,7 @@
                 @foreach($dirFiles['files'] as $folder=> $dirfile)
                     <tr>
                         <td>{{$folder}}</td>
-                        <td>{{count($dirfile)}}</td>
+                        <td><span class="alert-info badge">{{count($dirfile)}}</span></td>
                     </tr>
                 @endforeach
                 </tbody>
@@ -33,10 +33,16 @@
                 </thead>
                 <tbody>
                 @foreach($dirFiles['changed'] as $folder=> $date)
+                    <?php
+                    $formatedDate = Carbon\Carbon::createFromTimestamp($date)->format('d/m H:i');
+                    $state = (time() - $date) > 7200 ? 'ERR' : 'OK';
+                    $stClass = $state == 'OK' ? "alert-success" : "alert-danger";
+                    ?>
+
                     <tr>
                         <td>{{$folder}}</td>
-                        <td>{{$date}}</td>
-                        <td>{{$date}}</td>
+                        <td><span class="{{$stClass}}">{{$state}}</span></td>
+                        <td>{{$formatedDate}}</td>
                     </tr>
                 @endforeach
                 </tbody>
@@ -55,7 +61,7 @@
                 @foreach($dirFiles['dirs'] as $folder=> $dirfile)
                     <tr>
                         <td>{{$folder}}</td>
-                        <td>{{count($dirfile)}}</td>
+                        <td><span class="alert-info badge">{{count($dirfile)}}</span></td>
                     </tr>
                 @endforeach
                 </tbody>
