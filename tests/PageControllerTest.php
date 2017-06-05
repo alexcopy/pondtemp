@@ -2,16 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
-
-
-
-
-
-
-use Illuminate\Support\Facades\File;
-use Symfony\Component\HttpFoundation\Tests\File\FakeFile;
-
 class PageControllerTest extends \PHPUnit_Framework_TestCase
 {
 
