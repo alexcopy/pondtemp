@@ -50,15 +50,19 @@ class PageController extends Controller
             $dirFiles['files'][$dir] = File::allFiles($filesPath);
             $dirFiles['dirs'][$dir] = File::directories($ftpDir . '/' . $dir);
             $dirFiles['changed'][$dir] = File::lastModified($filesPath);
-            $dirFiles['size'][$dir] = self::human_filesize(File::size($filesPath));
+            $dirFiles['size'][$dir] =  self::human_filesize($filesPath);
         }
         return view('pages.camfiles', compact(['dirFiles']));
     }
 
-    public static function human_filesize($bytes, $decimals = 2)
+    public static function human_filesize($path, $decimals = 2)
     {
+        $io = popen ( '/usr/bin/du -sk ' . $path, 'r' );
+        $sizeB = fgets ( $io, 4096);
+        $sizeB = substr ( $sizeB, 0, strpos ( $sizeB, "\t" ));
         $size = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
-        $factor = floor((strlen($bytes) - 1) / 3);
-        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . $size[$factor];
+        $factor = floor((strlen($sizeB) - 1) / 3);
+        pclose ( $io );
+        return sprintf("%.{$decimals}f", $sizeB / pow(1024, $factor)) . $size[$factor];
     }
 }
