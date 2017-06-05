@@ -9,6 +9,7 @@
                 <tr>
                     <th>cam name</th>
                     <th>q-ty</th>
+                    <th>size</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -16,6 +17,7 @@
                     <tr>
                         <td>{{$folder}}</td>
                         <td><span class="alert-info badge">{{count($dirfile)}}</span></td>
+                       <td>{{$dirFiles['size'][$folder]}}</td>
                     </tr>
                 @endforeach
                 </tbody>
