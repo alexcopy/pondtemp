@@ -58,11 +58,26 @@ class PageController extends Controller
     public static function human_filesize($path, $decimals = 2)
     {
         $io = popen ( '/usr/bin/du -sk ' . $path, 'r' );
-        $sizeB = fgets ( $io, 4096);
-        $sizeB = substr ( $sizeB, 0, strpos ( $sizeB, "\t" ));
-        $size = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
-        $factor = floor((strlen($sizeB) - 1) / 3);
+        $size = fgets ( $io, 4096);
+        $size = substr ( $size, 0, strpos ( $size, "\t" ) );
         pclose ( $io );
-        return sprintf("%.{$decimals}f", $sizeB / pow(1024, $factor)) . $size[$factor];
-    }
+
+        return $size;
+//
+  }
 }
+//        $size = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
+//        $factor = floor((strlen($bytes) - 1) / 3);
+//        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . $size[$factor];
+
+//public static function human_filesize($path, $decimals = 2)
+//{
+//    $io = popen ( '/usr/bin/du -sk ' . $path, 'r' );
+//    $size = fgets ( $io, 4096);
+//    $sizeB = substr ( $size, 0, strpos ( $size, "\t" ) )*1024;
+//    pclose ( $io );
+//    $sizeH = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
+//    $factor = floor((strlen($sizeB) - 1) / 3);
+//    return sprintf("%.{$decimals}f", $sizeB / pow(1024, $factor)) . $sizeH[$factor];
+//
+//}
