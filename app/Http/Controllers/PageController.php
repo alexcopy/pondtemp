@@ -10,6 +10,8 @@ use App\Http\Models\WeatherReading;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class PageController extends Controller
 {
@@ -35,5 +37,18 @@ class PageController extends Controller
         return view('pages.graph', compact(['weather']));
     }
 
+    public function allCamFiles(Request $request)
+    {
+        $dirList = ['mamacam', 'pond', 'koridor'];
+        $ftpDir = storage_path() . '/ftp';
+        $dirFiles = [];
+
+        foreach ($dirList as $dir) {
+            $filesPath = $ftpDir . '/' . $dir . '/today';
+            $dirFiles['files'][$dir] = File::allFiles($filesPath);
+            $dirFiles['dirs'][$dir] = File::directories($ftpDir . '/' . $dir);
+        }
+        return view('pages.allfiles', compact(['dirFiles']));
+    }
 
 }

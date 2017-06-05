@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 
 $app->get('/receiver/', 'ApiController@tempData');
+$app->get('/allfiles/', 'PageController@allCamFiles');
 $app->get('/', 'PageController@index');
 $app->get('/ping', 'PageController@ping');
 $app->get('/graph', 'PageController@graph');

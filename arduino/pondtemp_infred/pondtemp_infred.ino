@@ -272,6 +272,7 @@ void translateIR() {
       break;
 
     case 0xFFE21D:
+    
       break;
 
     case 0xFF22DD:
