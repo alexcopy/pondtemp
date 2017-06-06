@@ -16,8 +16,11 @@ class ApiController extends Controller
     {
         $insertWeatherEvery = 300; //seconds
         $insertInToPondDBEvery = 1200; //seconds
-        TempMeter::writeToTextFile($request);
-
+        try {
+            TempMeter::writeToTextFile($request);
+        } catch (\Exception $exception) {
+            throw new \Exception($exception->getMessage());
+        }
 
         if (!$this->checkDataValidity($request)) {
             return 'ERROR';

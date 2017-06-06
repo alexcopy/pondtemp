@@ -4,3 +4,5 @@ Homestead.json
 Homestead.yaml
 .env
 /storage/ftp
+/storage/temp.txt
+/storage/urilog.txt
