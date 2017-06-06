@@ -14,3 +14,9 @@ function getSize($path)
 {
     return App\Http\Controllers\PageController::human_folderSize($path);
 }
+
+function getQty($path)
+{
+    $files=Illuminate\Support\Facades\File::allFiles($path);
+    return count($files);
+}

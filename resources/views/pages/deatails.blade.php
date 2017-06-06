@@ -13,6 +13,7 @@
                     <th>No</th>
                     <th>FileName</th>
                     <th>Size</th>
+                    <th>q-ty</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -29,9 +30,11 @@
                             @endphp
                             <td><strong><a href="{{$href}}"> {{class_basename($val)}}</a> </strong></td>
                             <td>{{getSize($val)}}</td>
+                            <td>{{getQty($val)}}</td>
                         @else
                             <td>{{$val->getFileName()}}</td>
                             <td>{{getSize($val->getPathName())}}</td>
+                            <td>1</td>
                         @endif
                     </tr>
                 @endforeach
