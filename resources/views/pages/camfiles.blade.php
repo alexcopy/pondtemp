@@ -1,5 +1,5 @@
 @extends('layouts.main')
-
+@include('helpers.functions')
 @section('content')
 
     <div class="row">
@@ -61,16 +61,19 @@
                 <tr>
                     <th>cam name</th>
                     <th>q-ty</th>
+                    <th>size</th>
                 </tr>
                 </thead>
                 <tbody>
+
                 @foreach($dirFiles['dirs'] as $folder=> $dirfile)
                     @php
                         $href='allfiles/details'.'?'.http_build_query(['q'=>'showfolders', 'folder'=>$folder, 'limit'=>500]);
                     @endphp
                     <tr>
                         <td><strong><a href="{{$href}}"> {{$folder}}</a> </strong></td>
-                        <td><span class="alert-info badge">{{count($dirfile)}}</span></td>
+                        <td><span class="alert-info badge">{{count($dirfile)-1}}</span></td>
+                        <td>{{getSize($ftpDir.'/'.$folder)}}</td>
                     </tr>
                 @endforeach
                 </tbody>

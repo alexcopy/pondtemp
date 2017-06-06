@@ -38,7 +38,7 @@ class PageController extends Controller
     public function allCamFiles(Request $request)
     {
         $dirList = ['mamacam', 'pond', 'koridor'];
-        $ftpDir = storage_path() . '/ftp';
+        $ftpDir = storage_path('ftp') ;
         $dirFiles = [];
 
 
@@ -49,8 +49,9 @@ class PageController extends Controller
             $dirFiles['dirs'][$dir] = File::directories($ftpDir . '/' . $dir);
             $dirFiles['changed'][$dir] = File::lastModified($filesPath);
             $dirFiles['size'][$dir] = self::human_folderSize($filesPath);
+
         }
-        return view('pages.camfiles', compact(['dirFiles']));
+        return view('pages.camfiles', compact(['dirFiles', 'ftpDir']));
     }
 
     public function allFilesDetails(Request $request)
@@ -59,6 +60,8 @@ class PageController extends Controller
         $folder = $request->get('folder', null);
         $limit = $request->get('limit', 100);
         $allowedFolders = ['mamacam', 'pond', 'koridor'];
+        $subfolder = $request->get('subfolder', null);
+
 
         if (!$query || (!$folder)) {
             throw new PageNotFound('please specify query');
@@ -76,7 +79,6 @@ class PageController extends Controller
                 $title = 'Show Archived folders for ' . $folder;
                 $result = File::directories($filesPath);
             } elseif ($query == 'showfolderfiles') {
-                $subfolder = $request->get('subfolder', null);
                 if (!$subfolder) throw new PageNotFound('Please specify subfolder');
                 $title = 'Show Folder Files for ' . $folder . ' and subfolder ' . $subfolder;
                 $result = File::allFiles($filesPath);
@@ -87,7 +89,7 @@ class PageController extends Controller
         } catch (\Exception $exception) {
             throw new PageNotFound($exception->getMessage());
         }
-        return view('pages.deatails', compact(['title', 'folder', 'result']));
+        return view('pages.deatails', compact(['title', 'folder', 'result', 'filesPath']));
     }
 
     public static function human_folderSize($path, $decimals = 2)
