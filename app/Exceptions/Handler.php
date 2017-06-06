@@ -45,6 +45,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+        if($e instanceof PageNotFound){
+            $message = $e->getMessage();
+            return view('pages.page404', compact(['message']));
+        }
         return parent::render($request, $e);
     }
 }

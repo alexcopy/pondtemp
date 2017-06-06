@@ -1,9 +1,10 @@
 @extends('layouts.main')
 
 @section('content')
+
     <div class="row">
         <div class="col-sm-3">
-            <h5>Today results:</h5>
+            <h5>{{title_case('today\'s results')}}</h5>
             <table class="table table-responsive">
                 <thead>
                 <tr>
@@ -15,16 +16,19 @@
                 <tbody>
                 @foreach($dirFiles['files'] as $folder=> $dirfile)
                     <tr>
-                        <td>{{$folder}}</td>
+                        @php
+                            $href='allfiles/details'.'?'.http_build_query(['q'=>'showtoday', 'folder'=>$folder, 'limit'=>500]);
+                        @endphp
+                        <td><strong><a href="{{$href}}"> {{$folder}}</a> </strong></td>
                         <td><span class="alert-info badge">{{count($dirfile)}}</span></td>
-                       <td>{{$dirFiles['size'][$folder]}}</td>
+                        <td>{{$dirFiles['size'][$folder]}}</td>
                     </tr>
                 @endforeach
                 </tbody>
             </table>
         </div>
         <div class="col-sm-4">
-            <h5>Status:</h5>
+            <h5>{{title_case('Status')}}</h5>
             <table class="table table-responsive">
                 <thead>
                 <tr>
@@ -35,11 +39,11 @@
                 </thead>
                 <tbody>
                 @foreach($dirFiles['changed'] as $folder=> $date)
-                    <?php
-                    $formatedDate = Carbon\Carbon::createFromTimestamp($date)->format('d/m H:i');
-                    $state = (time() - $date) > 7200 ? 'ERR' : 'OK';
-                    $stClass = $state == 'OK' ? "alert-success" : "alert-danger";
-                    ?>
+                    @php
+                        $formatedDate = Carbon\Carbon::createFromTimestamp($date)->format('d/m H:i');
+                        $state = (time() - $date) > 7200 ? 'ERR' : 'OK';
+                        $stClass = $state == 'OK' ? "alert-success" : "alert-danger";
+                    @endphp
 
                     <tr>
                         <td>{{$folder}}</td>
@@ -51,7 +55,7 @@
             </table>
         </div>
         <div class="col-sm-4">
-            <h5>All dirs results:</h5>
+            <h5>{{title_case('All dirs results:')}}</h5>
             <table class="table table-responsive">
                 <thead>
                 <tr>
@@ -61,8 +65,11 @@
                 </thead>
                 <tbody>
                 @foreach($dirFiles['dirs'] as $folder=> $dirfile)
+                    @php
+                        $href='allfiles/details'.'?'.http_build_query(['q'=>'showfolders', 'folder'=>$folder, 'limit'=>500]);
+                    @endphp
                     <tr>
-                        <td>{{$folder}}</td>
+                        <td><strong><a href="{{$href}}"> {{$folder}}</a> </strong></td>
                         <td><span class="alert-info badge">{{count($dirfile)}}</span></td>
                     </tr>
                 @endforeach
