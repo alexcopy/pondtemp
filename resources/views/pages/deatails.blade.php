@@ -18,13 +18,15 @@
                 <tbody>
 
                 @foreach($result as $key=>$val)
+                    @if(class_basename($val)=='today')
+                        @continue
+                    @endif
                     <tr>
                         <td>{{$key}}</td>
                         @if(is_string($val))
-                        @php
-                            $href='/allfiles/details'.'?'.http_build_query(['q'=>'showfolderfiles', 'folder'=>$folder, 'subfolder'=>class_basename($val), 'limit'=>500]);
-                        @endphp
-
+                            @php
+                                $href='/allfiles/details'.'?'.http_build_query(['q'=>'showfolderfiles', 'folder'=>$folder, 'subfolder'=>class_basename($val), 'limit'=>500]);
+                            @endphp
                             <td><strong><a href="{{$href}}"> {{class_basename($val)}}</a> </strong></td>
                             <td>{{getSize($val)}}</td>
                         @else
