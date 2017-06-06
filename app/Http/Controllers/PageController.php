@@ -81,7 +81,7 @@ class PageController extends Controller
             } elseif ($query == 'showfolderfiles') {
                 if (!$subfolder) throw new PageNotFound('Please specify subfolder');
                 $title = 'Show Folder Files for ' . $folder . ' and subfolder ' . $subfolder;
-                $result = File::allFiles($filesPath);
+                $result = File::allFiles($filesPath.'/'.$subfolder);
             } else {
                 throw new PageNotFound('didn\'t match any query params ');
             }
