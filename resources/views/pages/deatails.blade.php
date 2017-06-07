@@ -3,7 +3,7 @@
 @section('subtabs')
     <h5>{{title_case($title)}}</h5>
 @stop
-
+@php $count=1; @endphp
 @section('content')
     <div class="row">
         <div class="col-sm-4">
@@ -17,20 +17,16 @@
                 </tr>
                 </thead>
                 <tbody>
-
                 @foreach($result as $key=>$val)
-                    @if(class_basename($val)=='today')
-                        @continue
-                    @endif
                     <tr>
-                        <td>{{$key}}</td>
-                        @if(is_string($val))
+                        <td>{{$count++}}</td>
+                        @if(is_array($val))
                             @php
-                                $href='/allfiles/details'.'?'.http_build_query(['q'=>'showfolderfiles', 'folder'=>$folder, 'subfolder'=>class_basename($val), 'limit'=>500]);
+                                $href='/allfiles/details'.'?'.http_build_query(['q'=>'showfolderfiles', 'folder'=>$folder, 'subfolder'=>$val['folder'], 'limit'=>500]);
                             @endphp
-                            <td><strong><a href="{{$href}}"> {{class_basename($val)}}</a> </strong></td>
-                            <td>{{getSize($val)}}</td>
-                            <td>{{getQty($val)}}</td>
+                            <td><strong><a href="{{$href}}"> {{$val['date']}}</a> </strong></td>
+                            <td>{{getSize($val['origPath'])}}</td>
+                            <td>{{getQty($val['origPath'])}}</td>
                         @else
                             <td>{{$val->getFileName()}}</td>
                             <td>{{getSize($val->getPathName())}}</td>

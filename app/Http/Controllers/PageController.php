@@ -8,6 +8,7 @@ use App\Exceptions\PageNotFound;
 use App\Http\Models\Gauges;
 use App\Http\Models\TempMeter;
 use App\Http\Models\WeatherReading;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -38,7 +39,7 @@ class PageController extends Controller
     public function allCamFiles(Request $request)
     {
         $dirList = ['mamacam', 'pond', 'koridor'];
-        $ftpDir = storage_path('ftp') ;
+        $ftpDir = storage_path('ftp');
         $dirFiles = [];
 
 
@@ -77,11 +78,11 @@ class PageController extends Controller
                 $result = File::allFiles($filesPath . '/today');
             } elseif ($query == 'showfolders') {
                 $title = 'Show Archived folders for ' . $folder;
-                $result = File::directories($filesPath);
+                $result = self::sortFolders(File::directories($filesPath));
             } elseif ($query == 'showfolderfiles') {
                 if (!$subfolder) throw new PageNotFound('Please specify subfolder');
                 $title = 'Show Folder Files for ' . $folder . ' and subfolder ' . $subfolder;
-                $result = File::allFiles($filesPath.'/'.$subfolder);
+                $result = File::allFiles($filesPath . '/' . $subfolder);
             } else {
                 throw new PageNotFound('didn\'t match any query params ');
             }
@@ -100,5 +101,18 @@ class PageController extends Controller
         pclose($io);
         return $size;
 
+    }
+
+    public static function sortFolders(array $foldersList)
+    {
+        $folders = [];
+        foreach ($foldersList as $foldePath) {
+            if(!preg_match('~day-~i', class_basename($foldePath))) continue;
+            $folderName = str_replace('day-', '', class_basename($foldePath));
+            $timeStamp = Carbon::parse($folderName);
+            $folders[$timeStamp->timestamp] = ['date' => $timeStamp->format('d-m-Y'), 'origPath' => $foldePath, 'folder' => $folderName];
+        }
+        ksort($folders);
+        return $folders;
     }
 }
