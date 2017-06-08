@@ -1,6 +1,8 @@
 @extends('layouts.main')
 @include('helpers.functions')
+
 @section('subtabs')
+    <a href="javascript:history.back()" class="btn btn-default">Back</a>
     <h5>{{title_case($title)}}</h5>
 @stop
 @php $count=1; @endphp
