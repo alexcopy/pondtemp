@@ -8,6 +8,7 @@ use App\Http\Models\TempMeter;
 use App\Http\Models\WeatherReading;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class ApiController extends Controller
 {
@@ -121,6 +122,37 @@ class ApiController extends Controller
 
     public function filesStat(Request $request)
     {
+        $dirList = ['mamacam', 'pond', 'koridor'];
+        $ftpDir = storage_path('ftp');
+        $data = [];
+        $dateChunks = [];
 
+        $datesInterval = range(Carbon::now()->startOfDay()->timestamp, time());
+        $chunk = (int)count($datesInterval) / 24;
+        $chunks = array_chunk($datesInterval, $chunk);
+
+        foreach ($dirList as $dir) {
+            $filesPath = $ftpDir . '/' . $dir . '/today';
+
+            foreach (File::allFiles($filesPath) as $fileObj) {
+                $lastModified = File::lastModified($fileObj->getPathName());
+                $data[$dir][] = $lastModified;
+            }
+            asort($data[$dir]);
+            array_walk($chunks, function (&$chunk) use ($data, $dir, &$dateChunks) {
+                $end = Carbon::createFromTimestamp(end($chunk))->format('H:i');
+                $dateChunks[$dir][$end] = count(array_intersect($data[$dir], $chunk));
+                //$dateChunks[$dir][$end] = rand(1,30);
+            });
+        }
+
+        return response()->json([
+            'data' => [
+                'x' => array_keys($dateChunks['mamacam']),
+                'mamacam' => array_values($dateChunks['mamacam']),
+                'koridor' => array_values($dateChunks['koridor']),
+                'pond' => array_values($dateChunks['pond'])
+            ]
+        ], 200);
     }
 }

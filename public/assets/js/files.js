@@ -1,11 +1,12 @@
-ALEX.sendData = function (start, end) {
+var ALEX = ALEX || {};
+ALEX.getFilesData = function () {
     $.ajax({
         method: "POST",
-        url: "/api/v3/getfilesstats",
-        data: {startDate: start, endDate: end}
+        url: "/api/v3/getfilesstats"
+
     })
         .done(function (msg) {
-            ALEX.avgMinMax(msg.data.extr);
+
             setTimeout(function () {
                 msg.data.x.unshift('x');
                 msg.data.mamacam.unshift('Mama Cam');
@@ -15,7 +16,7 @@ ALEX.sendData = function (start, end) {
                 ALEX.temps.load({
                     columns: [
                         msg.data.x,
-                        msg.data.mamcam,
+                        msg.data.mamacam,
                         msg.data.koridor,
                         msg.data.pond
                     ],
@@ -48,5 +49,5 @@ ALEX.temps = c3.generate({
 
 
 $(document).ready(function () {
-    ALEX.sendData(null, null);
+    ALEX.getFilesData(null, null);
 });

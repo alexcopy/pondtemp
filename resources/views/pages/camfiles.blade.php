@@ -1,4 +1,9 @@
 @extends('layouts.main')
+@section('custom_css')
+    <link rel="stylesheet" href="assets/css/daterangepicker.css">
+    <link rel="stylesheet" href="assets/css/c3.min.css">
+@stop
+
 @include('helpers.functions')
 @section('content')
 
@@ -81,7 +86,9 @@
         </div>
     </div>
 
-
+<br/>
+<br/>
+<br/>
     <div class="row">
         <div class="chart">
             <div id="qty"></div>
