@@ -9,6 +9,7 @@ use App\Http\Models\WeatherReading;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 
 class ApiController extends Controller
 {
@@ -20,7 +21,7 @@ class ApiController extends Controller
         try {
             TempMeter::writeToTextFile($request);
         } catch (\Exception $exception) {
-             log("Failed to write data ");
+            Log::error($exception->getMessage());
         }
 
         if (!$this->checkDataValidity($request)) {
