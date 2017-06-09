@@ -20,7 +20,7 @@ class ApiController extends Controller
         try {
             TempMeter::writeToTextFile($request);
         } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
+             log("Failed to write data ");
         }
 
         if (!$this->checkDataValidity($request)) {
