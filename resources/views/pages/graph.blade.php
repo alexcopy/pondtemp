@@ -56,15 +56,8 @@
             <div id="press"></div>
         </div>
     </div>
-
-
-
-
 @stop
 @section('custom_scripts')
-
-
-
     <script src="assets/js/d3-3.4.3.min.js"></script>
     <script src="assets/js/moment.js"></script>
     <script src="assets/js/daterangepicker.js"></script>

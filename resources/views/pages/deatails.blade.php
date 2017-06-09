@@ -24,7 +24,7 @@
                         <td>{{$count++}}</td>
                         @if(is_array($val))
                             @php
-                                $href='/allfiles/details'.'?'.http_build_query(['q'=>'showfolderfiles', 'folder'=>$folder, 'subfolder'=>$val['folder'], 'limit'=>500]);
+                                $href='/allfiles/details'.'?'.http_build_query(['q'=>'showfolderfiles', 'folder'=>$folder, 'subfolder'=>class_basename($val['origPath']), 'limit'=>500]);
                             @endphp
                             <td><strong><a href="{{$href}}"> {{$val['date']}}</a> </strong></td>
                             <td>{{getSize($val['origPath'])}}</td>

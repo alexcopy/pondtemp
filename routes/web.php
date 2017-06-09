@@ -23,6 +23,8 @@ $app->get('/restoredata', 'Controller@restoreData');
 
 $app->get('/allfiles/details', 'PageController@allFilesDetails');
 $app->post('/api/v3/getdate', 'ApiController@jsonGraph');
+
+$app->post('/api/v3/getfilesstats', 'ApiController@filesStat');
 $app->post('/api/v3/chemicalanalyse', 'ApiController@chemicalAnalyse');
 
 
