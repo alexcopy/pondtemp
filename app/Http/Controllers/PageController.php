@@ -25,9 +25,7 @@ class PageController extends Controller
 
     public function ping()
     {
-        $weather = WeatherReading::orderBy('timestamp', 'desc')->limit(10)->get();
-        $tempReader = TempMeter::orderBy('timestamp', 'desc')->limit(10)->get();
-        return view('pages.index', compact(['weather', 'tempReader']));
+        return response()->json(time());
     }
 
     public function graph(Request $request)
@@ -107,7 +105,7 @@ class PageController extends Controller
     {
         $folders = [];
         foreach ($foldersList as $foldePath) {
-            if(!preg_match('~day-~i', class_basename($foldePath))) continue;
+            if (!preg_match('~day-~i', class_basename($foldePath))) continue;
             $folderName = str_replace('day-', '', class_basename($foldePath));
             $timeStamp = Carbon::parse($folderName);
             $folders[$timeStamp->timestamp] = ['date' => $timeStamp->format('d-m-Y'), 'origPath' => $foldePath, 'folder' => $folderName];
