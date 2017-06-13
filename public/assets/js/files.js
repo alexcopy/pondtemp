@@ -60,7 +60,7 @@ ALEX.drawTable = function (data) {
         table += '<tr>';
         if (rw !== 'x') {
             for (var td in data[rw]) {
-                table += '<td>' + data[rw][td] + '</td>';
+                table += '<td class="text-nowrap">' + data[rw][td] + '</td>';
             }
         }
         table += '</tr>';

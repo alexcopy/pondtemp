@@ -101,7 +101,7 @@
 
     <div class="row">
         <div class="col-sm-3">
-            <table id="filestimeline" class="table table-responsive">
+            <table id="filestimeline" class="table table-responsive table-bordered">
 
             </table>
         </div>
