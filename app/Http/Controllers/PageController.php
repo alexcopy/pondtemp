@@ -9,8 +9,10 @@ use App\Http\Models\Gauges;
 use App\Http\Models\TempMeter;
 use App\Http\Models\WeatherReading;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 
 class PageController extends Controller
 {
@@ -23,9 +25,24 @@ class PageController extends Controller
         return view('pages.index', compact(['weather', 'tempReader', 'guages']));
     }
 
-    public function ping()
+    public function ping(Request $request)
     {
-        return response()->json(time());
+        $time = time();
+        $fileContent = (new DateTime())->format('Y-m-d H:i:s')
+            . "  lastaccess: " . (double)$request->get('lastaccess', 0)
+            . "  current: " . $time
+            . "\n";
+
+        $fullUri = $time . ' | ' . $request->fullUrl();
+        try {
+            file_put_contents(storage_path() . "/pingurilog.txt", $fullUri . "\n", FILE_APPEND);
+            file_put_contents(storage_path() . "/ping.txt", $fileContent, FILE_APPEND);
+
+        } catch (\Exception $exception) {
+            Log::error($exception->getMessage());
+        }
+
+        return response()->json($time);
     }
 
     public function graph(Request $request)
