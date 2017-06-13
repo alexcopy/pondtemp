@@ -6,3 +6,5 @@ Homestead.yaml
 /storage/ftp
 /storage/temp.txt
 /storage/urilog.txt
+/storage/ping.txt
+/storage/pingurilog.txt
