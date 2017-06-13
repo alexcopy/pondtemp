@@ -12,6 +12,7 @@ ALEX.getFilesData = function () {
                 msg.data.mamacam.unshift('Mama Cam');
                 msg.data.koridor.unshift('Koridor');
                 msg.data.pond.unshift('Pond');
+                ALEX.drawTable(msg.data, '');
 
                 ALEX.temps.load({
                     columns: [
@@ -46,7 +47,27 @@ ALEX.temps = c3.generate({
         }
     }
 });
+ALEX.drawTable = function (data) {
 
+    table = '<thead><tr>';
+
+    for (var hd in data.x) {
+        table += '<th>' + data.x[hd] + '</th>';
+    }
+    table += '</tr></thead><tbody>';
+
+    for (var rw in data) {
+        table += '<tr>';
+        if (rw !== 'x') {
+            for (var td in data[rw]) {
+                table += '<td>' + data[rw][td] + '</td>';
+            }
+        }
+        table += '</tr>';
+    }
+    table += '</tbody>';
+    $("#filestimeline").append(table);
+};
 
 $(document).ready(function () {
     ALEX.getFilesData(null, null);

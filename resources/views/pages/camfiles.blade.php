@@ -86,15 +86,26 @@
         </div>
     </div>
 
-<br/>
-<br/>
-<br/>
+    <br/>
+    <br/>
+    <br/>
     <div class="row">
         <div class="chart">
             <div id="qty"></div>
         </div>
     </div>
+    <br>
+    <br>
 
+    <h4>Time Line</h4>
+
+    <div class="row">
+        <div class="col-sm-3">
+            <table id="filestimeline" class="table table-responsive">
+
+            </table>
+        </div>
+    </div>
 @stop
 
 @section('custom_scripts')
