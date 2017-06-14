@@ -42,7 +42,7 @@ class PageController extends Controller
             Log::error($exception->getMessage());
         }
 
-         echo 'ok';
+         echo $time;
     }
 
     public function graph(Request $request)
