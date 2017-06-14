@@ -139,6 +139,9 @@ class ApiController extends Controller
                 $lastModified = File::lastModified($fileObj->getPathName());
                 $data[$dir][] = $lastModified;
             }
+            if (empty($data[$dir])) {
+                $data[$dir] = [];
+            }
             asort($data[$dir]);
             array_walk($chunks, function (&$chunk) use ($data, $dir, &$dateChunks) {
                 $end = Carbon::createFromTimestamp(end($chunk))->format('H:i');
