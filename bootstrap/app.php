@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Config;
+
 require_once __DIR__.'/../vendor/autoload.php';
 
 try {
@@ -91,6 +93,7 @@ $app->singleton(
 | can respond to, as well as the controllers that may handle them.
 |
 */
+
 
 $app->group(['namespace' => 'App\Http\Controllers'], function ($app) {
     require __DIR__.'/../routes/web.php';

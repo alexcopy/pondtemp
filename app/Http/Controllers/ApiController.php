@@ -123,7 +123,7 @@ class ApiController extends Controller
 
     public function filesStat(Request $request)
     {
-        $dirList = ['mamacam', 'pond', 'koridor'];
+        $dirList =  explode(',', env('CAMS',','));
         $ftpDir = storage_path('ftp');
         $data = [];
         $dateChunks = [];
@@ -149,14 +149,12 @@ class ApiController extends Controller
                 //$dateChunks[$dir][$end] = rand(1,30);
             });
         }
+        $dirs= explode(',', env('CAMS',','));
+        $resp = ['data' => ['x' => array_keys($dateChunks['mamacam'])]];
 
-        return response()->json([
-            'data' => [
-                'x' => array_keys($dateChunks['mamacam']),
-                'mamacam' => array_values($dateChunks['mamacam']),
-                'koridor' => array_values($dateChunks['koridor']),
-                'pond' => array_values($dateChunks['pond'])
-            ]
-        ], 200);
+        foreach ($dirs as $dir) {
+            $resp['data'][$dir]=array_values($dateChunks[$dir]);
+        }
+        return response()->json($resp, 200);
     }
 }

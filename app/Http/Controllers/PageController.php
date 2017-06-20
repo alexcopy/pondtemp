@@ -11,6 +11,7 @@ use App\Http\Models\WeatherReading;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 
@@ -53,7 +54,7 @@ class PageController extends Controller
 
     public function allCamFiles(Request $request)
     {
-        $dirList = ['mamacam', 'pond', 'koridor'];
+        $dirList = explode(',', env('CAMS',','));
         $ftpDir = storage_path('ftp');
         $dirFiles = [];
 
@@ -75,7 +76,7 @@ class PageController extends Controller
         $query = $request->get('q', null);
         $folder = $request->get('folder', null);
         $limit = $request->get('limit', 100);
-        $allowedFolders = ['mamacam', 'pond', 'koridor'];
+        $allowedFolders =  explode(',', env('CAMS',','));
         $subfolder = $request->get('subfolder', null);
 
 

@@ -2,8 +2,8 @@
 
 #include <ESP8266WiFi.h>
 
-const char* ssid     = "redkot";
-const char* password = "Gorkogo177";
+const char* ssid     = "secret";
+const char* password = "secret";
 /*
   Public URL
 
