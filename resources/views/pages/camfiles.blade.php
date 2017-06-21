@@ -6,7 +6,10 @@
 
 @include('helpers.functions')
 @section('content')
-
+    @php
+        $overall='OK';
+        $totals=['today'=>['qty'=>0, 'size'=>0], 'status'=>['isok'=>'OK', 'last'=>0], 'alldirs'=>['qty'=>0, 'size'=>0]];
+    @endphp
     <div class="row">
         <div class="col-sm-3">
             <h5>{{title_case('today\'s results')}}</h5>
@@ -23,12 +26,20 @@
                     <tr>
                         @php
                             $href='allfiles/details'.'?'.http_build_query(['q'=>'showtoday', 'folder'=>$folder, 'limit'=>500]);
+                            $totals['today']['qty']+=count($dirfile);
+                            $totals['today']['size']+=getFolderSize($ftpDir.'/'.$folder.'/today');
+
                         @endphp
                         <td><strong><a href="{{$href}}"> {{$folder}}</a> </strong></td>
                         <td><span class="alert-info badge">{{count($dirfile)}}</span></td>
                         <td>{{$dirFiles['size'][$folder]}}</td>
                     </tr>
                 @endforeach
+                <tr>
+                    <td><b class="text-success">Total: </b></td>
+                    <td class="total"><b>{{$totals['today']['qty']}}</b></td>
+                    <td class="size"><b>{{humanize_size($totals['today']['size']*1024, 1)}}</b></td>
+                </tr>
                 </tbody>
             </table>
         </div>
@@ -48,6 +59,9 @@
                         $formatedDate = Carbon\Carbon::createFromTimestamp($date)->format('d/m H:i');
                         $state = (time() - $date) > 7200 ? 'ERR' : 'OK';
                         $stClass = $state == 'OK' ? "alert-success" : "alert-danger";
+                        $totals['status']['isok']=$state=='ERR' || $totals['status']['isok']=='ERR' ? 'ERR':'OK';
+                        $overallClass=$totals['status']['isok']== 'OK' ? "alert-success" : "alert-danger";
+                        $totals['status']['last']= $totals['status']['last'] < $date ? $date:$totals['status']['last'];
                     @endphp
 
                     <tr>
@@ -56,6 +70,11 @@
                         <td>{{$formatedDate}}</td>
                     </tr>
                 @endforeach
+                <tr>
+                    <td><b class="text-success">Total: </b></td>
+                    <td><b><span class="{{$overallClass}}">{{$totals['status']['isok']}}</span></b></td>
+                    <td><b>{{Carbon\Carbon::createFromTimestamp($totals['status']['last'])->format('d/m H:i')}}</b></td>
+                </tr>
                 </tbody>
             </table>
         </div>
@@ -74,6 +93,8 @@
                 @foreach($dirFiles['dirs'] as $folder=> $dirfile)
                     @php
                         $href='allfiles/details'.'?'.http_build_query(['q'=>'showfolders', 'folder'=>$folder, 'limit'=>500]);
+                        $totals['alldirs']['qty']+=count($dirfile)-1;
+                        $totals['alldirs']['size']+=getFolderSize($ftpDir.'/'.$folder);
                     @endphp
                     <tr>
                         <td><strong><a href="{{$href}}"> {{$folder}}</a> </strong></td>
@@ -81,6 +102,11 @@
                         <td>{{getSize($ftpDir.'/'.$folder)}}</td>
                     </tr>
                 @endforeach
+                <tr>
+                    <td><b class="text-success">Total: </b></td>
+                    <td class="total"><b>{{$totals['alldirs']['qty']}}</b></td>
+                    <td class="size"><b>{{humanize_size($totals['alldirs']['size']*1024, 1)}}</b></td>
+                </tr>
                 </tbody>
             </table>
         </div>

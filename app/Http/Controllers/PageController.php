@@ -109,9 +109,10 @@ class PageController extends Controller
         return view('pages.deatails', compact(['title', 'folder', 'result', 'filesPath']));
     }
 
-    public static function human_folderSize($path, $decimals = 2)
+    public static function human_folderSize($path, $h = 'h')
     {
-        $io = popen('/usr/bin/du -skh ' . $path, 'r');
+
+        $io = popen('/usr/bin/du -sk'.$h.' ' . $path, 'r');
         $size = fgets($io, 4096);
         $size = substr($size, 0, strpos($size, "\t"));
         pclose($io);
