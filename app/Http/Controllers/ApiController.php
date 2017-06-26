@@ -7,9 +7,11 @@ use App\Http\Models\TempMeter;
 
 use App\Http\Models\WeatherReading;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Monolog\Logger;
 
 class ApiController extends Controller
 {
@@ -123,7 +125,7 @@ class ApiController extends Controller
 
     public function filesStat(Request $request)
     {
-        $dirList =  explode(',', env('CAMS',','));
+        $dirList = explode(',', env('CAMS', ','));
         $ftpDir = storage_path('ftp');
         $data = [];
         $dateChunks = [];
@@ -149,12 +151,127 @@ class ApiController extends Controller
                 //$dateChunks[$dir][$end] = rand(1,30);
             });
         }
-        $dirs= explode(',', env('CAMS',','));
+        $dirs = explode(',', env('CAMS', ','));
         $resp = ['data' => ['x' => array_keys($dateChunks['mamacam'])]];
 
         foreach ($dirs as $dir) {
-            $resp['data'][$dir]=array_values($dateChunks[$dir]);
+            $resp['data'][$dir] = array_values($dateChunks[$dir]);
         }
         return response()->json($resp, 200);
     }
+
+// TODO Move to separate service
+    public static function getAlarmIds($camsObject)
+    {
+        $ifRegisterd = self::checkIsClientexists();
+        if (!(int)$ifRegisterd->result) {
+            (new Logger('client existence checks failed'));
+            throw new \Exception("Client existence check is failed");
+        }
+        $cams = self::getUserDevicesParams();
+
+        try {
+            $alarmMsgs=self::getAlarmMessages($cams[0], 5,0);
+        } catch (\Exception $exception) {
+
+
+        }
+
+    }
+
+
+    protected static function getAlarmMessages($devObject, $max_count = 1, $last_fresh_time = 0)
+    {
+        $server = env('CAM_ALRM_SERV', '');
+        $devObject->max_count = $max_count;
+        $devObject->last_fresh_time = $last_fresh_time;
+
+        $url = $server . '/GetAlarmMsg/AlarmSelectServletPicture?param='
+            . \GuzzleHttp\json_encode($devObject);
+        $params = [
+            'defaults' => [
+                'headers' => [
+                    'User-Agent' => 'Dalvik/2.1.0 (Linux; U; Android 6.0.1; HTC Desire 530 Build/MMB29M)',
+                    'Connection' => 'Keep-Alive',
+                    'Accept-Encoding' => 'gzip'
+                ]
+            ]
+        ];
+
+        try {
+            $page = (new Client($params))->request('GET', $url)->getBody()->getContents();
+            return \GuzzleHttp\json_decode($page);
+
+        } catch (\Exception $exception) {
+            (new Logger('client existence check failed'))->addCritical($exception->getMessage());
+            return (object)['result' => 0];
+        }
+
+    }
+
+    /**
+     * @return mixed|object
+     */
+    protected static function checkIsClientexists()
+    {
+        $server = env('CAM_ALRM_SERV', '');
+        $url = $server . '/GetAlarmMsg/XGPhoneClientRegistered?param='
+            . \GuzzleHttp\json_encode(self::getCheckParams());
+
+        $params = [
+            'defaults' => [
+                'headers' => [
+                    'User-Agent' => 'Dalvik/2.1.0 (Linux; U; Android 6.0.1; HTC Desire 530 Build/MMB29M)',
+                    'Connection' => 'Keep-Alive',
+                    'Accept-Encoding' => 'gzip'
+                ]
+            ]
+        ];
+
+        try {
+            $page = (new Client($params))->request('GET', $url)->getBody()->getContents();
+            return \GuzzleHttp\json_decode($page);
+        } catch (\Exception $exception) {
+            (new Logger('client existence check failed'))->addCritical($exception->getMessage());
+            return (object)['result' => 0];
+        }
+
+    }
+
+    /**
+     * @return object
+     */
+    private static function getCheckParams()
+    {
+        return (object)[
+            'client_id' => env('CAM_CLIENT_ID', ''),
+            'phone_type' => env('CAM_PHONE_TYPE', ''),
+            'apikey' => env('CAM_APIKEY', ''),
+            'secretkey' => env('CAM_SECRETKEY', ''),
+            'channel_id' => env('CAM_CHANNEL_ID', ''),
+            'phone_num' => 'unknow',
+            'user_id' => 'unknow',
+            'vibrate' => 0,
+            'sound' => 0,
+            'sys_lan' => 'cn',
+            'recv_msg_pri' => 1,
+            'sound_file' => 'alarm.mp3',
+        ];
+    }
+
+    private static function getUserDevicesParams()
+    {
+        $res = [];
+        $cams = explode(',', env('CAM_IDS', []));
+        foreach ($cams as $cam) {
+            if (!$cam) continue;
+            $res[] = (object)[
+                'username' => env('CAM_LOGIN', 'admin'),
+                'password' => env('CAM_PASS', 888888),
+                'dev_id' => $cam,
+            ];
+        }
+        return $res;
+    }
+
 }
