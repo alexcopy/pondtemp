@@ -6,6 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class WeatherReading extends Migration
 {
+
     /**
      * Run the migrations.
      *

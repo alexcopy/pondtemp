@@ -128,3 +128,21 @@ $factory->define(App\Http\Models\LiveStocks::class, function (Faker\Generator $f
     ];
 });
 
+$factory->define(App\Http\Models\Camalarms::class, function (Faker\Generator $faker) {
+    return [
+        'msgid' => $faker->unixTime,
+        'alarm_time' => $faker->date('Y-m-d H:i:s'),
+        'alarm_msg' => $faker->text(100),
+        'has_position' => $faker->text(100),
+        'version_num' => $faker->randomDigit,
+        'alarm_image' => $faker->text(100),
+        'alarm_type' => $faker->randomDigit,
+        'dev_id' => $faker->unixTime,
+        'alarm_id' => $faker->unixTime,
+        'alarm_level' => $faker->randomDigit,
+        'last_fresh_time' => $faker->unixTime,
+        'image_id' => $faker->unixTime,
+        'ip' => $faker->ipv4,
+    ];
+});
+

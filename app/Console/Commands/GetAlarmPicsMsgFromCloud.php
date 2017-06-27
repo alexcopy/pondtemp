@@ -41,7 +41,7 @@ class GetAlarmPicsMsgFromCloud extends Command
     public function handle()
     {
         $cams = $this->getCams();
-  dd(ApiController::getAlarmIds($cams, []));
+  dd(ApiController::getAlarmMessagesAndWriteInDb( ));
 
     }
 

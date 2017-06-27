@@ -161,21 +161,22 @@ class ApiController extends Controller
     }
 
 // TODO Move to separate service
-    public static function getAlarmIds($camsObject)
+    public static function getAlarmMessagesAndWriteInDb()
     {
         $ifRegisterd = self::checkIsClientexists();
+        $alarmMsgs=[];
         if (!(int)$ifRegisterd->result) {
             (new Logger('client existence checks failed'));
             throw new \Exception("Client existence check is failed");
         }
         $cams = self::getUserDevicesParams();
-
-        try {
-            $alarmMsgs=self::getAlarmMessages($cams[0], 5,0);
-        } catch (\Exception $exception) {
-
-
+        foreach ($cams as $cam) {
+           $alarmMsg = self::getAlarmMessages($cams[0], 5, 0);
+           if(!$alarmMsg->result) continue;
+            $alarmMsgs[]=$alarmMsg->value;
         }
+
+
 
     }
 
