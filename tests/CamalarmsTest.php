@@ -75,16 +75,16 @@ class CamalarmsTest extends \TestCase
             ]
         ];
 
-        $json = \GuzzleHttp\json_decode(\GuzzleHttp\json_encode($response));
+        $json = \GuzzleHttp\json_decode(\GuzzleHttp\json_encode($response), true);
 
-        foreach ($json->value as $value) {
-            if (isset($value->id)) {
-                $msgid = $value->id;
-                $value->msgid = $msgid;
-                unset($value->id);
+        foreach ($json['value'] as $value) {
+            if (isset($value['id'])) {
+                $msgid = $value['id'];
+                $value['msgid'] = $msgid;
+                unset($value['id']);
             }
 
-             Camalarms::create(json_decode(json_encode($value), true));
+             Camalarms::create($value);
         }
         $resutl = Camalarms::all()->toArray();
         $this->assertCount(2, $resutl);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Models\Camalarms;
 use App\Http\Models\Gauges;
 use App\Http\Models\TempMeter;
 
@@ -163,21 +164,18 @@ class ApiController extends Controller
 // TODO Move to separate service
     public static function getAlarmMessagesAndWriteInDb()
     {
+        $stat = [];
         $ifRegisterd = self::checkIsClientexists();
-        $alarmMsgs=[];
         if (!(int)$ifRegisterd->result) {
             (new Logger('client existence checks failed'));
-            throw new \Exception("Client existence check is failed");
+            throw new \Exception("Client existence checks  failed");
         }
         $cams = self::getUserDevicesParams();
         foreach ($cams as $cam) {
-           $alarmMsg = self::getAlarmMessages($cams[0], 5, 0);
-           if(!$alarmMsg->result) continue;
-            $alarmMsgs[]=$alarmMsg->value;
+            $alarmMsg = self::getAlarmMessages($cam, 5, 0);
+            $stat[] = Camalarms::writeJsonToDb($alarmMsg);
         }
-
-
-
+        return $stat;
     }
 
 
@@ -201,7 +199,7 @@ class ApiController extends Controller
 
         try {
             $page = (new Client($params))->request('GET', $url)->getBody()->getContents();
-            return \GuzzleHttp\json_decode($page);
+            return $page;
 
         } catch (\Exception $exception) {
             (new Logger('client existence check failed'))->addCritical($exception->getMessage());

@@ -36,19 +36,13 @@ class GetAlarmPicsMsgFromCloud extends Command
 
     /**
      * Execute the console command.
-     * Play Days are: Tuesday, Friday
+     *
      */
     public function handle()
     {
-        $cams = $this->getCams();
-  dd(ApiController::getAlarmMessagesAndWriteInDb( ));
-
+        $stat = ApiController::getAlarmMessagesAndWriteInDb();
+        print_r($stat);
     }
 
-//TODO move everything to DB and add UI to manually add, get data from CLASS DTO add interface
-    private function getCams()
-    {
-
-    }
 
 }
