@@ -19,7 +19,7 @@ class ProcessAlarmImages extends Command
      *
      * @var string
      */
-    protected $signature = 'getalarm:process';
+    protected $signature = 'alarm:process';
 
     /**
      * The console command description.
@@ -46,6 +46,6 @@ class ProcessAlarmImages extends Command
     public function handle()
     {
          $res=ApiController::processAlarmMessages();
-         dd($res);
+         print_r($res);
     }
 }

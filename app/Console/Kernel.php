@@ -27,6 +27,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-
+        $schedule->command('migrate')->everyThirtyMinutes();
+        $schedule->command('alarm:cams')->everyFiveMinutes();
+        $schedule->command('alarm:process')->everyFiveMinutes();
+        $schedule->command('clockwork:clean')->dailyAt('18:00');
     }
 }

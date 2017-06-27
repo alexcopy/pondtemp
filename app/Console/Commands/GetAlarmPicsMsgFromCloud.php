@@ -15,7 +15,7 @@ class GetAlarmPicsMsgFromCloud extends Command
      *
      * @var string
      */
-    protected $signature = 'getalarm:cams';
+    protected $signature = 'alarm:cams';
 
     /**
      * The console command description.
