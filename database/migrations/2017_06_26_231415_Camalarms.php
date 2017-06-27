@@ -17,15 +17,15 @@ class Camalarms extends Migration
         Schema::create('camalarms', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('msgid');
-            $table->string('alarm_msg');
-            $table->dateTimeTz('alarm_time');
-            $table->string('has_position');
-            $table->integer('version_num');
-            $table->string('alarm_image');
-            $table->integer('alarm_type');
+            $table->string('alarm_msg')->default('nan');
+            $table->dateTimeTz('alarm_time')->default(\Carbon\Carbon::now()->format('Y-m-d H:i:s'));
+            $table->string('has_position')->default('0');
+            $table->integer('version_num')->default(0);
+            $table->string('alarm_image')->default(' ');;
+            $table->integer('alarm_type')->default(0);
             $table->integer('dev_id');
             $table->integer('alarm_id');
-            $table->integer('alarm_level');
+            $table->integer('alarm_level')->default(0);
             $table->integer('last_fresh_time');
             $table->integer('image_id');
             $table->string('ip');
