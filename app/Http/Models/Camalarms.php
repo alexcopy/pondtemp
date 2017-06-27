@@ -44,6 +44,7 @@ class Camalarms extends Model
                 }
                 $stat['dev_id'] = $value['dev_id'];
                 if (self::where('msgid', $value['msgid'])->where('dev_id', $value['dev_id'])->where('alarm_id', $value['alarm_id'])->count()) continue;
+                $value['timestamp']=time();
                 Camalarms::create($value);
                 $stat['count']++;
             }
