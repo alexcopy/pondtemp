@@ -162,6 +162,86 @@ class ApiController extends Controller
     }
 
 // TODO Move to separate service
+
+    public static function processAlarmMessages()
+    {
+        $stat=[];
+        $devices = self::getUserDevicesParams();
+        foreach ($devices as $device) {
+            $proc = Camalarms::where('dev_id', $device->dev_id)->where('processed', 0)->where('process_fail','<', 10);
+            $stat[$device->dev_id]['dev_id']=$device->dev_id;
+            $stat[$device->dev_id]['count']=0;
+            $stat[$device->dev_id]['fails']=0;
+            if ($proc->count() == 0) continue;
+            foreach ($proc->get() as $img) {
+                $jsonImg = self::processImage($img, $device);
+                if(isset($jsonImg['result']) && ($jsonImg['result']==0)){
+                    Camalarms::where('id', $img->id)->increment('process_fail');
+                    $stat[$device->dev_id]['fails']++;
+                    sleep(rand(5, 20));
+                    continue;
+                }
+                $result = self::convertImageAndSave($jsonImg, $device);
+                if ($result) {
+                    Camalarms::where('id', $img->id)->update(['processed' => 1, 'processed_at' => time()]);
+                    $stat[$device->dev_id]['count']++;
+                }
+                sleep(rand(1, 5));
+            }
+        }
+       return $stat;
+    }
+
+    protected static function processImage($img, $device)
+    {
+        $device->alarm_id = $img->alarm_id;
+        $device->version = 2;
+        $device->version = 2;
+        $url = 'http://' . $img->ip . ':8888/GetAlarmMsg/AlarmGetPictureByID?param=' . base64_encode(\GuzzleHttp\json_encode($device));
+        $params = [
+            'defaults' => [
+                'headers' => [
+                    'User-Agent' => 'Dalvik/2.1.0 (Linux; U; Android 6.0.1; HTC Desire 530 Build/MMB29M)',
+                    'Connection' => 'Keep-Alive',
+                    'Accept-Encoding' => 'gzip'
+                ]
+            ]
+        ];
+        try {
+            $page = (new Client($params))->request('GET', $url)->getBody()->getContents();
+            return \GuzzleHttp\json_decode($page, true);
+        } catch (\Exception $exception) {
+            (new Logger('Didn\'t get valid JSON from image server for img_id=' . $img->alarm_id . ' and dev_id: '
+                . $img->dev_id . ' with message: '))
+                ->addCritical($exception->getMessage());
+            return  ['result' => 0];
+        }
+    }
+
+    protected static function convertImageAndSave($jsonImage, $device)
+    {
+        $path = storage_path('ftp/' . $device->dev_id . '/today/');
+        try {
+            if (!file_exists($path)) {
+                File::makeDirectory($path, 0777, true);
+            }
+            $imageData = base64_decode($jsonImage['alarm_image']);
+            $source = imagecreatefromstring($imageData);
+            $imageName = $path . $device->dev_id . "_" . $jsonImage['alarm_id'] . "_" . time() . ".jpg";
+            $imageSave = imagejpeg($source, $imageName, 100);
+            imagedestroy($source);
+            return $imageSave;
+
+        } catch (\Exception $exception) {
+            (new Logger('Get an Error in saving IMAGE to hard drive' .
+                $path . $jsonImage['dev_id'] . "_"
+                . $jsonImage['alarm_id'] . "_" . time()
+                . ".jpg" . ' with message: '))
+                ->addCritical($exception->getMessage());
+            return false;
+        }
+    }
+
     public static function getAlarmMessagesAndWriteInDb()
     {
         $stat = [];

@@ -24,6 +24,7 @@ class Camalarms extends Model
         "last_fresh_time",
         "image_id",
         "ip",
+        "processed_at",
     ];
 
 
@@ -47,8 +48,11 @@ class Camalarms extends Model
             }
 
         } catch (\Exception $exception) {
-            (new Logger('Failed to add and parse JSON responce from P2P'))->addCritical($exception->getMessage());
+
+            (new Logger('Failed to add and parse JSON responce from P2P with resp:' . $response))->addCritical($exception->getMessage());
         }
         return $stat;
     }
+
+
 }

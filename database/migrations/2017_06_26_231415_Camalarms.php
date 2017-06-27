@@ -31,6 +31,8 @@ class Camalarms extends Migration
             $table->string('ip');
             $table->boolean('processed')->default(false);
             $table->integer('timestamp')->default(time());
+            $table->integer('processed_at')->default(0);
+            $table->smallInteger('process_fail')->default(0);
         });
     }
 
