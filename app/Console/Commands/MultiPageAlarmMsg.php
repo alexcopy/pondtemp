@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 
 
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\CamApiController;
 use Illuminate\Console\Command;
 
 class MultiPageAlarmMsg  extends Command
@@ -41,7 +42,7 @@ class MultiPageAlarmMsg  extends Command
      */
     public function handle()
     {
-        $res = ApiController::multiplePagedResult(24);
+        $res = CamApiController::multiplePagedResult(24);
         print_r($res);
     }
 }

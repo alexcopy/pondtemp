@@ -4,6 +4,7 @@
 namespace App\Console\Commands;
 
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\CamApiController;
 use Illuminate\Console\Command;
 
 class ProcessAlarmImages extends Command
@@ -40,7 +41,7 @@ class ProcessAlarmImages extends Command
      */
     public function handle()
     {
-         $res=ApiController::processAlarmMessages();
+         $res=CamApiController::processAlarmMessages();
          print_r($res);
     }
 }
