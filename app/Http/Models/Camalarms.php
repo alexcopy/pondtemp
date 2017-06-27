@@ -34,6 +34,7 @@ class Camalarms extends Model
         try {
             $json = \GuzzleHttp\json_decode($response, true);
             if (!isset($json['value'])) throw new \Exception('Empty Value has Passed');
+            if (isset($json['result']) && $json['result']==0) throw new \Exception('Empty Result has Passed');
 
             foreach ($json['value'] as $value) {
                 if (isset($value['id'])) {

@@ -3,10 +3,11 @@
 
 namespace App\Console\Commands;
 
+
 use App\Http\Controllers\ApiController;
 use Illuminate\Console\Command;
 
-class ProcessAlarmImages extends Command
+class MultiPageAlarmMsg  extends Command
 {
 
     /**
@@ -14,14 +15,14 @@ class ProcessAlarmImages extends Command
      *
      * @var string
      */
-    protected $signature = 'alarm:process';
+    protected $signature = 'alarm:mutipage';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Process images from camalarms table if success change status and download image to HD ';
+    protected $description = ' Is emergency Command in case we missed results in DB, retrospectively checking alrts ';
 
     /**
      * Create a new command instance.
@@ -40,7 +41,7 @@ class ProcessAlarmImages extends Command
      */
     public function handle()
     {
-         $res=ApiController::processAlarmMessages();
-         print_r($res);
+        $res = ApiController::multiplePagedResult(24);
+        print_r($res);
     }
 }

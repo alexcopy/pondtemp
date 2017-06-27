@@ -163,19 +163,77 @@ class ApiController extends Controller
 
 // TODO Move to separate service
 
+    public static function multiplePagedResult($numberOfHours = 24)
+    {
+        $stat = [];
+        /** @var $chunk_mins interval in mins */
+        $chunk_mins = 5;
+        $devices = self::getUserDevicesParams();
+        $minsInOneDay = (60 * $numberOfHours) / $chunk_mins;
+
+        foreach ($devices as $device) {
+            $to_time = time();
+            foreach (range(1, $minsInOneDay) as $chunkNumber) {
+                $now = Carbon::now();
+                $from_Time = $now->subMinutes($chunkNumber * $chunk_mins)->timestamp;
+                $chk = [
+                    'from_time' => $from_Time . rand(111, 999),
+                    'to_time' => $to_time . rand(111, 999),
+                ];
+                $to_time = $from_Time;
+                $page = self::conditionalResult($chk['from_time'], $chk['to_time'], $device);
+                $stat[] = Camalarms::writeJsonToDb($page);
+                sleep(rand(5, 20));
+            }
+        }
+        return $stat;
+    }
+
+    protected static function conditionalResult($from_time, $to_time, $device, $qty = 10)
+    {
+        $device->from_time = $from_time;
+        $device->to_time = $to_time;
+        $device->max_count = $qty;
+        $server = env('CAM_ALRM_SERV', '');
+        $url = $server . '/GetAlarmMsg/AlarmGetMessageListWithCondition?param=' . base64_encode(\GuzzleHttp\json_encode($device));
+
+        $params = [
+            'defaults' => [
+                'headers' => [
+                    'User-Agent' => 'Dalvik/2.1.0 (Linux; U; Android 6.0.1; HTC Desire 530 Build/MMB29M)',
+                    'Connection' => 'Keep-Alive',
+                    'Accept-Encoding' => 'gzip'
+                ]
+            ]
+        ];
+        try {
+
+            return (new Client($params))->request('GET', $url)->getBody()->getContents();
+
+        } catch (\Exception $exception) {
+            (new Logger('Didn\'t get valid JSON from conditionalResult server for dev_id=' . $device->dev_id .
+                ' and time interval starts at: '
+                . $from_time . ' and ending at: ' . $to_time . ' with message: '))
+                ->addCritical($exception->getMessage());
+            return ['result' => 0];
+        }
+
+    }
+
+
     public static function processAlarmMessages()
     {
-        $stat=[];
+        $stat = [];
         $devices = self::getUserDevicesParams();
         foreach ($devices as $device) {
-            $proc = Camalarms::where('dev_id', $device->dev_id)->where('processed', 0)->where('process_fail','<', 10);
-            $stat[$device->dev_id]['dev_id']=$device->dev_id;
-            $stat[$device->dev_id]['count']=0;
-            $stat[$device->dev_id]['fails']=0;
+            $proc = Camalarms::where('dev_id', $device->dev_id)->where('processed', 0)->where('process_fail', '<', 10);
+            $stat[$device->dev_id]['dev_id'] = $device->dev_id;
+            $stat[$device->dev_id]['count'] = 0;
+            $stat[$device->dev_id]['fails'] = 0;
             if ($proc->count() == 0) continue;
             foreach ($proc->get() as $img) {
                 $jsonImg = self::processImage($img, $device);
-                if(isset($jsonImg['result']) && ($jsonImg['result']==0)){
+                if (isset($jsonImg['result']) && ($jsonImg['result'] == 0)) {
                     Camalarms::where('id', $img->id)->increment('process_fail');
                     $stat[$device->dev_id]['fails']++;
                     sleep(rand(5, 20));
@@ -189,7 +247,7 @@ class ApiController extends Controller
                 sleep(rand(1, 5));
             }
         }
-       return $stat;
+        return $stat;
     }
 
     protected static function processImage($img, $device)
@@ -214,7 +272,7 @@ class ApiController extends Controller
             (new Logger('Didn\'t get valid JSON from image server for img_id=' . $img->alarm_id . ' and dev_id: '
                 . $img->dev_id . ' with message: '))
                 ->addCritical($exception->getMessage());
-            return  ['result' => 0];
+            return ['result' => 0];
         }
     }
 
