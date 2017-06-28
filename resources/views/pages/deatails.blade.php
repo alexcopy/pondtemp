@@ -41,8 +41,7 @@
                             <td>{{$val->getFileName()}}</td>
                             <td>{{getSize($val->getPathName())}}</td>
                             <td>1</td>
-                            <td></td>
-
+                            <td><img src="{{preg_replace('~[^\.]+storage~i', '/assets/pics', $val->getPathName())}}" style=" height: 20%"></td>
                         @endif
                     </tr>
                 @endforeach

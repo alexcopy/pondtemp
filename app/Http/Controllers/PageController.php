@@ -113,12 +113,11 @@ class PageController extends Controller
         if (isset($chunkedRes[$page])) {
             $result = $chunkedRes[$page];
             $page++;
-
         } else {
-
             $result = end($chunkedRes);
         }
-        $next = '/' . $request->path() . "?folder={$folder}&limit={$limit}&q={$query}&page={$page}";
+
+        $next = '/' . $request->path() . "?folder={$folder}&subfolder={$subfolder}&limit={$limit}&q={$query}&page={$page}";
         return view('pages.deatails', compact(['title', 'folder', 'result', 'filesPath', 'next']));
     }
 
