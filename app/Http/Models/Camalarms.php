@@ -4,6 +4,7 @@ namespace App\Http\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 use Monolog\Logger;
 
 class Camalarms extends Model
@@ -51,7 +52,7 @@ class Camalarms extends Model
 
         } catch (\Exception $exception) {
 
-            (new Logger('Failed to add and parse JSON responce from P2P with resp:' . $response))->addCritical($exception->getMessage());
+            Log::critical('Failed to add and parse JSON responce from P2P with resp:' . $response .'Err Messsage is: '.$exception->getMessage());
         }
         return $stat;
     }

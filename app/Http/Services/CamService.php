@@ -6,6 +6,7 @@ namespace App\Http\Services;
 
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Monolog\Logger;
 
 class CamService
@@ -40,10 +41,9 @@ class CamService
             return (new Client($this->params))->request('GET', $url)->getBody()->getContents();
 
         } catch (\Exception $exception) {
-            (new Logger('Didn\'t get valid JSON from conditionalResult server for dev_id=' . $device->dev_id .
+            Log::critical('Didn\'t get valid JSON from conditionalResult server for dev_id=' . $device->dev_id .
                 ' and time interval starts at: '
-                . $from_time . ' and ending at: ' . $to_time . ' with message: '))
-                ->addCritical($exception->getMessage());
+                . $from_time . ' and ending at: ' . $to_time . ' with message: '.' MSG: '.$exception->getMessage());
             return ['result' => 0];
         }
 
@@ -60,9 +60,8 @@ class CamService
             $page = (new Client($this->params))->request('GET', $url)->getBody()->getContents();
             return \GuzzleHttp\json_decode($page, true);
         } catch (\Exception $exception) {
-            (new Logger('Didn\'t get valid JSON from image server for img_id=' . $img->alarm_id . ' and dev_id: '
-                . $img->dev_id . ' with message: '))
-                ->addCritical($exception->getMessage());
+            Log::critical('Didn\'t get valid JSON from image server for img_id=' . $img->alarm_id . ' and dev_id: '
+                . $img->dev_id . ' with message: '.'  MSG '.$exception->getMessage());
             return ['result' => 0];
         }
     }
@@ -82,11 +81,10 @@ class CamService
             return $imageSave;
 
         } catch (\Exception $exception) {
-            (new Logger('Get an Error in saving IMAGE to hard drive' .
+            Log::critical('Get an Error in saving IMAGE to hard drive' .
                 $path . $jsonImage['dev_id'] . "_"
                 . $jsonImage['alarm_id'] . "_" . time()
-                . ".jpg" . ' with message: '))
-                ->addCritical($exception->getMessage());
+                . ".jpg" . ' with message: '.'  MSG '.$exception->getMessage());
             return false;
         }
     }
@@ -140,7 +138,7 @@ class CamService
             $page = (new Client($this->params))->request('GET', $url)->getBody()->getContents();
             return \GuzzleHttp\json_decode($page);
         } catch (\Exception $exception) {
-            (new Logger('client existence check failed'))->addCritical($exception->getMessage());
+            Log::critical('client existence check failed'.'  Msg:  ' .$exception->getMessage());
             return (object)['result' => 0];
         }
 
@@ -161,8 +159,8 @@ class CamService
             return $page;
 
         } catch (\Exception $exception) {
-            (new Logger('client existence check failed'))->addCritical($exception->getMessage());
-            return (object)['result' => 0];
+            Log::critical('Something Wrong With Getting Alarm messages'.'  MSG: '.$exception->getMessage());
+            return   \GuzzleHttp\json_encode(['result' => 0]);
         }
 
     }
