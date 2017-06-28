@@ -2,15 +2,20 @@
 @include('helpers.functions')
 
 @section('subtabs')
-    <a href="javascript:history.back()" class="btn btn-default">Back</a>
     <h5>{{title_case($title)}}</h5>
+    <div class="row">
+        <div class="col-sm-2"><a href="javascript:history.back()" class="btn btn-default">Back</a></div>
+        <div class="col-lg-3">   <a href="{{$next}}" class="btn btn-default">Next</a></div>
+    </div>
+
+
 @stop
 @php $count=1; @endphp
 @section('content')
     {{--<img src="../../assets/pics/32177699_163468063_1498604760.jpg">--}}
     {{--<img src="../storage/ftp/32177699/today/32177699_163468063_1498604760.jpg" alt="a picture">--}}
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             <table class="table table-responsive">
                 <thead>
                 <tr>
@@ -18,6 +23,7 @@
                     <th>FileName</th>
                     <th>Size</th>
                     <th>q-ty</th>
+                    <th>IMG</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -35,6 +41,8 @@
                             <td>{{$val->getFileName()}}</td>
                             <td>{{getSize($val->getPathName())}}</td>
                             <td>1</td>
+                            <td></td>
+
                         @endif
                     </tr>
                 @endforeach
@@ -43,5 +51,4 @@
         </div>
     </div>
 @stop
-
 

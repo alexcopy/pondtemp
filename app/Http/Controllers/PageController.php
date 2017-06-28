@@ -43,7 +43,7 @@ class PageController extends Controller
             Log::error($exception->getMessage());
         }
 
-         echo $time;
+        echo $time;
     }
 
     public function graph(Request $request)
@@ -54,7 +54,7 @@ class PageController extends Controller
 
     public function allCamFiles(Request $request)
     {
-        $dirList = explode(',', env('CAMS',','));
+        $dirList = explode(',', env('CAMS', ','));
         $ftpDir = storage_path('ftp');
         $dirFiles = [];
 
@@ -73,10 +73,11 @@ class PageController extends Controller
 
     public function allFilesDetails(Request $request)
     {
+        $limit = 15;
         $query = $request->get('q', null);
         $folder = $request->get('folder', null);
-        $limit = $request->get('limit', 100);
-        $allowedFolders =  explode(',', env('CAMS',','));
+        $page = $request->get('page', 0);
+        $allowedFolders = explode(',', env('CAMS', ','));
         $subfolder = $request->get('subfolder', null);
 
 
@@ -106,13 +107,25 @@ class PageController extends Controller
         } catch (\Exception $exception) {
             throw new PageNotFound($exception->getMessage());
         }
-        return view('pages.deatails', compact(['title', 'folder', 'result', 'filesPath']));
+
+        $chunkedRes = array_chunk($result, $limit);
+
+        if (isset($chunkedRes[$page])) {
+            $result = $chunkedRes[$page];
+            $page++;
+
+        } else {
+
+            $result = end($chunkedRes);
+        }
+        $next = '/' . $request->path() . "?folder={$folder}&limit={$limit}&q={$query}&page={$page}";
+        return view('pages.deatails', compact(['title', 'folder', 'result', 'filesPath', 'next']));
     }
 
     public static function human_folderSize($path, $h = 'h')
     {
 
-        $io = popen('/usr/bin/du -sk'.$h.' ' . $path, 'r');
+        $io = popen('/usr/bin/du -sk' . $h . ' ' . $path, 'r');
         $size = fgets($io, 4096);
         $size = substr($size, 0, strpos($size, "\t"));
         pclose($io);
