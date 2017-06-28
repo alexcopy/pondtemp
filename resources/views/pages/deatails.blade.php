@@ -7,6 +7,8 @@
 @stop
 @php $count=1; @endphp
 @section('content')
+    {{--<img src="../../assets/pics/32177699_163468063_1498604760.jpg">--}}
+    {{--<img src="../storage/ftp/32177699/today/32177699_163468063_1498604760.jpg" alt="a picture">--}}
     <div class="row">
         <div class="col-sm-4">
             <table class="table table-responsive">
