@@ -33,6 +33,7 @@ class Camalarms extends Migration
             $table->integer('timestamp')->default(time());
             $table->integer('processed_at')->default(0);
             $table->smallInteger('process_fail')->default(0);
+            $table->smallInteger('in_process')->default(0);
         });
     }
 

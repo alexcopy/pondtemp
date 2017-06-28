@@ -16,6 +16,7 @@ use Monolog\Logger;
 
 class CamApiController
 {
+
     public static function multiplePagedResult($numberOfHours = 24)
     {
         $stat = [];
@@ -48,7 +49,11 @@ class CamApiController
         $stat = [];
         $devices = (new CamService())->getUserDevicesParams();
         foreach ($devices as $device) {
-            $proc = Camalarms::where('dev_id', $device->dev_id)->where('processed', 0)->where('process_fail', '<', 10);
+            $proc = Camalarms::where('dev_id', $device->dev_id)
+                ->where('processed', 0)
+                ->where('process_fail', '<', 10)
+                ->where('in_process', 0)->limit(20);
+
             $stat[$device->dev_id]['dev_id'] = $device->dev_id;
             $stat[$device->dev_id]['count'] = 0;
             $stat[$device->dev_id]['fails'] = 0;
@@ -57,13 +62,14 @@ class CamApiController
                 $jsonImg = (new CamService())->processImage($img, $device);
                 if (isset($jsonImg['result']) && ($jsonImg['result'] == 0)) {
                     Camalarms::where('id', $img->id)->increment('process_fail');
+                    Camalarms::where('id', $img->id)->update(['in_process' => 0]);
                     $stat[$device->dev_id]['fails']++;
                     sleep(rand(5, 20));
                     continue;
                 }
                 $result = (new CamService())->convertImageAndSave($jsonImg, $device);
                 if ($result) {
-                    Camalarms::where('id', $img->id)->update(['processed' => 1, 'processed_at' => time()]);
+                    Camalarms::where('id', $img->id)->update(['in_process'=>0, 'processed' => 1, 'processed_at' => time()]);
                     $stat[$device->dev_id]['count']++;
                 }
                 sleep(rand(1, 5));

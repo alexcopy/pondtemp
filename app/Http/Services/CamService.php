@@ -11,15 +11,11 @@ use Monolog\Logger;
 class CamService
 {
 
-    public function conditionalResult($from_time, $to_time, $device, $qty = 10)
-    {
-        $device->from_time = $from_time;
-        $device->to_time = $to_time;
-        $device->max_count = $qty;
-        $server = env('CAM_ALRM_SERV', '');
-        $url = $server . '/GetAlarmMsg/AlarmGetMessageListWithCondition?param=' . base64_encode(\GuzzleHttp\json_encode($device));
+    protected $params;
 
-        $params = [
+    public function __construct()
+    {
+        $this->params = [
             'defaults' => [
                 'headers' => [
                     'User-Agent' => 'Dalvik/2.1.0 (Linux; U; Android 6.0.1; HTC Desire 530 Build/MMB29M)',
@@ -28,9 +24,20 @@ class CamService
                 ]
             ]
         ];
+    }
+
+
+    public function conditionalResult($from_time, $to_time, $device, $qty = 10)
+    {
+        $device->from_time = $from_time;
+        $device->to_time = $to_time;
+        $device->max_count = $qty;
+        $server = env('CAM_ALRM_SERV', '');
+        $url = $server . '/GetAlarmMsg/AlarmGetMessageListWithCondition?param=' . base64_encode(\GuzzleHttp\json_encode($device));
+
         try {
 
-            return (new Client($params))->request('GET', $url)->getBody()->getContents();
+            return (new Client($this->params))->request('GET', $url)->getBody()->getContents();
 
         } catch (\Exception $exception) {
             (new Logger('Didn\'t get valid JSON from conditionalResult server for dev_id=' . $device->dev_id .
@@ -48,17 +55,9 @@ class CamService
         $device->version = 2;
         $device->version = 2;
         $url = 'http://' . $img->ip . ':8888/GetAlarmMsg/AlarmGetPictureByID?param=' . base64_encode(\GuzzleHttp\json_encode($device));
-        $params = [
-            'defaults' => [
-                'headers' => [
-                    'User-Agent' => 'Dalvik/2.1.0 (Linux; U; Android 6.0.1; HTC Desire 530 Build/MMB29M)',
-                    'Connection' => 'Keep-Alive',
-                    'Accept-Encoding' => 'gzip'
-                ]
-            ]
-        ];
+
         try {
-            $page = (new Client($params))->request('GET', $url)->getBody()->getContents();
+            $page = (new Client($this->params))->request('GET', $url)->getBody()->getContents();
             return \GuzzleHttp\json_decode($page, true);
         } catch (\Exception $exception) {
             (new Logger('Didn\'t get valid JSON from image server for img_id=' . $img->alarm_id . ' and dev_id: '
@@ -110,7 +109,7 @@ class CamService
     /**
      * @return object
      */
-    public function getCheckParams()
+    private function getCheckParams()
     {
         return (object)[
             'client_id' => env('CAM_CLIENT_ID', ''),
@@ -137,18 +136,8 @@ class CamService
         $url = $server . '/GetAlarmMsg/XGPhoneClientRegistered?param='
             . \GuzzleHttp\json_encode($this->getCheckParams());
 
-        $params = [
-            'defaults' => [
-                'headers' => [
-                    'User-Agent' => 'Dalvik/2.1.0 (Linux; U; Android 6.0.1; HTC Desire 530 Build/MMB29M)',
-                    'Connection' => 'Keep-Alive',
-                    'Accept-Encoding' => 'gzip'
-                ]
-            ]
-        ];
-
         try {
-            $page = (new Client($params))->request('GET', $url)->getBody()->getContents();
+            $page = (new Client($this->params))->request('GET', $url)->getBody()->getContents();
             return \GuzzleHttp\json_decode($page);
         } catch (\Exception $exception) {
             (new Logger('client existence check failed'))->addCritical($exception->getMessage());
@@ -165,18 +154,10 @@ class CamService
 
         $url = $server . '/GetAlarmMsg/AlarmSelectServletPicture?param='
             . \GuzzleHttp\json_encode($devObject);
-        $params = [
-            'defaults' => [
-                'headers' => [
-                    'User-Agent' => 'Dalvik/2.1.0 (Linux; U; Android 6.0.1; HTC Desire 530 Build/MMB29M)',
-                    'Connection' => 'Keep-Alive',
-                    'Accept-Encoding' => 'gzip'
-                ]
-            ]
-        ];
+
 
         try {
-            $page = (new Client($params))->request('GET', $url)->getBody()->getContents();
+            $page = (new Client($this->params))->request('GET', $url)->getBody()->getContents();
             return $page;
 
         } catch (\Exception $exception) {
