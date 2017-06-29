@@ -11,7 +11,7 @@ class Gauges extends Model
 {
 
     public $timestamps = false;
-    protected $fillable = ['readingDate', 'pondLower', 'pondUpper', 'fl1', 'fl2','strlow', 'fl3'];
+    protected $fillable = ['readingDate', 'pondLower', 'pondUpper', 'fl1', 'fl2','strlow', 'fl3','timestamp'];
 
 
     public static function writeToDb(Request $request )
