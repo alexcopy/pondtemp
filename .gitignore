@@ -14,3 +14,4 @@ npm-debug.log
 /storage/urilog.txt
 /storage/ping.txt
 /storage/pingurilog.txt
+.DS_Store
