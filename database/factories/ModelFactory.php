@@ -28,7 +28,7 @@ $factory->define(App\Http\Models\Gauges::class, function (Faker\Generator $faker
         'fl1' => $faker->randomDigit,
         'fl2' => $faker->randomDigit,
         'fl3' => $faker->randomDigit,
-        'strlow' => $faker->randomFloat(),
+        'strlow' =>$faker->randomDigit,
         'timestamp' => \Carbon\Carbon::parse($date)->timestamp,
     ];
 });

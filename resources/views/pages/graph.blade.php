@@ -63,4 +63,5 @@
     <script src="assets/js/daterangepicker.js"></script>
     <script src="assets/js/c3.js"></script>
     <script type="text/javascript" src="assets/js/graph.js"></script>
+
 @stop

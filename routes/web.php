@@ -14,17 +14,17 @@
 use Illuminate\Support\Facades\Route;
 
 
-$app->get('/receiver/', 'ApiController@tempData');
-$app->get('/allfiles/', 'PageController@allCamFiles');
-$app->get('/', 'PageController@index');
-$app->get('/ping', 'PageController@ping');
-$app->get('/graph', 'PageController@graph');
-$app->get('/restoredata', 'Controller@restoreData');
+Route::get('/receiver/', 'ApiController@tempData');
+Route::get('/allfiles/', 'PageController@allCamFiles');
+Route::get('/', 'PageController@index');
+Route::get('/ping', 'PageController@ping');
+Route::get('/graph', 'PageController@graph');
+Route::get('/restoredata', 'Controller@restoreData');
 
-$app->get('/allfiles/details', 'PageController@allFilesDetails');
-$app->post('/api/v3/getdate', 'ApiController@jsonGraph');
+Route::get('/allfiles/details', 'PageController@allFilesDetails');
+Route::post('/api/v3/getdate', 'ApiController@jsonGraph');
 
-$app->post('/api/v3/getfilesstats', 'ApiController@filesStat');
-$app->post('/api/v3/chemicalanalyse', 'ApiController@chemicalAnalyse');
+Route::post('/api/v3/getfilesstats', 'ApiController@filesStat');
+Route::post('/api/v3/chemicalanalyse', 'ApiController@chemicalAnalyse');
 
 
