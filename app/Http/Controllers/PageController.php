@@ -141,7 +141,7 @@ class PageController extends Controller
             $timeStamp = Carbon::parse($folderName);
             $folders[$timeStamp->timestamp] = ['date' => $timeStamp->format('d-m-Y'), 'origPath' => $foldePath, 'folder' => $folderName];
         }
-        ksort($folders);
+        krsort($folders);
         return $folders;
     }
 }
