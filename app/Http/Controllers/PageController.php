@@ -8,6 +8,7 @@ use App\Exceptions\PageNotFound;
 use App\Http\Models\Gauges;
 use App\Http\Models\TempMeter;
 use App\Http\Models\WeatherReading;
+use App\Http\Services\CamAlarmFilesFilters;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
@@ -98,6 +99,7 @@ class PageController extends Controller
             if ($query == 'showtoday') {
                 $title = 'Show Today Files for ' . $folder;
                 $result = File::allFiles($filesPath . '/today');
+                $result = CamAlarmFilesFilters::fileNameIsKeyToSort($result, $folder);
             } elseif ($query == 'showfolders') {
                 $title = 'Show Archived folders for ' . $folder;
                 $result = self::sortFolders(File::directories($filesPath));
@@ -105,6 +107,7 @@ class PageController extends Controller
                 if (!$subfolder) throw new PageNotFound('Please specify subfolder');
                 $title = 'Show Folder Files for ' . $folder . ' and subfolder ' . $subfolder;
                 $result = File::allFiles($filesPath . '/' . $subfolder);
+                $result = CamAlarmFilesFilters::fileNameIsKeyToSort($result, $folder);
             } else {
                 throw new PageNotFound('didn\'t match any query params ');
             }
@@ -112,6 +115,7 @@ class PageController extends Controller
         } catch (\Exception $exception) {
             throw new PageNotFound($exception->getMessage());
         }
+
 
         $chunkedRes = array_chunk($result, $limit);
 
