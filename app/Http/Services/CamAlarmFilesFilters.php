@@ -13,16 +13,15 @@ class CamAlarmFilesFilters
         foreach ($alarmFiles as $key => $file) {
             $alarmFile = $file->getPathName();
             $keys = explode('_', $alarmFile);
-            if (($camType != 'koridor') || (count($keys) <= 1)) {
+            if (($camType == 'koridor') || (count($keys) <= 1)) {
                 $keys = str_replace('Koridor-2017-', '', $alarmFile);
                 $keys = [str_replace('-', '', $alarmFile)];
             }
             $sortArg = self::getSortArgBasedOnCamType($camType);
             if (isset($keys[$sortArg])) {
-                $parsedFileName[(int)$keys[$sortArg]] = $file;
+                $parsedFileName[$keys[$sortArg]] = $file;
             }
         }
-
 
         if ($direction == 'desc') {
             krsort($parsedFileName, SORT_NUMERIC);
