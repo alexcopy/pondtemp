@@ -128,10 +128,11 @@ $factory->define(App\Http\Models\Camalarms::class, function (Faker\Generator $fa
         'version_num' => $faker->randomDigit,
         'alarm_image' => $faker->text(100),
         'alarm_type' => $faker->randomDigit,
+        'alarm_stamp' =>  $faker->unixTime,
         'dev_id' => $faker->unixTime,
         'alarm_id' => $faker->unixTime,
         'alarm_level' => $faker->randomDigit,
-        'last_fresh_time' => $faker->unixTime,
+        'last_fresh_time' => microtime(),
         'image_id' => $faker->unixTime,
         'ip' => $faker->ipv4,
     ];
