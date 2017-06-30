@@ -15,3 +15,5 @@ npm-debug.log
 /storage/ping.txt
 /storage/pingurilog.txt
 .DS_Store
+/public/assets/pics/ftp
+composer.lock
