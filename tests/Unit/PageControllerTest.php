@@ -13,7 +13,6 @@ protected $ftppath='';
         foreach ($dirs as $dir) {
             if (!file_exists($this->ftppath.'/today')) {
                 $path = $this->ftppath . '/' . $dir . '/today';
-                echo $path."\n";
                 mkdir($path, $mode = 0777, $recursive = true);
             }
         }
