@@ -19,7 +19,7 @@ class CamAlarmFilesFilters
             }
             $sortArg = self::getSortArgBasedOnCamType($camType);
             if (isset($keys[$sortArg])) {
-                $parsedFileName[$keys[$sortArg]] = $file;
+                $parsedFileName[(int)$keys[$sortArg]] = $file;
             }
         }
 
