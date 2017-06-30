@@ -23,9 +23,6 @@ class CamAlarmFilesFilters
             }
         }
 
-        if (count($parsedFileName) != count($alarmFiles)) {
-            return $alarmFiles;
-        }
 
         if ($direction == 'desc') {
             krsort($parsedFileName);
