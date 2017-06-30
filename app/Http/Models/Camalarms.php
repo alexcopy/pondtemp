@@ -54,7 +54,7 @@ class Camalarms extends Model
 
         } catch (\Exception $exception) {
 
-            Log::critical('Failed to add and parse JSON responce from P2P with resp:' . print_r($response) . 'Err Messsage is: ' . $exception->getMessage());
+            Log::critical('Failed to add and parse JSON responce from P2P with resp:' .  $response  .'  Err Messsage is: ' . $exception->getMessage());
         }
         return $stat;
     }

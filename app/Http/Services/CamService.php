@@ -44,7 +44,7 @@ class CamService
             Log::critical('Didn\'t get valid JSON from conditionalResult server for dev_id=' . $device->dev_id .
                 ' and time interval starts at: '
                 . $from_time . ' and ending at: ' . $to_time . ' with message: ' . ' MSG: ' . $exception->getMessage());
-            return ['result' => 0];
+            return '{"result":0}';
         }
 
     }
