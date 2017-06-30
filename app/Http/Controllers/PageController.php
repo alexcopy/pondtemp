@@ -18,6 +18,11 @@ use Illuminate\Support\Facades\Log;
 class PageController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         $weather = WeatherReading::orderBy('timestamp', 'desc')->limit(100)->get();
