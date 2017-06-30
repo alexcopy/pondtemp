@@ -43,7 +43,7 @@ class CamService
         } catch (\Exception $exception) {
             Log::critical('Didn\'t get valid JSON from conditionalResult server for dev_id=' . $device->dev_id .
                 ' and time interval starts at: '
-                . $from_time . ' and ending at: ' . $to_time . ' with message: '.' MSG: '.$exception->getMessage());
+                . $from_time . ' and ending at: ' . $to_time . ' with message: ' . ' MSG: ' . $exception->getMessage());
             return ['result' => 0];
         }
 
@@ -61,7 +61,7 @@ class CamService
             return \GuzzleHttp\json_decode($page, true);
         } catch (\Exception $exception) {
             Log::critical('Didn\'t get valid JSON from image server for img_id=' . $img->alarm_id . ' and dev_id: '
-                . $img->dev_id . ' with message: '.'  MSG '.$exception->getMessage());
+                . $img->dev_id . ' with message: ' . '  MSG ' . $exception->getMessage());
             return ['result' => 0];
         }
     }
@@ -76,7 +76,11 @@ class CamService
             $imageData = base64_decode($jsonImage['alarm_image']);
             $source = imagecreatefromstring($imageData);
             $imageName = $path . $device->dev_id . "_" . $jsonImage['alarm_id'] . "_" . time() . ".jpg";
-            $imageSave = imagejpeg($source, $imageName, 100);
+            if (!file_exists($imageName)) {
+                $imageSave = imagejpeg($source, $imageName, 100);
+            } else {
+                $imageSave = true;
+            }
             imagedestroy($source);
             return $imageSave;
 
@@ -84,7 +88,7 @@ class CamService
             Log::critical('Get an Error in saving IMAGE to hard drive' .
                 $path . $jsonImage['dev_id'] . "_"
                 . $jsonImage['alarm_id'] . "_" . time()
-                . ".jpg" . ' with message: '.'  MSG '.$exception->getMessage());
+                . ".jpg" . ' with message: ' . '  MSG ' . $exception->getMessage());
             return false;
         }
     }
@@ -138,7 +142,7 @@ class CamService
             $page = (new Client($this->params))->request('GET', $url)->getBody()->getContents();
             return \GuzzleHttp\json_decode($page);
         } catch (\Exception $exception) {
-            Log::critical('client existence check failed'.'  Msg:  ' .$exception->getMessage());
+            Log::critical('client existence check failed' . '  Msg:  ' . $exception->getMessage());
             return (object)['result' => 0];
         }
 
@@ -159,8 +163,8 @@ class CamService
             return $page;
 
         } catch (\Exception $exception) {
-            Log::critical('Something Wrong With Getting Alarm messages'.'  MSG: '.$exception->getMessage());
-            return   \GuzzleHttp\json_encode(['result' => 0]);
+            Log::critical('Something Wrong With Getting Alarm messages' . '  MSG: ' . $exception->getMessage());
+            return \GuzzleHttp\json_encode(['result' => 0]);
         }
 
     }
