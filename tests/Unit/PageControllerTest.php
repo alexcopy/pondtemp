@@ -8,7 +8,7 @@ protected $ftppath='';
     public function setUp()
     {
         $dirs = ['dir1', 'dir2', 'dir3'];
-        $this->ftppath=getcwd().'/storage/ftp';
+        $this->ftppath='../storage/ftp';
 
         foreach ($dirs as $dir) {
             if (!file_exists($this->ftppath.'/today')) {
