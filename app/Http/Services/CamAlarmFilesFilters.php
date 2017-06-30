@@ -25,9 +25,9 @@ class CamAlarmFilesFilters
 
 
         if ($direction == 'desc') {
-            krsort($parsedFileName);
+            krsort($parsedFileName, SORT_NUMERIC);
         } else {
-            ksort($parsedFileName);
+            ksort($parsedFileName, SORT_NUMERIC);
         }
         return $parsedFileName;
     }
