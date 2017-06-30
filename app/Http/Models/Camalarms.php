@@ -62,8 +62,9 @@ class Camalarms extends Model
 
     private static function getTimeStamp($alarm_time, $last_fresh_time)
     {
-        $timestampChina = Carbon::createFromFormat('Y-m-d H:i:s', $alarm_time, 'Asia/Shanghai')->timestamp;
-        $timestampLondon = Carbon::createFromFormat('Y-m-d H:i:s', $alarm_time, 'Europe/London')->timestamp;
+
+        $timestampChina = Carbon::parse($alarm_time, 'Asia/Shanghai')->timestamp;
+        $timestampLondon = Carbon::parse($alarm_time, 'Europe/London')->timestamp;
         $fresh = (string)$last_fresh_time;
         $freshTime = substr($fresh, 0, 10);
         $diff = abs((int)$timestampLondon - (int)$freshTime);

@@ -28,3 +28,7 @@ Route::post('/api/v3/getfilesstats', 'ApiController@filesStat');
 Route::post('/api/v3/chemicalanalyse', 'ApiController@chemicalAnalyse');
 
 
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
