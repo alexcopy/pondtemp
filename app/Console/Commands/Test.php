@@ -2,10 +2,12 @@
 
 namespace App\Console\Commands;
 
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class Test extends Command
 {
+
     /**
      * The name and signature of the console command.
      *
@@ -37,11 +39,22 @@ class Test extends Command
      */
     public function handle()
     {
-        $allAlarms= \App\Http\Models\Camalarms::all();
-        foreach ($allAlarms as $alarm) {
 
+        $allAlarms = \App\Http\Models\Camalarms::all();
+        foreach ($allAlarms as $alarm) {
+            $timestampChina = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $alarm->alarm_time, 'Asia/Shanghai')->timestamp;
+            $timestampLondon=Carbon::createFromFormat('Y-m-d H:i:s', $alarm->alarm_time, 'Europe/London')->timestamp;
+            $fresh = (string)$alarm->last_fresh_time;
+            $freshTime = substr($fresh, 0, 10);
+            $diff = abs((int)$timestampLondon - (int)$freshTime);
+
+            if ($diff > 4600) {
+                $alarm->alarm_stamp = $timestampChina;
+            } else {
+                $alarm->alarm_stamp = $timestampLondon;
+            }
+            $alarm->save();
         }
-        $tc=\Carbon\Carbon::createFromFormat('Y-m-d h:i:s', $time=$alarm->alarm_time, 'Asia/Shanghai');
-        dd($tc->timestamp);
+
     }
 }
