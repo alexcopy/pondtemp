@@ -35,8 +35,8 @@ class Camalarms extends Model
         $stat = ['count' => 0, 'dev_id' => 0];
         try {
             $json = \GuzzleHttp\json_decode($response, true);
-            if (!isset($json['value'])) throw new \Exception('Empty Value has Passed');
-            if (isset($json['result']) && $json['result'] == 0) throw new \Exception('Empty Result has Passed');
+            if (!isset($json['value'])) throw new \Exception('Empty Value has Passed', 8);
+            if (isset($json['result']) && $json['result'] == 0) throw new \Exception('Empty Result has Passed', 8);
 
             foreach ($json['value'] as $value) {
                 if (isset($value['id'])) {
@@ -53,8 +53,12 @@ class Camalarms extends Model
             }
 
         } catch (\Exception $exception) {
-
-            Log::critical('Failed to add and parse JSON responce from P2P with resp:' .  $response  .'  Err Messsage is: ' . $exception->getMessage());
+            if ($exception->getCode() != 8) {
+                Log::critical('Failed to add and parse JSON responce from P2P with resp:' . $response . '  Err Messsage is: ' . $exception->getMessage());
+            } else {
+                Log::info("Get an empty Json with 0 results the response is " . $response
+                );
+            }
         }
         return $stat;
     }

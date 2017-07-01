@@ -19,6 +19,7 @@ class Device extends Migration
             $table->string('deviceName');
             $table->string('deviceType');
             $table->string('description');
+            $table->tinyInteger('is_disabled')->default(0);
             $table->integer('timestamp')->default(time());
         });
     }
