@@ -34,7 +34,7 @@
 
                 <!-- Branding Image -->
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'PondTemp') }}
+                    {{ config('app.edname', 'PondTemp') }}
                 </a>
             </div>
 
