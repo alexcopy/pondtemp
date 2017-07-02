@@ -7,6 +7,7 @@ namespace App\Console\Commands;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\CamApiController;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class GetAlarmPicsMsgFromCloud extends Command
 {
@@ -41,8 +42,8 @@ class GetAlarmPicsMsgFromCloud extends Command
      */
     public function handle()
     {
-        $stat = CamApiController::getAlarmMessagesAndWriteInDb();
-        print_r($stat);
+        $res = CamApiController::getAlarmMessagesAndWriteInDb();
+        Log::info('Run get alarm messages schedule, got results: '.\GuzzleHttp\json_encode($res));
     }
 
 

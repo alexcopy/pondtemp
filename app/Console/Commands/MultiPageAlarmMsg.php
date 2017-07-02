@@ -7,6 +7,7 @@ namespace App\Console\Commands;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\CamApiController;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class MultiPageAlarmMsg  extends Command
 {
@@ -43,6 +44,6 @@ class MultiPageAlarmMsg  extends Command
     public function handle()
     {
         $res = CamApiController::multiplePagedResult(24);
-        print_r($res);
+        Log::info('Run multi Page schedule, got results: '.\GuzzleHttp\json_encode($res));
     }
 }
