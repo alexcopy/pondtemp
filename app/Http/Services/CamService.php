@@ -90,7 +90,8 @@ class CamService
                 . $jsonImage['alarm_id'] . "_" . time()
                 . ".jpg" . ' with message: ' . '  MSG ' . $exception->getMessage().
                 'Stack trace:'."\n"
-                .'#'.$jsonImage['alarm_image']
+                .'#0'.$jsonImage['alarm_image']."\n"
+                .'#1 JsonObj'. \GuzzleHttp\json_encode($jsonImage)
             );
             return false;
         }
