@@ -88,7 +88,11 @@ class CamService
             Log::critical('Get an Error in saving IMAGE to hard drive' .
                 $path . $jsonImage['dev_id'] . "_"
                 . $jsonImage['alarm_id'] . "_" . time()
-                . ".jpg" . ' with message: ' . '  MSG ' . $exception->getMessage());
+                . ".jpg" . ' with message: ' . '  MSG ' . $exception->getMessage().
+                'Stack trace:'."\n"
+                .'#'.$jsonImage
+
+            );
             return false;
         }
     }
