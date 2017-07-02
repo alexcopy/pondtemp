@@ -71,6 +71,10 @@ class CamApiController
                 if ($result) {
                     Camalarms::where('id', $img->id)->update(['in_process'=>0, 'processed' => 1, 'processed_at' => time()]);
                     $stat[$device->dev_id]['count']++;
+                }else{
+                    Camalarms::where('id', $img->id)->increment('process_fail');
+                    Camalarms::where('id', $img->id)->update(['in_process' => 0]);
+                    $stat[$device->dev_id]['fails']++;
                 }
                 sleep(rand(1, 5));
             }
