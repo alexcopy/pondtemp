@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 
 use App\Exceptions\PageNotFound;
+use App\Http\Models\Camalarms;
 use App\Http\Models\Gauges;
 use App\Http\Models\TempMeter;
 use App\Http\Models\WeatherReading;
@@ -61,6 +62,7 @@ class PageController extends Controller
     public function allCamFiles(Request $request)
     {
         $dirList = explode(',', env('CAMS', ','));
+        $camIdsList = explode(',', env('CAM_IDS', ','));
         $ftpDir = storage_path('ftp');
         $dirFiles = [];
 
@@ -74,7 +76,20 @@ class PageController extends Controller
             $dirFiles['size'][$dir] = self::human_folderSize($filesPath);
 
         }
-        return view('pages.camfiles', compact(['dirFiles', 'ftpDir']));
+        $tableStats = [];
+        foreach ($camIdsList as $item) {
+            $tableStats[$item] = [
+                'processed' => Camalarms::where('dev_id', $item)->where('processed', 1)->count(),
+                'waiting' => Camalarms::where('dev_id', $item)->where('processed', 0)->count(),
+                'zerofail' => Camalarms::where('dev_id', $item)->where('process_fail', 0)->count(),
+                'overFive' => Camalarms::where('dev_id', $item)->where('process_fail', '>', 5)->count(),
+                'tenFail' => Camalarms::where('dev_id', $item)->where('process_fail', '=', 10)->count(),
+                'total' => Camalarms::where('dev_id', $item)->count(),
+            ];
+
+        }
+
+        return view('pages.camfiles', compact(['dirFiles', 'ftpDir', 'tableStats']));
     }
 
     public function allFilesDetails(Request $request)

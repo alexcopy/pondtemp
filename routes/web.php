@@ -31,4 +31,4 @@ Route::post('/api/v3/chemicalanalyse', 'ApiController@chemicalAnalyse');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'PageController@index')->name('home');
