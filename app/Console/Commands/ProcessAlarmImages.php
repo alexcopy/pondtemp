@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\CamApiController;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
@@ -42,7 +43,8 @@ class ProcessAlarmImages extends Command
      */
     public function handle()
     {
-         $res=CamApiController::processAlarmMessages();
+        if(Carbon::now()->hour==3) return null;
+        $res=CamApiController::processAlarmMessages();
         Log::info('Run Processing page schedule, got results: '.\GuzzleHttp\json_encode($res));
 
     }

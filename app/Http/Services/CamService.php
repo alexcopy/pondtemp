@@ -54,14 +54,17 @@ class CamService
         $device->alarm_id = $img->alarm_id;
         $device->version = 2;
         $device->version = 2;
-        $url = 'http://' . $img->ip . ':8888/GetAlarmMsg/AlarmGetPictureByID?param=' . base64_encode(\GuzzleHttp\json_encode($device));
+        $ports=['8888', '8889'];
+        $url = 'http://' . $img->ip . ':'.$ports[0].'/GetAlarmMsg/AlarmGetPictureByID?param=' . base64_encode(\GuzzleHttp\json_encode($device));
 
         try {
             $page = (new Client($this->params))->request('GET', $url)->getBody()->getContents();
             return \GuzzleHttp\json_decode($page, true);
         } catch (\Exception $exception) {
-            Log::critical('Didn\'t get valid JSON from image server for img_id=' . $img->alarm_id . ' and dev_id: '
-                . $img->dev_id . ' with message: ' . '  MSG ' . $exception->getMessage());
+            $msg = 'Didn\'t get valid JSON from image server for img_id=' . $img->alarm_id . ' and dev_id: '
+                . $img->dev_id . ' with message: ' . '  MSG ' . $exception->getMessage();
+            echo $msg;
+            Log::critical($msg);
             return ['result' => 0];
         }
     }

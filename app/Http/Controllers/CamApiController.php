@@ -12,7 +12,9 @@ namespace App\Http\Controllers;
 use App\Http\Models\Camalarms;
 use App\Http\Services\CamService;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use Monolog\Logger;
+
 
 class CamApiController
 {
@@ -24,7 +26,7 @@ class CamApiController
         $chunk_mins = 5;
         $devices = (new CamService())->getUserDevicesParams();
         $minsInOneDay = (60 * $numberOfHours) / $chunk_mins;
-
+        $i = 0;
         foreach ($devices as $device) {
             $to_time = time();
             foreach (range(1, $minsInOneDay) as $chunkNumber) {
@@ -36,17 +38,38 @@ class CamApiController
                 ];
                 $to_time = $from_Time;
                 $page = (new CamService())->conditionalResult($chk['from_time'], $chk['to_time'], $device);
-                $stat[] = Camalarms::writeJsonToDb($page);
-                sleep(rand(5, 20));
+                $i++;
+                $stat[$i] = Camalarms::writeJsonToDb($page);
+                $info = $i . ": Got results for dev id: " . $device->dev_id . " with message:  " . self::getNumbeResponceInfo($page) . ' q-ty wrote to DB: '.  $stat[$i]['count'].'  and time interval is: ' . Carbon::createFromTimestamp($to_time)->format('d/m H:i') . "\n";
+                echo $info;
+                Log::info($info);
             }
         }
         return $stat;
     }
 
+    protected static function getNumbeResponceInfo($page)
+    {
+        try {
+            $json = json_decode($page, true);
+            if (isset($json['result']) && $json['result'] == 0){
+                return 'zero results benn recieved';
+            }
+            if (isset($json['result'])){
+                return "Have received: ".$json['result']. "  results";
+            }
+
+        } catch (\Exception $exception) {
+
+            return 'got Error while trying to parce json string';
+
+        }
+    }
 
     public static function processAlarmMessages()
     {
         $stat = [];
+        $i=0;
         $devices = (new CamService())->getUserDevicesParams();
         foreach ($devices as $device) {
             $proc = Camalarms::where('dev_id', $device->dev_id)
@@ -64,14 +87,17 @@ class CamApiController
                     Camalarms::where('id', $img->id)->increment('process_fail');
                     Camalarms::where('id', $img->id)->update(['in_process' => 0]);
                     $stat[$device->dev_id]['fails']++;
-                    sleep(rand(5, 20));
+                    echo "Failed for device ID: ". $device->dev_id."\n";
+
                     continue;
                 }
-                $result = (new CamService())->convertImageAndSave($jsonImg, $device);
+                 $result = (new CamService())->convertImageAndSave($jsonImg, $device);
+                 $msg= $i++. "  Success: saved new image in to server with img ID: ".$jsonImg["alarm_id"] . " from device ID: ". $jsonImg["dev_id"]."\n";
+                 echo $msg;
                 if ($result) {
-                    Camalarms::where('id', $img->id)->update(['in_process'=>0, 'processed' => 1, 'processed_at' => time()]);
+                    Camalarms::where('id', $img->id)->update(['in_process' => 0, 'processed' => 1, 'processed_at' => time()]);
                     $stat[$device->dev_id]['count']++;
-                }else{
+                } else {
                     Camalarms::where('id', $img->id)->increment('process_fail');
                     Camalarms::where('id', $img->id)->update(['in_process' => 0]);
                     $stat[$device->dev_id]['fails']++;

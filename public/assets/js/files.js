@@ -12,7 +12,6 @@ ALEX.getFilesData = function () {
                 msg.data.mamacam.unshift('Mama Cam');
                 msg.data.koridor.unshift('Koridor');
                 msg.data.pond.unshift('Pond');
-                msg.data.mamakitchen.unshift('MamaKit');
                 ALEX.drawTable(msg.data, '');
 
                 ALEX.temps.load({
@@ -21,7 +20,6 @@ ALEX.getFilesData = function () {
                         msg.data.mamacam,
                         msg.data.koridor,
                         msg.data.pond,
-                        msg.data.mamakitchen,
                     ],
                     length: 0,
                     duration: 8500
@@ -41,7 +39,6 @@ ALEX.temps = c3.generate({
             ['Mama Cam', []],
             ['Koridor', []],
             ['Pond', []],
-            ['MamaKit', []],
         ]
     },
     axis: {

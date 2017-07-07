@@ -6,6 +6,7 @@ namespace App\Console\Commands;
 
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\CamApiController;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
@@ -42,6 +43,7 @@ class GetAlarmPicsMsgFromCloud extends Command
      */
     public function handle()
     {
+        if(Carbon::now()->hour==3) return null;
         $res = CamApiController::getAlarmMessagesAndWriteInDb();
         Log::info('Run get alarm messages schedule, got results: '.\GuzzleHttp\json_encode($res));
     }
