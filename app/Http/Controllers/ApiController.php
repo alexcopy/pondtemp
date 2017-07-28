@@ -159,6 +159,7 @@ class ApiController extends Controller
         foreach ($dirs as $dir) {
             $resp['data'][$dir] = array_values($dateChunks[$dir]);
         }
+        $resp['data']['dirs']=$dirs;
         return response()->json($resp, 200);
     }
 
