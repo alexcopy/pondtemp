@@ -13,6 +13,7 @@ class CreateUserAgentListsTable extends Migration
      */
     public function up()
     {
+        return null;
         Schema::create('user_agent_lists', function (Blueprint $table) {
             $table->increments('id');
             $table->string("Type");

@@ -14,6 +14,7 @@ class CreateProxyListsTable extends Migration
      */
     public function up()
     {
+        return null;
         Schema::create('proxy_lists', function (Blueprint $table) {
             $table->increments('id');
             $table->string('ip');
