@@ -6,6 +6,7 @@ namespace App\Console\Commands;
 
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\CamApiController;
+use App\Http\Models\ProxyList;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;

@@ -4,29 +4,13 @@
 namespace App\Http\Services;
 
 
-use GuzzleHttp\Client;
+use App\Http\Models\ProxyList;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Monolog\Logger;
 
 class CamService
 {
-
-    protected $params;
-
-    public function __construct()
-    {
-        $this->params = [
-            'defaults' => [
-                'headers' => [
-                    'User-Agent' => 'Dalvik/2.1.0 (Linux; U; Android 6.0.1; HTC Desire 530 Build/MMB29M)',
-                    'Connection' => 'Keep-Alive',
-                    'Accept-Encoding' => 'gzip'
-                ]
-            ]
-        ];
-    }
-
 
     public function conditionalResult($from_time, $to_time, $device, $qty = 10)
     {
@@ -37,8 +21,7 @@ class CamService
         $url = $server . '/GetAlarmMsg/AlarmGetMessageListWithCondition?param=' . base64_encode(\GuzzleHttp\json_encode($device));
 
         try {
-
-            return (new Client($this->params))->request('GET', $url)->getBody()->getContents();
+            return ProxyList::getCurlPage(ProxyList::getProxyForClient(), $url);
 
         } catch (\Exception $exception) {
             Log::critical('Didn\'t get valid JSON from conditionalResult server for dev_id=' . $device->dev_id .
@@ -58,7 +41,7 @@ class CamService
         $url = 'http://' . $img->ip . ':'.$ports[0].'/GetAlarmMsg/AlarmGetPictureByID?param=' . base64_encode(\GuzzleHttp\json_encode($device));
 
         try {
-            $page = (new Client($this->params))->request('GET', $url)->getBody()->getContents();
+            $page = ProxyList::getCurlPage(ProxyList::getProxyForClient(), $url);
             return \GuzzleHttp\json_decode($page, true);
         } catch (\Exception $exception) {
             $msg = 'Didn\'t get valid JSON from image server for img_id=' . $img->alarm_id . ' and dev_id: '
@@ -146,8 +129,8 @@ class CamService
             . \GuzzleHttp\json_encode($this->getCheckParams());
 
         try {
-            $page = (new Client($this->params))->request('GET', $url)->getBody()->getContents();
-            return \GuzzleHttp\json_decode($page);
+            $page = ProxyList::getCurlPage(ProxyList::getProxyForClient(), $url);
+           return \GuzzleHttp\json_decode($page);
         } catch (\Exception $exception) {
             Log::critical('client existence check failed' . '  Msg:  ' . $exception->getMessage());
             return (object)['result' => 0];
@@ -164,9 +147,8 @@ class CamService
         $url = $server . '/GetAlarmMsg/AlarmSelectServletPicture?param='
             . \GuzzleHttp\json_encode($devObject);
 
-
         try {
-            $page = (new Client($this->params))->request('GET', $url)->getBody()->getContents();
+            $page = ProxyList::getCurlPage(ProxyList::getProxyForClient(), $url);
             return $page;
 
         } catch (\Exception $exception) {
