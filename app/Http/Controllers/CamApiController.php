@@ -114,8 +114,8 @@ class CamApiController
         $stat = [];
         $ifRegisterd = (new CamService())->checkIsClientexists();
         if (!(int)$ifRegisterd->result) {
-            (new Logger('client existence checks failed'));
-            throw new \Exception("Client existence checks  failed");
+            Log::alert("Client existence checks  failed");
+            echo "Client existence checks  failed \n";
         }
         $cams = (new CamService())->getUserDevicesParams();
         foreach ($cams as $cam) {
