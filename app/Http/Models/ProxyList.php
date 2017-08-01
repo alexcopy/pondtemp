@@ -2,6 +2,7 @@
 
 namespace App\Http\Models;
 
+use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Model;
 
 class ProxyList extends Model
@@ -51,17 +52,26 @@ class ProxyList extends Model
 
     public static function getCurlPage($oProxy, $url)
     {
-        $proxy = "$oProxy->user:$oProxy->pwd@$oProxy->ip";
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_PROXY, $proxy);
-        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
-        curl_setopt($ch,CURLOPT_USERAGENT, UserAgentList::inRandomOrder()->get()->first()->Agent);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_HEADER, 1);
-        $page = curl_exec($ch);
-        curl_close($ch);
-        return $page;
+
+       return (new Client())->request('GET', $url,
+            [
+                'headers' => [
+                    'User-Agent' => 'Dalvik/2.1.0 (Linux; U; Android 6.0.1; HTC Desire 530 Build/MMB29M)'
+                ]
+            ])->getBody()->getContents();
+
+//        $proxy = "$oProxy->user:$oProxy->pwd@$oProxy->ip";
+//        $ch = curl_init();
+//        curl_setopt($ch, CURLOPT_URL, $url);
+//        curl_setopt($ch, CURLOPT_PROXY, $proxy);
+//        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
+//        curl_setopt($ch,CURLOPT_USERAGENT, 'Dalvik/2.1.0 (Linux; U; Android 6.0.1; HTC Desire 530 Build/MMB29M)');
+//        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+//        curl_setopt($ch, CURLOPT_HEADER, 1);
+//        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 600);
+//        $page = curl_exec($ch);
+//        curl_close($ch);
+//        return $page;
     }
 }

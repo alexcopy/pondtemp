@@ -5,6 +5,7 @@ namespace App\Http\Services;
 
 
 use App\Http\Models\ProxyList;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Monolog\Logger;
@@ -37,11 +38,13 @@ class CamService
         $device->alarm_id = $img->alarm_id;
         $device->version = 2;
         $device->version = 2;
-        $ports=['8888', '8889'];
-        $url = 'http://' . $img->ip . ':'.$ports[0].'/GetAlarmMsg/AlarmGetPictureByID?param=' . base64_encode(\GuzzleHttp\json_encode($device));
-
+        $ports = ['8888', '8889'];
+        $url = 'http://' . $img->ip . ':' . $ports[0] . '/GetAlarmMsg/AlarmGetPictureByID?param=' . base64_encode(\GuzzleHttp\json_encode($device));
         try {
             $page = ProxyList::getCurlPage(ProxyList::getProxyForClient(), $url);
+            if (preg_match('~(?P<res>\{"result".+)~msi', $page, $mtch)) {
+                $page = trim($mtch['res']);
+            }
             return \GuzzleHttp\json_decode($page, true);
         } catch (\Exception $exception) {
             $msg = 'Didn\'t get valid JSON from image server for img_id=' . $img->alarm_id . ' and dev_id: '
@@ -74,10 +77,10 @@ class CamService
             Log::critical('Get an Error in saving IMAGE to hard drive' .
                 $path . $jsonImage['dev_id'] . "_"
                 . $jsonImage['alarm_id'] . "_" . time()
-                . ".jpg" . ' with message: ' . '  MSG ' . $exception->getMessage().
-                'Stack trace:'."\n"
-                .'#0'.$jsonImage['alarm_image']."\n"
-                .'#1 JsonObj'. \GuzzleHttp\json_encode($jsonImage)
+                . ".jpg" . ' with message: ' . '  MSG ' . $exception->getMessage() .
+                'Stack trace:' . "\n"
+                . '#0' . $jsonImage['alarm_image'] . "\n"
+                . '#1 JsonObj' . \GuzzleHttp\json_encode($jsonImage)
             );
             return false;
         }
@@ -105,17 +108,17 @@ class CamService
     {
         return (object)[
             'client_id' => env('CAM_CLIENT_ID', ''),
-            'phone_type' => env('CAM_PHONE_TYPE', ''),
+            'phone_type' => (int)env('CAM_PHONE_TYPE', ''),
+            'phone_num' => 'unknow',
             'apikey' => env('CAM_APIKEY', ''),
             'secretkey' => env('CAM_SECRETKEY', ''),
-            'channel_id' => env('CAM_CHANNEL_ID', ''),
-            'phone_num' => 'unknow',
+            'channel_id' => (int)env('CAM_CHANNEL_ID', ''),
             'user_id' => 'unknow',
             'vibrate' => 0,
             'sound' => 0,
-            'sys_lan' => 'cn',
-            'recv_msg_pri' => 1,
             'sound_file' => 'alarm.mp3',
+            'recv_msg_pri' => 0,
+            'sys_lan' => 'en',
         ];
     }
 
@@ -124,13 +127,17 @@ class CamService
      */
     public function checkIsClientexists()
     {
-        $server = env('CAM_ALRM_SERV', '');
+        $server = env('CAM_EXIST_SERV', '');
         $url = $server . '/GetAlarmMsg/XGPhoneClientRegistered?param='
             . \GuzzleHttp\json_encode($this->getCheckParams());
-
         try {
-            $page = ProxyList::getCurlPage(ProxyList::getProxyForClient(), $url);
-           return \GuzzleHttp\json_decode($page);
+            $page = (new Client())->request('GET', $url,
+                [
+                    'headers' => [
+                        'User-Agent' => 'Dalvik/2.1.0 (Linux; U; Android 6.0.1; HTC Desire 530 Build/MMB29M)'
+                    ]
+                ])->getBody()->getContents();
+            return \GuzzleHttp\json_decode($page);
         } catch (\Exception $exception) {
             Log::critical('client existence check failed' . '  Msg:  ' . $exception->getMessage());
             return (object)['result' => 0];

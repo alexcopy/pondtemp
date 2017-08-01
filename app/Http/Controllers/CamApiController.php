@@ -112,16 +112,18 @@ class CamApiController
     public static function getAlarmMessagesAndWriteInDb()
     {
         $stat = [];
-        $ifRegisterd = (new CamService())->checkIsClientexists();
-        if (!(int)$ifRegisterd->result) {
-            Log::alert("Client existence checks  failed");
-            echo "Client existence checks  failed \n";
-        }
+       // $ifRegisterd = (new CamService())->checkIsClientexists();
+//        if (!(int)$ifRegisterd->result) {
+//            Log::alert("Client existence checks  failed");
+//            echo "Client existence checks  failed \n";
+//        }
         $cams = (new CamService())->getUserDevicesParams();
+
         foreach ($cams as $cam) {
             $alarmMsg = (new CamService())->getAlarmMessages($cam, 5, 0);
             $stat[] = Camalarms::writeJsonToDb($alarmMsg);
         }
+
         return $stat;
     }
 

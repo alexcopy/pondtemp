@@ -29,15 +29,16 @@ class Camalarms extends Model
         "processed_at",
     ];
 
-
     public static function writeJsonToDb($response)
     {
         $stat = ['count' => 0, 'dev_id' => 0];
+        if (preg_match('~(?P<res>\{"result".+)~msi', $response, $mtch)) {
+            $response=trim($mtch['res']);
+        }
         try {
             $json = \GuzzleHttp\json_decode($response, true);
             if (!isset($json['value'])) throw new \Exception('Empty Value has Passed', 8);
             if (isset($json['result']) && $json['result'] == 0) throw new \Exception('Empty Result has Passed', 8);
-
             foreach ($json['value'] as $value) {
                 if (isset($value['id'])) {
                     $msgid = $value['id'];
