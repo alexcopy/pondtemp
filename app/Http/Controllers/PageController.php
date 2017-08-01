@@ -80,7 +80,7 @@ class PageController extends Controller
         foreach ($camIdsList as $item) {
             $tableStats[$item] = [
                 'processed' => Camalarms::where('dev_id', $item)->where('processed', 1)->count(),
-                'waiting' => Camalarms::where('dev_id', $item)->whereBetween('process_fail', [0, 9])->count(),
+                'waiting' => Camalarms::where('dev_id', $item)->where('processed', 0)->whereBetween('process_fail', [0, 9])->count(),
                 'zerofail' => Camalarms::where('dev_id', $item)->where('process_fail', 0)->count(),
                 'overFive' => Camalarms::where('dev_id', $item)->whereBetween('process_fail', [4, 9])->count(),
                 'tenFail' => Camalarms::where('dev_id', $item)->where('process_fail', '>', 9)->count(),
