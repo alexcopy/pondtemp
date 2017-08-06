@@ -9,6 +9,7 @@ class Cameras extends Model
 {
 
     protected $fillable = [
+        'cam_id',
         'name',
         'login',
         'password',

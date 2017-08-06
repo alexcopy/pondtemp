@@ -15,6 +15,11 @@ class CamsController extends Controller
         $cams = Cameras::all();
         return view('pages.addcamform', compact(['cams']));
     }
+    public function show()
+    {
+        $cams = Cameras::all();
+        return view('pages.addcamform', compact(['cams']));
+    }
 
     /**
      * Show the form to create a new blog post.
@@ -53,5 +58,13 @@ class CamsController extends Controller
 //                ->withErrors($validator)
 //                ->withInput();
 //        }
+    }
+
+    public function destroy($id)
+    {
+        Cameras::destroy($id);
+        $cams = Cameras::all();
+
+        return view('pages.addcamform', compact(['cams']));
     }
 }

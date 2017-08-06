@@ -79,7 +79,8 @@
                     <th>Cam Name</th>
                     <th>port</th>
                     <th>is_cloud</th>
-                    <th>edit/delete</th>
+                    <th>edit</th>
+                    <th>delete</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -90,9 +91,10 @@
                         <td>{{$cam->port}}</td>
                         <td>{{$cam->is_cloudBased?'yes':'no'}}</td>
                         <td>
-                            <button id="edit_{{$cam->id}}" class="fa fa-pencil" aria-hidden="true"> edit</button>
-                            <button id="del_{{$cam->id}}" class="button-red fa fa-times" aria-hidden="true"> del
-                            </button>
+                            @include('utils.edit', ['url' => URL::route('addcam.edit',$cam->id),'text' => '<span class="fa fa-pencil" aria-hidden="true"></span> edit'])
+                        </td>
+                        <td>
+                            @include('utils.delete', ['url' => URL::route('addcam.destroy',$cam->id),'text' => '<span class="button-red fa fa-times" aria-hidden="true"></span> del'])
                         </td>
                     </tr>
                 @endforeach
