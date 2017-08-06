@@ -23,7 +23,7 @@ class Cameras extends Model
     public static function parseRequest(Request $request)
     {
         return [
-            'cam_id' => $request->input('cam_id', rand(1111, 7777)),
+            'cam_id' => (int)$request->input('cam_id', 0) ?: rand(1111, 7777),
             'name' => $request->input('name'),
             'login' => $request->input('login'),
             'password' => $request->input('name'),
