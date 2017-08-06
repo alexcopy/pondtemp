@@ -37,7 +37,7 @@
             <div class="form-group">
                 {!! Form::label('password','pass',["class"=>"col-sm-2 control-label"]) !!}
                 <div class="col-sm-3">
-                    {!! Form::text('password', null, ["class"=>"form-control"]) !!}
+                    {!! Form::password('password', null, ["class"=>"form-control"]) !!}
                 </div>
             </div>
             <div class="form-group">
