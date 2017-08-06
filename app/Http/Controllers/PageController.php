@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\PageNotFound;
 use App\Http\Models\Camalarms;
+use App\Http\Models\Cameras;
 use App\Http\Models\Gauges;
 use App\Http\Models\TempMeter;
 use App\Http\Models\WeatherReading;

@@ -3,9 +3,11 @@
 namespace App\Http\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
 class Cameras extends Model
 {
+
     protected $fillable = [
         'name',
         'login',
@@ -16,4 +18,19 @@ class Cameras extends Model
         'clientExistsUrl',
         'is_cloudBased',
     ];
+
+    public static function parseRequest(Request $request)
+    {
+        return [
+            'cam_id' => $request->input('cam_id', 0),
+            'name' => $request->input('name'),
+            'login' => $request->input('login'),
+            'password' => $request->input('name'),
+            'alarmServerUrl' => $request->input('name'),
+            'port' => (int)$request->input('port', 0) ?: 8888,
+            'channel' => $request->input('channel'),
+            'clientExistsUrl' => $request->input('clientExistsUrl'),
+            'is_cloudBased' => $request->input('is_cloudBased'),
+        ];
+    }
 }

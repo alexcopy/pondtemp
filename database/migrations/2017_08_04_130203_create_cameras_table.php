@@ -6,6 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateCamerasTable extends Migration
 {
+
     /**
      * Run the migrations.
      *
@@ -15,6 +16,7 @@ class CreateCamerasTable extends Migration
     {
         Schema::create('cameras', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('cam_id')->default(0);
             $table->string('name');
             $table->string('login');
             $table->string('password');
