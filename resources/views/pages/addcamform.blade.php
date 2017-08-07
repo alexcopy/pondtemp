@@ -1,9 +1,8 @@
 @extends('layouts.main')
 @section('content')
     <div class="row">
-        <div class="col-sm-1"></div>
-        <div class="col-sm-5">
-            <div class="col-lg-4">
+        <div class="col-lg-8">
+            <div class="col-lg-3">
                 <h4 class="text-success text-center">Add New Cam</h4>
             </div>
 
@@ -43,7 +42,7 @@
             <div class="form-group">
                 {!! Form::label('alarmServerUrl','Server URL',["class"=>"col-sm-2 control-label"]) !!}
                 <div class="col-sm-3">
-                    {!! Form::text('alarmServerUrl', null, ["class"=>"form-control"]) !!}
+                    {!! Form::url('alarmServerUrl', null, ["class"=>"form-control"]) !!}
                 </div>
             </div>
             <div class="form-group">
@@ -62,6 +61,12 @@
                 {!! Form::label('is_cloudBased','is cloud',["class"=>"col-sm-2 control-label"]) !!}
                 <div class="col-sm-3">
                     {!! Form::select('is_cloudBased',[ 'no','yes'] , ["class"=>"form-control"]) !!}
+                </div>
+            </div>
+            <div class="form-group">
+                {!! Form::label('other','other',["class"=>"col-sm-2 control-label"]) !!}
+                <div class="col-sm-3">
+                    {!! Form::textarea('other',null , ["class"=>"form-control"]) !!}
                 </div>
             </div>
 
