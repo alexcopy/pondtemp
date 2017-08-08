@@ -18,3 +18,4 @@
         <li><a href="#">Edit/Delete Cams</a></li>
     </ul>
 </li>
+<li><a href="/log-viewer/logs">Logs</a> </li>

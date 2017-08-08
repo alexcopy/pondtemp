@@ -10,6 +10,13 @@ use Illuminate\Http\Request;
 class CamsController extends Controller
 {
 
+
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         $cams = Cameras::all();
