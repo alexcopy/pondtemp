@@ -14,8 +14,8 @@
     <ul class="dropdown-menu">
         <li><a href="/allfiles">All Files</a></li>
         <li role="separator" class="divider"></li>
-        <li><a href="/addcam">Add New Cam</a></li>
-        <li><a href="#">Edit/Delete Cams</a></li>
+        <li><a href="/cam/create">New Cam</a></li>
+        <li><a href="/cam">Cams List</a></li>
     </ul>
 </li>
 <li><a href="/log-viewer/logs">Logs</a> </li>

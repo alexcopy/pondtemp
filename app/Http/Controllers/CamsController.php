@@ -6,6 +6,7 @@ use App\Http\Models\Cameras;
 use App\Http\Requests\StoreCam;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class CamsController extends Controller
 {
@@ -19,13 +20,14 @@ class CamsController extends Controller
     public function index()
     {
         $cams = Cameras::all();
-        return view('pages.addcamform', compact(['cams']));
+        return view('pages.cam.index', compact(['cams']));
     }
 
-    public function show()
+    public function show($id)
     {
-        $cams = Cameras::all();
-        return view('pages.addcamform', compact(['cams']));
+        $cam = Cameras::find($id);
+
+        return view('pages.cam.show', compact(['cam']));
     }
 
     /**
@@ -40,7 +42,7 @@ class CamsController extends Controller
             Cameras::create($params);
         }
         $cams = Cameras::all();
-        return view('pages.addcamform', compact(['cams']));
+        return view('pages.cam.create', compact(['cams']));
 
     }
 
@@ -58,20 +60,14 @@ class CamsController extends Controller
             Cameras::create($params);
         }
         $cams = Cameras::all();
-        return view('pages.addcamform', compact(['cams']));
-//
-//        if ($validator->fails()) {
-//            return redirect('post/create')
-//                ->withErrors($validator)
-//                ->withInput();
-//        }
+        return view('pages.cam.index', compact(['cams']));
     }
 
     public function destroy($id)
     {
         Cameras::destroy($id);
         $cams = Cameras::all();
-        if (Cameras::where('id', $id)->count() == 0) {
+        if (Cameras::find($id) == 0) {
             return response()->json([
                 'success' => "The record has been destroyed"
             ], 200);
@@ -80,5 +76,17 @@ class CamsController extends Controller
         return response()->json([
             'error' => "The record wasn't deleted"
         ], 500);
+    }
+
+    public function edit($id)
+    {
+        $cam = Cameras::find($id);
+        return view('pages.cam.edit', compact(['cam']));
+    }
+
+    public function update($id)
+    {
+        $cam = Cameras::find($id);
+        return view('pages.cam.edit', compact(['cam']));
     }
 }

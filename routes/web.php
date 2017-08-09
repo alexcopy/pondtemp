@@ -28,7 +28,7 @@ Route::post('/api/v3/getfilesstats', 'ApiController@filesStat');
 Route::post('/api/v3/chemicalanalyse', 'ApiController@chemicalAnalyse');
 
 
-Route::resource('addcam', 'CamsController');
+Route::resource('cam', 'CamsController');
 //Route::post('addcam', 'CamsController@create');
 
 Auth::routes();
