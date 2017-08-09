@@ -70,7 +70,6 @@ class PageController extends Controller
 
         foreach ($dirList as $dir) {
             $filesPath = $ftpDir . '/' . $dir . '/today';
-
             $dirFiles['files'][$dir] = File::allFiles($filesPath);
             $dirFiles['dirs'][$dir] = File::directories($ftpDir . '/' . $dir);
             $dirFiles['changed'][$dir] = File::lastModified($filesPath);

@@ -11,7 +11,6 @@ class CamsController extends Controller
 {
 
 
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -22,6 +21,7 @@ class CamsController extends Controller
         $cams = Cameras::all();
         return view('pages.addcamform', compact(['cams']));
     }
+
     public function show()
     {
         $cams = Cameras::all();
@@ -71,7 +71,14 @@ class CamsController extends Controller
     {
         Cameras::destroy($id);
         $cams = Cameras::all();
+        if (Cameras::where('id', $id)->count() == 0) {
+            return response()->json([
+                'success' => "The record has been destroyed"
+            ], 200);
+        }
 
-        return view('pages.addcamform', compact(['cams']));
+        return response()->json([
+            'error' => "The record wasn't deleted"
+        ], 500);
     }
 }

@@ -85,23 +85,25 @@
                     <th>url</th>
                     <th>port</th>
                     <th>is_cloud</th>
-                    <th>edit</th>
-                    <th>delete</th>
+                    <th>edit/delete</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($cams as $cam)
-                    <tr>
+                    <tr id="camrow_{{$cam->id}}">
                         <td>{{$cam->cam_id}}</td>
                         <td>{{$cam->name}}</td>
-                        <td><a href="#">link</a> </td>
+                        <td><a href="#">link</a></td>
                         <td>{{$cam->port}}</td>
                         <td>{{$cam->is_cloudBased?'yes':'no'}}</td>
                         <td>
-                            @include('utils.edit', ['url' => URL::route('addcam.edit',$cam->id),'text' => '<span class="fa fa-pencil" aria-hidden="true"></span> edit'])
-                        </td>
-                        <td>
-                            @include('utils.delete', ['url' => URL::route('addcam.destroy',$cam->id),'text' => '<span class="fa fa-times" aria-hidden="true"></span> del'])
+                            <div class="row">
+                                <button class="btn btn-xs btn-warning" onclick="ALEX.camedit({{$cam->id}})"><span
+                                            class="fa fa-pencil" aria-hidden="true"></span> Edit
+                                </button>
+                                <button class="btn btn-xs btn-danger" onclick="ALEX.camdelete({{$cam->id}})"><span
+                                            class="fa fa-times" aria-hidden="true"></span> DEL</button>
+                            </div>
                         </td>
                     </tr>
                 @endforeach
@@ -110,4 +112,8 @@
         </div>
     </div>
 
+@stop
+
+@section('custom_scripts')
+    <script type="text/javascript" src="assets/js/custom/altercams.js"></script>
 @stop
