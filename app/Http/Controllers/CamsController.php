@@ -6,6 +6,7 @@ use App\Http\Models\Cameras;
 use App\Http\Requests\StoreCam;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
 class CamsController extends Controller
@@ -42,7 +43,7 @@ class CamsController extends Controller
             Cameras::create($params);
         }
         $cams = Cameras::all();
-        return view('pages.cam.create', compact(['cams']));
+        return view('pages.cam.index', compact(['cams']));
 
     }
 
@@ -84,9 +85,15 @@ class CamsController extends Controller
         return view('pages.cam.edit', compact(['cam']));
     }
 
-    public function update($id)
+    public function update($id, StoreCam $request)
     {
+
         $cam = Cameras::find($id);
-        return view('pages.cam.edit', compact(['cam']));
+
+        if ($cam) {
+            $params = array_filter(Cameras::parseRequest($request));
+            $cam->update($params);
+        }
+        return Redirect::to('cam');
     }
 }

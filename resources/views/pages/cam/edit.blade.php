@@ -1,12 +1,17 @@
 @extends('layouts.main')
 
 {{--{{ HTML::ul($errors->all()) }}--}}
-
+@section('tabs')
+@if (Session::has('message'))
+    <div class="alert alert-info">{{ Session::get('message') }}</div>
+@endif
+@stop
 
     <h4 class="text-success text-center pull-left">Add New Cam</h4>
 @section('content')
 
     <div class="row">
+        <div class="col-lg-1"></div>
         <div class="col-lg-4">
             {!! Form::model($cam, ['route' => ['cam.update', $cam->id], 'method' => 'PUT']) !!}
 
