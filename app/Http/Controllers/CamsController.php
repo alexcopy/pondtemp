@@ -43,7 +43,7 @@ class CamsController extends Controller
             Cameras::create($params);
         }
         $cams = Cameras::all();
-        return view('pages.cam.index', compact(['cams']));
+        return view('pages.cam.create', compact(['cams']));
 
     }
 
