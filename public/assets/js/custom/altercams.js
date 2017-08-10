@@ -1,12 +1,10 @@
 var ALEX = ALEX || {};
-
-ALEX.camdelete = function (id) {
-    var url = window.location.toString();
-    url=url.replace(/\/index|\/show/i, '');
-    var token =
+ALEX.camdelete = function (url) {
+    var parts = url.split('/');
+    var id = parts[parts.length -1];
         $.ajax(
             {
-                url: url + '/' + id,
+                url: url,
                 type: 'DELETE',
                 dataType: "JSON",
                 data: {
@@ -20,10 +18,4 @@ ALEX.camdelete = function (id) {
             });
 
     console.log("It failed");
-}
-ALEX.camedit = function (id) {
-
-}
-ALEX.camshow = function (id) {
-
 }

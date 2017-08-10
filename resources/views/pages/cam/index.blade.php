@@ -62,8 +62,8 @@
                                                 class="fa fa-pencil" aria-hidden="true"></span> Edit
                                         </a>
                                         <button class="btn btn-xs btn-danger"
-                                                onclick="ALEX.camdelete({{$cam->id}})"><span
-                                                    class="fa fa-times" aria-hidden="true"></span> DEL
+                                                onclick='ALEX.camdelete(" {{Request::url().'/'.$cam->id}} ")' >
+                                            <span class="fa fa-times" aria-hidden="true"></span> DEL
                                         </button>
                                     </div>
                                 </td>
