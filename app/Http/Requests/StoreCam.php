@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreCam extends FormRequest
 {
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -24,9 +25,10 @@ class StoreCam extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:255',
+            'name' => 'required|max:255|min:2|regex:~^[a-zA-Z0-9_.-]*$~i',
             'login' => 'required',
             'password' => 'required',
+            'alarmServerUrl' => 'required',
         ];
     }
 }

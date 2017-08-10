@@ -1,13 +1,15 @@
 @extends('layouts.main')
-
-{{--{{ HTML::ul($errors->all()) }}--}}
 @section('tabs')
-@if (Session::has('message'))
-    <div class="alert alert-info">{{ Session::get('message') }}</div>
-@endif
-@stop
 
-    <h4 class="text-success text-center pull-left">Add New Cam</h4>
+    @if (Session::has('message')  )
+        <div class="alert alert-info">{{ Session::get('message') }}</div>
+    @endif
+
+    @if ( Html::ul($errors->all()) )
+        <div class="alert alert-info">{{ Html::ul($errors->all()) }}</div>
+    @endif
+@stop
+<h4 class="text-success text-center pull-left">Add New Cam</h4>
 @section('content')
 
     <div class="row">

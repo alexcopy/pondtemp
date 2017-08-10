@@ -1,7 +1,12 @@
 @extends('layouts.main')
+
 @section('tabs')
-    @if (Session::has('message'))
+    @if (Session::has('message')  )
         <div class="alert alert-info">{{ Session::get('message') }}</div>
+    @endif
+
+    @if ( Html::ul($errors->all()) )
+        <div class="alert alert-info">{{ Html::ul($errors->all()) }}</div>
     @endif
 @stop
 

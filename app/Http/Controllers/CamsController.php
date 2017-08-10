@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Models\Cameras;
 use App\Http\Requests\StoreCam;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
@@ -46,7 +47,16 @@ class CamsController extends Controller
     {
         if ($request->isMethod('post')) {
             $params = array_filter(Cameras::parseRequest($request));
-            Cameras::create($params);
+            try {
+                $cam = Cameras::create($params);
+                Cameras::makePathForCam($cam->name);
+
+            } catch (\Exception $exception) {
+                if (isset($cam) && $cam) {
+                    Cameras::destroy($cam->id);
+                }
+                Log::alert("Failed to create Cam  " . $exception->getMessage());
+            }
         }
         $cams = Cameras::all();
         return view('pages.cam.index', compact(['cams']));
