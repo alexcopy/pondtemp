@@ -4,14 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Models\Cameras;
 use App\Http\Requests\StoreCam;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
 class CamsController extends Controller
 {
-
 
     public function __construct()
     {
@@ -27,35 +25,25 @@ class CamsController extends Controller
     public function show($id)
     {
         $cam = Cameras::find($id);
-
         return view('pages.cam.show', compact(['cam']));
     }
 
+
     /**
-     * Show the form to create a new blog post.
-     *
-     * @return Response
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|View
      */
     public function create(Request $request)
     {
-        if ($request->isMethod('post')) {
-            $params = array_filter(Cameras::parseRequest($request));
-            Cameras::create($params);
-        }
-        $cams = Cameras::all();
-        return view('pages.cam.create', compact(['cams']));
-
+        return view('pages.cam.create');
     }
 
     /**
-     * Store a new blog post.
-     *
-     * @param  Request $request
-     * @return Response
+     * @param StoreCam $request
+     * @return \Illuminate\Contracts\View\Factory|View
      */
     public function store(StoreCam $request)
     {
-
         if ($request->isMethod('post')) {
             $params = array_filter(Cameras::parseRequest($request));
             Cameras::create($params);
@@ -63,6 +51,7 @@ class CamsController extends Controller
         $cams = Cameras::all();
         return view('pages.cam.index', compact(['cams']));
     }
+
 
     public function destroy($id)
     {
@@ -87,9 +76,7 @@ class CamsController extends Controller
 
     public function update($id, StoreCam $request)
     {
-
         $cam = Cameras::find($id);
-
         if ($cam) {
             $params = array_filter(Cameras::parseRequest($request));
             $cam->update($params);
