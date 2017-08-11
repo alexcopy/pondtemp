@@ -13,7 +13,7 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 $factory->define(App\Http\Models\WaterChanges::class, function (Faker\Generator $faker) {
     return [
         'changeDate' => $faker->date('Y-m-d H:i:s'),
-        'description' => $faker->text(),
+        'description' => $faker->text(50),
         'readingBefore' => $faker->randomFloat(),
         'readingAfter' => $faker->randomFloat(),
     ];

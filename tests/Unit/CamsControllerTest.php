@@ -10,6 +10,15 @@ use Tests\TestCase;
 class CamsControllerTest extends TestCase
 {
 
+    protected function setUp()
+    {
+        parent::setUp();
+        if (!File::exists(storage_pt('ftp'))) {
+            File::makeDirectory(storage_pt('ftp'));
+        }
+        echo 'Creating directory in storage at UP '. storage_pt('ftp')."\n";
+    }
+
 
     public function testDestroyCamFolder()
     {
@@ -65,7 +74,8 @@ class CamsControllerTest extends TestCase
 
 
 }
+
 function storage_pt($path = '')
 {
-    return app('path.storage').($path ? DIRECTORY_SEPARATOR.$path : $path);
+    return app('path.storage') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
 }
