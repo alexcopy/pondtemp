@@ -90,6 +90,7 @@ class CamsController extends Controller
         if ($cam) {
             $params = array_filter(Cameras::parseRequest($request));
             $cam->update($params);
+
         }
         return Redirect::to('cam');
     }

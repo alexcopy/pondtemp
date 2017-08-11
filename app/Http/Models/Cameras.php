@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 
 class Cameras extends Model
 {
@@ -39,7 +40,8 @@ class Cameras extends Model
 
     public static function makePathForCam($camName)
     {
-        $path = storage_path('/ftp/' . $camName . '/today');
+        $path = storage_path('ftp/' . $camName . '/today');
+
         if (!File::exists($path)) {
             File::makeDirectory($path, $mode = 0777, true);
         }
@@ -52,8 +54,46 @@ class Cameras extends Model
         return $path;
     }
 
-    public static function destroyCamsFolder($camName)
+    public static function renameCamsFolder($oldCamName, $newCamName)
     {
+        $path = storage_path('ftp/');
+        if (!File::exists($path . $oldCamName)) {
+            throw new \Exception('File is not exists');
+        }
 
+        if (!File::copyDirectory($path . $oldCamName, $path . $newCamName, null)) {
+            throw new \Exception('Error in copying directory');
+        }
+
+        if (!File::deleteDirectory($path . $oldCamName)) {
+            throw new \Exception('Error in deleting old directory');
+        }
+        return true;
+    }
+
+    public static function destroyCamFolder($camName)
+    {
+        $archivePath = storage_path('ftp/archive/');
+        $oldCamPath = storage_path('ftp/' . $camName);
+
+        if (!File::exists($archivePath)) {
+            try {
+                File::makeDirectory($archivePath, $mode = 0777, true);
+            } catch (\Exception $exception) {
+                Log::crirical('Cannot create archive folder  ' . $exception->getMessage());
+                return null;
+            }
+        }
+        File::copyDirectory($oldCamPath, $archivePath . '/' . $camName, null);
+        if (File::exists($archivePath . $camName)) {
+            File::deleteDirectory($oldCamPath);
+            if (!File::exists($oldCamPath)) {
+                return true;
+            } else {
+                throw new \Exception('Cannot Delete old Folder');
+            }
+        } else {
+            throw new \Exception('Cannot copy old folder to new location');
+        }
     }
 }
