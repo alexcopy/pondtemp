@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\File;
+
 class PageControllerTest extends \PHPUnit_Framework_TestCase
 {
 protected $ftppath='';
@@ -13,7 +15,7 @@ protected $ftppath='';
         foreach ($dirs as $dir) {
             if (!file_exists($this->ftppath.'/today')) {
                 $path = $this->ftppath . '/' . $dir . '/today';
-                mkdir($path, $mode = 0777, $recursive = true);
+                File::makeDirectory($path, $mode = 0777, $recursive = true);
             }
         }
     }

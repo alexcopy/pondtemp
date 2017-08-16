@@ -7,31 +7,34 @@ use App\Http\Models\Cameras;
 use Illuminate\Support\Facades\File;
 use Tests\TestCase;
 
+
 class CamsControllerTest extends TestCase
 {
 
     private $testCamName = '';
+    private $ftppath;
+
 
     protected function setUp()
     {
-        parent::setUp();
+        $this->ftppath = '../storage/ftp/';
         $this->testCamName = 'testCamName';
-        if (!File::exists(storage_pt('ftp'))) {
-            File::makeDirectory(storage_pt('ftp'));
+        if (!File::exists($this->ftppath)) {
+            File::makeDirectory($this->ftppath);
         }
-        if (File::exists(storage_pt('ftp/' . $this->testCamName))) {
-            File::deleteDirectory('ftp/' . $this->testCamName);
-        }
-        echo 'Creating directory in storage at UP ' . storage_pt('ftp') . "\n";
+        if (File::exists($this->ftppath . $this->testCamName))) {
+        File::deleteDirectory($this->ftppath . $this->testCamName);
+    }
+        echo 'Creating directory in storage at UP ' . $this->ftppath . "\n";
     }
 
 
     public function testDestroyCamFolder()
     {
 
-        $archivePath = storage_pt('ftp/archive/');
-        $path = storage_pt('ftp/' . $this->testCamName);
-        Cameras::makePathForCam($this->testCamName, $path.'/today');
+        $archivePath = $this->ftppath . 'archive/';
+        $path = $this->ftppath . $this->testCamName;
+        Cameras::makePathForCam($this->testCamName, $path . '/today');
         self::assertDirectoryExists($path);
         self::assertIsReadable($path);
         Cameras::destroyCamFolder($this->testCamName);
@@ -46,7 +49,7 @@ class CamsControllerTest extends TestCase
     public function testMakePathForCam()
     {
 
-        $path = storage_pt('ftp/' . $this->testCamName);
+        $path = $this->ftppath . $this->testCamName;
         Cameras::makePathForCam($this->testCamName, $path . '/today');
         self::assertDirectoryExists($path);
         self::assertDirectoryExists($path . '/' . 'today');
@@ -60,9 +63,9 @@ class CamsControllerTest extends TestCase
     {
         $oldCamName = 'oldCamName';
         $newCamName = 'newCamName';
-        $path = storage_pt('ftp/');
+        $path = $this->ftppath;
 
-        Cameras::makePathForCam($oldCamName, $path . $oldCamName.'/today');
+        Cameras::makePathForCam($oldCamName, $path . $oldCamName . '/today');
         self::assertDirectoryExists($path . $oldCamName);
         self::assertDirectoryNotExists($path . $newCamName);
 
@@ -79,9 +82,4 @@ class CamsControllerTest extends TestCase
     }
 
 
-}
-
-function storage_pt($path = '')
-{
-    return app('path.storage') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
 }
