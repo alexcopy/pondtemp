@@ -18,7 +18,7 @@ class CamsControllerTest extends TestCase
         $this->ftppath = '../storage/ftp';
         $this->testCamName = 'testCamName';
         if (!File::exists($this->ftppath)) {
-            File::makeDirectory($this->ftppath);
+            File::makeDirectory($this->ftppath, $mode = 0777, true);
         }
         if (File::exists($this->ftppath .'/' .$this->testCamName)) {
             File::deleteDirectory($this->ftppath .'/'. $this->testCamName);
