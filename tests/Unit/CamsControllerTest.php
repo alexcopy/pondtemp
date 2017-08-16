@@ -10,28 +10,34 @@ use Tests\TestCase;
 class CamsControllerTest extends TestCase
 {
 
+    private $testCamName = '';
+
     protected function setUp()
     {
         parent::setUp();
+        $this->testCamName = 'testCamName';
         if (!File::exists(storage_pt('ftp'))) {
             File::makeDirectory(storage_pt('ftp'));
         }
-        echo 'Creating directory in storage at UP '. storage_pt('ftp')."\n";
+        if (File::exists(storage_pt('ftp/' . $this->testCamName))) {
+            File::deleteDirectory('ftp/' . $this->testCamName);
+        }
+        echo 'Creating directory in storage at UP ' . storage_pt('ftp') . "\n";
     }
 
 
     public function testDestroyCamFolder()
     {
-        $camName = 'testCamName';
+
         $archivePath = storage_pt('ftp/archive/');
-        $path = storage_pt('ftp/' . $camName);
-        Cameras::makePathForCam($camName);
+        $path = storage_pt('ftp/' . $this->testCamName);
+        Cameras::makePathForCam($this->testCamName, $path.'/today');
         self::assertDirectoryExists($path);
         self::assertIsReadable($path);
-        Cameras::destroyCamFolder($camName);
+        Cameras::destroyCamFolder($this->testCamName);
         self::assertDirectoryExists($archivePath);
         self::assertIsWritable($archivePath);
-        self::assertDirectoryExists($archivePath . $camName);
+        self::assertDirectoryExists($archivePath . $this->testCamName);
         self::assertDirectoryNotExists($path);
         File::deleteDirectory($archivePath);
         self::assertDirectoryNotExists($archivePath);
@@ -39,9 +45,9 @@ class CamsControllerTest extends TestCase
 
     public function testMakePathForCam()
     {
-        $camName = 'testCamName';
-        $path = storage_pt('ftp/' . $camName);
-        Cameras::makePathForCam($camName);
+
+        $path = storage_pt('ftp/' . $this->testCamName);
+        Cameras::makePathForCam($this->testCamName, $path . '/today');
         self::assertDirectoryExists($path);
         self::assertDirectoryExists($path . '/' . 'today');
         self::assertIsWritable($path);
@@ -56,7 +62,7 @@ class CamsControllerTest extends TestCase
         $newCamName = 'newCamName';
         $path = storage_pt('ftp/');
 
-        Cameras::makePathForCam($oldCamName);
+        Cameras::makePathForCam($oldCamName, $path . $oldCamName.'/today');
         self::assertDirectoryExists($path . $oldCamName);
         self::assertDirectoryNotExists($path . $newCamName);
 

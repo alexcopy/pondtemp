@@ -38,11 +38,10 @@ class Cameras extends Model
         ];
     }
 
-    public static function makePathForCam($camName)
+    public static function makePathForCam($camName, $path = null)
     {
-        $path = storage_path('ftp/' . $camName . '/today');
-
-        Log::alert( 'Creating directory in storage makePathForCam '.$path."\n");
+        $path = $path ?: storage_path('ftp/' . $camName . '/today');
+        Log::alert('Creating directory in storage makePathForCam ' . $path . "\n");
 
         if (!File::exists($path)) {
             File::makeDirectory($path, $mode = 0777, true);
@@ -56,9 +55,9 @@ class Cameras extends Model
         return $path;
     }
 
-    public static function renameCamsFolder($oldCamName, $newCamName)
+    public static function renameCamsFolder($oldCamName, $newCamName, $path = null)
     {
-        $path = storage_path('ftp/');
+        $path = $path ?: storage_path('ftp/');
         if (!File::exists($path . $oldCamName)) {
             throw new \Exception('File is not exists');
         }
@@ -73,10 +72,10 @@ class Cameras extends Model
         return true;
     }
 
-    public static function destroyCamFolder($camName)
+    public static function destroyCamFolder($camName, $archivePath = null, $oldCamPath = null)
     {
-        $archivePath = storage_path('ftp/archive/');
-        $oldCamPath = storage_path('ftp/' . $camName);
+        $archivePath = $archivePath ?: storage_path('ftp/archive/');
+        $oldCamPath = $oldCamPath ?: storage_path('ftp/' . $camName);
 
         if (!File::exists($archivePath)) {
             try {
