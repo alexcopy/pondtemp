@@ -22,7 +22,7 @@ class CamsControllerTest extends TestCase
         if (!File::exists($this->ftppath)) {
             File::makeDirectory($this->ftppath);
         }
-        if (File::exists($this->ftppath . $this->testCamName))) {
+        if (File::exists($this->ftppath . $this->testCamName)) {
         File::deleteDirectory($this->ftppath . $this->testCamName);
     }
         echo 'Creating directory in storage at UP ' . $this->ftppath . "\n";
