@@ -15,14 +15,15 @@ class CamsControllerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->ftppath = '../storage/ftp/';
+        $this->ftppath = '../storage/ftp';
         $this->testCamName = 'testCamName';
         if (!File::exists($this->ftppath)) {
             File::makeDirectory($this->ftppath);
         }
-        if (File::exists($this->ftppath . $this->testCamName)) {
-            File::deleteDirectory($this->ftppath . $this->testCamName);
+        if (File::exists($this->ftppath .'/' .$this->testCamName)) {
+            File::deleteDirectory($this->ftppath .'/'. $this->testCamName);
         }
+        $this->ftppath = '../storage/ftp/';
     }
 
 
