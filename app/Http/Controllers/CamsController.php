@@ -65,17 +65,26 @@ class CamsController extends Controller
 
     public function destroy($id)
     {
-        Cameras::destroy($id);
+        try {
+            $camName = Cameras::find($id)->name;
+            Cameras::destroy($id);
+            $res = Cameras::destroyCamFolder($camName);
+            if (!$res) throw new \Exception('Problems in moving directory to archive folder');
+        } catch (\Exception $exception) {
+            Log::alert($exception->getMessage());
+            return response()->json([
+                'error' => "The record wasn't deleted",
+                'exception'=>$exception->getMessage()
+        ], 500);
+        }
         $cams = Cameras::all();
-        if (Cameras::find($id) == 0) {
+        if (!Cameras::find($id)) {
             return response()->json([
                 'success' => "The record has been destroyed"
             ], 200);
         }
 
-        return response()->json([
-            'error' => "The record wasn't deleted"
-        ], 500);
+
     }
 
     public function edit($id)

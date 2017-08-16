@@ -77,13 +77,12 @@ class Cameras extends Model
         $archivePath = $archivePath ?: storage_path('ftp/archive/');
         $oldCamPath = $oldCamPath ?: storage_path('ftp/' . $camName);
 
-        if (!File::exists($archivePath)) {
-            try {
-                File::makeDirectory($archivePath, $mode = 0777, true);
-            } catch (\Exception $exception) {
-                Log::crirical('Cannot create archive folder  ' . $exception->getMessage());
-                return null;
-            }
+        if (!self::checkAndCreateArchiveFolder($archivePath)) {
+            throw new \Exception('Cannot create archive folder please check permissions');
+        }
+
+        if (!File::exists($oldCamPath)) {
+            return true;
         }
         File::copyDirectory($oldCamPath, $archivePath . '/' . $camName, null);
         if (File::exists($archivePath . $camName)) {
@@ -96,5 +95,21 @@ class Cameras extends Model
         } else {
             throw new \Exception('Cannot copy old folder to new location');
         }
+
+    }
+
+    protected static function checkAndCreateArchiveFolder($path = null)
+    {
+        $path = $path ?: storage_path('ftp/archive/');
+
+        if (!File::exists($path)) {
+            try {
+                File::makeDirectory($path, $mode = 0777, true);
+            } catch (\Exception $exception) {
+                Log::crirical('Cannot create archive folder  ' . $exception->getMessage());
+                return false;
+            }
+        }
+        return File::exists($path);
     }
 }
