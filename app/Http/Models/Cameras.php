@@ -27,7 +27,7 @@ class Cameras extends Model
     {
         return [
             'cam_id' => (int)$request->input('cam_id', 0) ?: rand(1111, 7777),
-            'name' => $request->input('name'),
+            'name' => $request->input('name', null),
             'login' => $request->input('login'),
             'password' => $request->input('password'),
             'alarmServerUrl' => $request->input('alarmServerUrl'),

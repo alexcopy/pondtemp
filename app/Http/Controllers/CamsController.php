@@ -74,8 +74,8 @@ class CamsController extends Controller
             Log::alert($exception->getMessage());
             return response()->json([
                 'error' => "The record wasn't deleted",
-                'exception'=>$exception->getMessage()
-        ], 500);
+                'exception' => $exception->getMessage()
+            ], 500);
         }
         $cams = Cameras::all();
         if (!Cameras::find($id)) {
@@ -98,8 +98,10 @@ class CamsController extends Controller
         $cam = Cameras::find($id);
         if ($cam) {
             $params = array_filter(Cameras::parseRequest($request));
+            if ($params['name'] && ($cam->name != $params['name'])) {
+                Cameras::renameCamsFolder($cam->name, $params['name']);
+            }
             $cam->update($params);
-
         }
         return Redirect::to('cam');
     }
