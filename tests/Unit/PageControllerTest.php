@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\File;
+use Tests\TestCase;
 
-class PageControllerTest extends \PHPUnit_Framework_TestCase
+class PageControllerTest extends TestCase
 {
 protected $ftppath='';
     public function setUp()
     {
+        parent::setUp();
         $dirs = ['dir1', 'dir2', 'dir3'];
         $this->ftppath='../storage/ftp';
 
