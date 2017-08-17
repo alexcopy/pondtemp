@@ -63,7 +63,7 @@ class Cameras extends Model
             throw new \Exception('Cam folder isn\'t exists try to delete camera first');
         }
 
-        if(File::exists($path . $newCamName)){
+        if (File::exists($path . $newCamName)) {
             throw new \Exception('Cam is already exists Please choose different newcam name');
         }
         if (!File::copyDirectory($path . $oldCamName, $path . $newCamName, null)) {
@@ -80,7 +80,7 @@ class Cameras extends Model
     {
         $archivePath = $archivePath ?: storage_path('ftp/archive/');
         $oldCamPath = $oldCamPath ?: storage_path('ftp/' . $camName);
-
+        $time = time();
         if (!self::checkAndCreateArchiveFolder($archivePath)) {
             throw new \Exception('Cannot create archive folder please check permissions');
         }
@@ -88,11 +88,11 @@ class Cameras extends Model
         if (!File::exists($oldCamPath)) {
             return true;
         }
-        File::copyDirectory($oldCamPath, $archivePath . '/' . $camName, null);
-        if (File::exists($archivePath . $camName)) {
+        File::copyDirectory($oldCamPath, $archivePath . '/' . $camName."_{$time}", null);
+        if (File::exists($archivePath . $camName."_{$time}")) {
             File::deleteDirectory($oldCamPath);
             if (!File::exists($oldCamPath)) {
-                return true;
+                return $time;
             } else {
                 throw new \Exception('Cannot Delete old Folder');
             }

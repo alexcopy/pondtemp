@@ -40,10 +40,12 @@ class CamsControllerTest extends TestCase
         Cameras::makePathForCam($this->testCamName, $path . '/today');
         self::assertDirectoryExists($path);
         self::assertIsReadable($path);
-        Cameras::destroyCamFolder($this->testCamName, $archivePath, $path);
+        $delTime=Cameras::destroyCamFolder($this->testCamName, $archivePath, $path);
+        self::assertTrue(is_int($delTime));
+        self::assertTrue($delTime>=time());
         self::assertDirectoryExists($archivePath);
         self::assertIsWritable($archivePath);
-        self::assertDirectoryExists($archivePath . $this->testCamName);
+        self::assertDirectoryExists($archivePath . $this->testCamName."_{$delTime}");
         self::assertDirectoryNotExists($path);
         File::deleteDirectory($archivePath);
         self::assertDirectoryNotExists($archivePath);
