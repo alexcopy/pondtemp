@@ -87,6 +87,10 @@ class CamsController extends Controller
 
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|View
+     */
     public function edit($id)
     {
         $cam = Cameras::find($id);

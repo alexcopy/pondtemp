@@ -2,6 +2,7 @@
 
 namespace App\Http\Models;
 
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Http\Request;
@@ -59,9 +60,12 @@ class Cameras extends Model
     {
         $path = $path ?: storage_path('ftp/');
         if (!File::exists($path . $oldCamName)) {
-            throw new \Exception('File is not exists');
+            throw new \Exception('Cam folder isn\'t exists try to delete camera first');
         }
 
+        if(File::exists($path . $newCamName)){
+            throw new \Exception('Cam is already exists Please choose different newcam name');
+        }
         if (!File::copyDirectory($path . $oldCamName, $path . $newCamName, null)) {
             throw new \Exception('Error in copying directory');
         }
