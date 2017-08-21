@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Models\Camalarms;
+use App\Http\Models\Cameras;
 use App\Http\Models\Gauges;
 use App\Http\Models\TempMeter;
 
@@ -127,7 +128,8 @@ class ApiController extends Controller
 
     public function filesStat(Request $request)
     {
-        $dirList = explode(',', env('CAMS', ','));
+
+        $dirList = Cameras::all();
         $ftpDir = storage_path('ftp');
         $data = [];
         $dateChunks = [];
@@ -137,29 +139,32 @@ class ApiController extends Controller
         $chunks = array_chunk($datesInterval, $chunk);
 
         foreach ($dirList as $dir) {
-            $filesPath = $ftpDir . '/' . $dir . '/today';
+            $filesPath = $ftpDir . '/' . $dir->name . '/today';
 
             foreach (File::allFiles($filesPath) as $fileObj) {
                 $lastModified = File::lastModified($fileObj->getPathName());
-                $data[$dir][] = $lastModified;
+                $data[$dir->name][] = $lastModified;
             }
-            if (empty($data[$dir])) {
-                $data[$dir] = [];
+            if (empty($data[$dir->name])) {
+                $data[$dir->name] = [];
             }
-            asort($data[$dir]);
-            array_walk($chunks, function (&$chunk) use ($data, $dir, &$dateChunks) {
+            asort($data[$dir->name]);
+            $dirName = $dir->name;
+            array_walk($chunks, function (&$chunk) use ($data, $dirName, &$dateChunks) {
                 $end = Carbon::createFromTimestamp(end($chunk))->format('H:i');
-                $dateChunks[$dir][$end] = count(array_intersect($data[$dir], $chunk));
+                $dateChunks[$dirName][$end] = count(array_intersect($data[$dirName], $chunk));
                 //$dateChunks[$dir][$end] = rand(1,30);
             });
         }
-        $dirs = explode(',', env('CAMS', ','));
-        $resp = ['data' => ['x' => array_keys($dateChunks['mamacam'])]];
 
-        foreach ($dirs as $dir) {
-            $resp['data'][$dir] = array_values($dateChunks[$dir]);
+        $resp = ['data' => ['x' => array_keys($dateChunks['mamacam'])]];
+        $dirs = [];
+        foreach ($dirList as $dir) {
+            $resp['data'][$dir->name] = array_values($dateChunks[$dir->name]);
+            $dirs[] = $dir->name;
         }
-        $resp['data']['dirs']=$dirs;
+
+        $resp['data']['dirs'] = $dirs;
         return response()->json($resp, 200);
     }
 

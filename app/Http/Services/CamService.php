@@ -4,6 +4,7 @@
 namespace App\Http\Services;
 
 
+use App\Http\Models\Cameras;
 use App\Http\Models\ProxyList;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\File;
@@ -89,13 +90,13 @@ class CamService
     public function getUserDevicesParams()
     {
         $res = [];
-        $cams = explode(',', env('CAM_IDS', []));
+        $cams = Cameras::where('is_cloudBased', 1)->get();
         foreach ($cams as $cam) {
             if (!$cam) continue;
             $res[] = (object)[
-                'username' => env('CAM_LOGIN', 'admin'),
-                'password' => env('CAM_PASS', 888888),
-                'dev_id' => $cam,
+                'username' => $cam->login,
+                'password' => $cam->password,
+                'dev_id' => $cam->cam_id,
             ];
         }
         return $res;

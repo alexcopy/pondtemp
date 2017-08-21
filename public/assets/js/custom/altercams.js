@@ -1,5 +1,6 @@
 var ALEX = ALEX || {};
 ALEX.camdelete = function (url) {
+    url=url.replace('http', 'https');
     var parts = url.split('/');
     var id = parts[parts.length -1];
         $.ajax(

@@ -46,7 +46,7 @@
 
 
                         <button class="btn btn-xs btn-danger"
-                                onclick='ALEX.camdelete(" {{Request::url()}} ")'>
+                                onclick='ALEX.camdelete("{{Request::url()}}")'>
                             <span class="fa fa-times" aria-hidden="true"></span> DEL
                         </button>
                     </td>

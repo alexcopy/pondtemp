@@ -62,31 +62,31 @@ class PageController extends Controller
 
     public function allCamFiles(Request $request)
     {
-        $dirList = explode(',', env('CAMS', ','));
-        $camIdsList = explode(',', env('CAM_IDS', ','));
+//        $dirList = explode(',', env('CAMS', ','));
+//        $camIdsList = explode(',', env('CAM_IDS', ','));
+        $dirList = Cameras::all();
+        $camIdsList=Cameras::where('is_cloudBased', 1)->get();
         $ftpDir = storage_path('ftp');
         $dirFiles = [];
 
 
         foreach ($dirList as $dir) {
-            $filesPath = $ftpDir . '/' . $dir . '/today';
-            $dirFiles['files'][$dir] = File::allFiles($filesPath);
-            $dirFiles['dirs'][$dir] = File::directories($ftpDir . '/' . $dir);
-            $dirFiles['changed'][$dir] = File::lastModified($filesPath);
-            $dirFiles['size'][$dir] = self::human_folderSize($filesPath);
-
+            $filesPath = $ftpDir . '/' . $dir->name . '/today';
+            $dirFiles['files'][$dir->name] = File::allFiles($filesPath);
+            $dirFiles['dirs'][$dir->name] = File::directories($ftpDir . '/' . $dir->name);
+            $dirFiles['changed'][$dir->name] = File::lastModified($filesPath);
+            $dirFiles['size'][$dir->name] = self::human_folderSize($filesPath);
         }
         $tableStats = [];
         foreach ($camIdsList as $item) {
-            $tableStats[$item] = [
-                'processed' => Camalarms::where('dev_id', $item)->where('processed', 1)->count(),
-                'waiting' => Camalarms::where('dev_id', $item)->where('processed', 0)->whereBetween('process_fail', [0, 9])->count(),
-                'zerofail' => Camalarms::where('dev_id', $item)->where('process_fail', 0)->count(),
-                'overFive' => Camalarms::where('dev_id', $item)->whereBetween('process_fail', [4, 9])->count(),
-                'tenFail' => Camalarms::where('dev_id', $item)->where('process_fail', '>', 9)->count(),
-                'total' => Camalarms::where('dev_id', $item)->count(),
+            $tableStats[$item->cam_id] = [
+                'processed' => Camalarms::where('dev_id', $item->cam_id)->where('processed', 1)->count(),
+                'waiting' => Camalarms::where('dev_id', $item->cam_id)->where('processed', 0)->whereBetween('process_fail', [0, 9])->count(),
+                'zerofail' => Camalarms::where('dev_id', $item->cam_id)->where('process_fail', 0)->count(),
+                'overFive' => Camalarms::where('dev_id', $item->cam_id)->whereBetween('process_fail', [4, 9])->count(),
+                'tenFail' => Camalarms::where('dev_id', $item->cam_id)->where('process_fail', '>', 9)->count(),
+                'total' => Camalarms::where('dev_id', $item->cam_id)->count(),
             ];
-
         }
 
         return view('pages.camfiles', compact(['dirFiles', 'ftpDir', 'tableStats']));
@@ -98,14 +98,13 @@ class PageController extends Controller
         $query = $request->get('q', null);
         $folder = $request->get('folder', null);
         $page = $request->get('page', 0);
-        $allowedFolders = explode(',', env('CAMS', ','));
         $subfolder = $request->get('subfolder', null);
 
 
         if (!$query || (!$folder)) {
             throw new PageNotFound('please specify query');
         }
-        if (!in_array($folder, $allowedFolders)) {
+        if (Cameras::where('name',$folder)->count()==0) {
             throw new PageNotFound('Unrecognized Folder Name');
         }
 
