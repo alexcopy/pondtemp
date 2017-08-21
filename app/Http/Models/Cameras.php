@@ -60,7 +60,7 @@ class Cameras extends Model
     {
         $path = $path ?: storage_path('ftp/');
         if (!File::exists($path . $oldCamName)) {
-            throw new \Exception('Cam folder isn\'t exists try to delete camera first');
+            self::makePathForCam($path . $oldCamName);
         }
 
         if (File::exists($path . $newCamName)) {

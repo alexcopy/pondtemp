@@ -62,13 +62,12 @@ class PageController extends Controller
 
     public function allCamFiles(Request $request)
     {
-//        $dirList = explode(',', env('CAMS', ','));
-//        $camIdsList = explode(',', env('CAM_IDS', ','));
+
         $dirList = Cameras::all();
         $camIdsList=Cameras::where('is_cloudBased', 1)->get();
         $ftpDir = storage_path('ftp');
         $dirFiles = [];
-
+        $dirFiles['files']=[];
 
         foreach ($dirList as $dir) {
             $filesPath = $ftpDir . '/' . $dir->name . '/today';
