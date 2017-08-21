@@ -12,34 +12,6 @@ class CamsControllerTest extends TestCase
     private $testCamName = '';
     private $ftppath;
 
-    public function testWriteFilesCopyAndToArchive()
-    {
-        $path = $this->ftppath . $this->testCamName;
-        $todayPath = $path . '/today';
-        $testFile = "/testfile.txt";
-        $archivePath = $this->ftppath . 'archive/';
-        Cameras::makePathForCam($this->testCamName, $todayPath);
-        self::assertDirectoryExists($path);
-        self::assertDirectoryExists($todayPath);
-        $todayFile = fopen($todayPath. $testFile, "w");
-        $camFile = fopen($path. $testFile, "w");
-        $txt = "John Doe\n";
-        fwrite($todayFile, $txt);
-        $txt = "Jane Doe\n";
-        fwrite($camFile, $txt);
-        fclose($todayFile);
-        fclose($camFile);
-        self::assertFileExists($todayPath. $testFile);
-        self::assertFileExists($path. $testFile);
-        $delTime=Cameras::destroyCamFolder($this->testCamName, $archivePath, $path);
-        self::assertFileExists($archivePath . $this->testCamName."_{$delTime}".$testFile);
-        self::assertFileExists($archivePath . $this->testCamName."_{$delTime}/today".$testFile);
-        self::assertDirectoryExists($archivePath . $this->testCamName."_{$delTime}");
-        self::assertDirectoryNotExists($path);
-        File::deleteDirectory($archivePath);
-        self::assertDirectoryNotExists($archivePath);
-    }
-
     protected function setUp()
     {
         parent::setUp();
@@ -60,6 +32,38 @@ class CamsControllerTest extends TestCase
     }
 
 
+    /**
+     * Write, Destroy files testgs
+     */
+    public function testWriteFilesCopyAndToArchive()
+    {
+        $path = $this->ftppath . $this->testCamName;
+        $todayPath = $path . '/today';
+        $testFile = "/testfile.txt";
+        $archivePath = $this->ftppath . 'archive/';
+        Cameras::makePathForCam($this->testCamName, $todayPath);
+        self::assertDirectoryExists($path);
+        self::assertDirectoryExists($todayPath);
+        $todayFile = fopen($todayPath . $testFile, "w");
+        $camFile = fopen($path . $testFile, "w");
+        $txt = "John Doe\n";
+        fwrite($todayFile, $txt);
+        $txt = "Jane Doe\n";
+        fwrite($camFile, $txt);
+        fclose($todayFile);
+        fclose($camFile);
+        self::assertFileExists($todayPath . $testFile);
+        self::assertFileExists($path . $testFile);
+        $delTime = Cameras::destroyCamFolder($this->testCamName, $archivePath, $path);
+        self::assertFileExists($archivePath . $this->testCamName . "_{$delTime}" . $testFile);
+        self::assertFileExists($archivePath . $this->testCamName . "_{$delTime}/today" . $testFile);
+        self::assertDirectoryExists($archivePath . $this->testCamName . "_{$delTime}");
+        self::assertDirectoryNotExists($path);
+        File::deleteDirectory($archivePath);
+        self::assertDirectoryNotExists($archivePath);
+    }
+
+
     public function testDestroyCamFolder()
     {
         $archivePath = $this->ftppath . 'archive/';
@@ -67,12 +71,12 @@ class CamsControllerTest extends TestCase
         Cameras::makePathForCam($this->testCamName, $path . '/today');
         self::assertDirectoryExists($path);
         self::assertIsReadable($path);
-        $delTime=Cameras::destroyCamFolder($this->testCamName, $archivePath, $path);
+        $delTime = Cameras::destroyCamFolder($this->testCamName, $archivePath, $path);
         self::assertTrue(is_int($delTime));
-        self::assertTrue($delTime>=time());
+        self::assertTrue($delTime >= time());
         self::assertDirectoryExists($archivePath);
         self::assertIsWritable($archivePath);
-        self::assertDirectoryExists($archivePath . $this->testCamName."_{$delTime}");
+        self::assertDirectoryExists($archivePath . $this->testCamName . "_{$delTime}");
         self::assertDirectoryNotExists($path);
         File::deleteDirectory($archivePath);
         self::assertDirectoryNotExists($archivePath);
