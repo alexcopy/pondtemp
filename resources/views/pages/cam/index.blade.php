@@ -52,19 +52,27 @@
                                 <td>{{$cam->is_cloudBased?'yes':'no'}}</td>
                                 <td>
                                     <div class="row">
-                                        <a class="btn btn-xs btn-success"
-                                           href="{{URL::to('cam/'.$cam->id)}}"><span
-                                                    class="fa fa-address-card" aria-hidden="true"></span> Show
-                                        </a>
+                                        <div class="col-xs-2">
+                                            <a class="btn btn-xs btn-success"
+                                               href="{{URL::to('cam/'.$cam->id)}}"><span
+                                                        class="fa fa-address-card" aria-hidden="true"></span> Show
+                                            </a>
+                                        </div>
 
-                                        <a class="btn btn-xs btn-warning"
-                                                href="{{URL::to('cam/'.$cam->id.'/edit')}}"><span
-                                                class="fa fa-pencil" aria-hidden="true"></span> Edit
-                                        </a>
-                                        <button class="btn btn-xs btn-danger"
-                                                onclick='ALEX.camdelete(" {{Request::url().'/'.$cam->id}} ")' >
-                                            <span class="fa fa-times" aria-hidden="true"></span> DEL
-                                        </button>
+                                        <div class="col-xs-2">
+                                            <a class="btn btn-xs btn-warning"
+                                               href="{{URL::to('cam/'.$cam->id.'/edit')}}"><span
+                                                        class="fa fa-pencil" aria-hidden="true"></span> Edit
+                                            </a>
+                                        </div>
+                                        <div class="col-xs-2">
+                                            {{ Form::open(array('url' => 'cam/' . $cam->id)) }}
+                                            {{ Form::hidden('_method', 'DELETE') }}
+                                            <button class="btn btn-xs btn-danger" type="submit">
+                                                <span class="fa fa-times" aria-hidden="true"></span> DEL
+                                            </button>
+                                            {{ Form::close() }}
+                                        </div>
                                     </div>
                                 </td>
                             </tr>

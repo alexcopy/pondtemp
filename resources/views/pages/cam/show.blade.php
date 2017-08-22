@@ -44,11 +44,15 @@
                                     class="fa fa-pencil" aria-hidden="true"></span> Edit
                         </a>
 
-
-                        <button class="btn btn-xs btn-danger"
-                                onclick='ALEX.camdelete("{{Request::url()}}")'>
+                        {{ Form::open(array('url' => 'cam/' . $cam->id, 'class' => 'pull-right')) }}
+                        {{ Form::hidden('_method', 'DELETE') }}
+                        <button class="btn btn-xs btn-danger" type="submit">
                             <span class="fa fa-times" aria-hidden="true"></span> DEL
                         </button>
+                        {{ Form::close() }}
+
+
+
                     </td>
                 </tr>
 

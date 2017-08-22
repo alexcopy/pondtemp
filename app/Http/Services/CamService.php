@@ -39,6 +39,7 @@ class CamService
         $device->alarm_id = $img->alarm_id;
         $device->version = 2;
         $device->version = 2;
+
         $ports = ['8888', '8889'];
         $url = 'http://' . $img->ip . ':' . $ports[0] . '/GetAlarmMsg/AlarmGetPictureByID?param=' . base64_encode(\GuzzleHttp\json_encode($device));
         try {
@@ -148,12 +149,17 @@ class CamService
 
     public function getAlarmMessages($devObject, $max_count = 1, $last_fresh_time = 0)
     {
-        $server = env('CAM_ALRM_SERV', '');
-        $devObject->max_count = $max_count;
-        $devObject->last_fresh_time = $last_fresh_time;
 
+        $server = $devObject->alarmServerUrl.':'.$devObject->port;
         $url = $server . '/GetAlarmMsg/AlarmSelectServletPicture?param='
-            . \GuzzleHttp\json_encode($devObject);
+            . \GuzzleHttp\json_encode(
+                (object)[
+                'username' => $devObject->login,
+                'password' => $devObject->password,
+                'dev_id' => $devObject->cam_id,
+                'last_fresh_time' => $last_fresh_time,
+                'max_count' => $max_count]
+            );
 
         try {
             $page = ProxyList::getCurlPage(ProxyList::getProxyForClient(), $url);

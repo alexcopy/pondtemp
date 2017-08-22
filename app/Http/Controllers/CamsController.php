@@ -79,9 +79,7 @@ class CamsController extends Controller
         }
         $cams = Cameras::all();
         if (!Cameras::find($id)) {
-            return response()->json([
-                'success' => "The record has been destroyed"
-            ], 200);
+            return Redirect::to('cam');
         }
 
 
@@ -97,7 +95,7 @@ class CamsController extends Controller
         return view('pages.cam.edit', compact(['cam']));
     }
 
-    public function update($id, StoreCam $request)
+    public function update($id, Request $request)
     {
         $cam = Cameras::find($id);
         if ($cam) {

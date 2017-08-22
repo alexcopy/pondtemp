@@ -1,15 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: alexredko
- * Date: 27/06/2017
- * Time: 23:44
- */
 
 namespace App\Http\Controllers;
 
 
 use App\Http\Models\Camalarms;
+use App\Http\Models\Cameras;
 use App\Http\Services\CamService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -88,7 +83,6 @@ class CamApiController
                     Camalarms::where('id', $img->id)->update(['in_process' => 0]);
                     $stat[$device->dev_id]['fails']++;
                     echo "Failed for device ID: ". $device->dev_id."\n";
-
                     continue;
                 }
                  $result = (new CamService())->convertImageAndSave($jsonImg, $device);
@@ -117,7 +111,8 @@ class CamApiController
 //            Log::alert("Client existence checks  failed");
 //            echo "Client existence checks  failed \n";
 //        }
-        $cams = (new CamService())->getUserDevicesParams();
+    //    $cams = (new CamService())->getUserDevicesParams();
+        $cams = Cameras::where('is_cloudBased', 1)->get();
 
         foreach ($cams as $cam) {
             $alarmMsg = (new CamService())->getAlarmMessages($cam, 5, 0);
