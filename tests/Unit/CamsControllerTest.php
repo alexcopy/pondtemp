@@ -112,7 +112,7 @@ class CamsControllerTest extends TestCase
 
         } catch (\Exception $exception) {
 
-            self::assertEquals('Cam folder isn\'t exists try to delete camera first', $exception->getMessage());
+            self::assertEquals('mkdir(): File exists', $exception->getMessage());
         }
         try {
             Cameras::renameCamsFolder($newCamName, $newCamName, $path);

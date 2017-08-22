@@ -44,7 +44,9 @@ class Cameras extends Model
         $path = $path ?: storage_path('ftp/' . $camName . '/today');
         Log::alert('Creating directory in storage makePathForCam ' . $path . "\n");
 
-        if (!File::exists($path)) {
+        if (File::exists($path)) {
+            throw new \Exception('Folder already exists');
+        } else {
             File::makeDirectory($path, $mode = 0777, true);
         }
         if (!File::isWritable($path)) {
