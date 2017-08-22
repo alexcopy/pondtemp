@@ -5,7 +5,9 @@
     <h5>{{title_case($title)}}</h5>
     <div class="row">
         <div class="col-sm-2"><a href="javascript:history.back()" class="btn btn-default">Back</a></div>
-        <div class="col-lg-3">   <a href="{{$next}}" class="btn btn-default">Next</a></div>
+        @if($next!='')
+            <div class="col-lg-3"><a href="{{$next}}" class="btn btn-default">Next</a></div>
+        @endif
     </div>
 
 
@@ -41,7 +43,8 @@
                             <td>{{$val->getFileName()}}</td>
                             <td>{{getSize($val->getPathName())}}</td>
                             <td>1</td>
-                            <td><img src="{{preg_replace('~[^\.]+storage~i', '/assets/pics', $val->getPathName())}}" style=" height: 20%"></td>
+                            <td><img src="{{preg_replace('~[^\.]+storage~i', '/assets/pics', $val->getPathName())}}"
+                                     style=" height: 20%"></td>
                         @endif
                     </tr>
                 @endforeach

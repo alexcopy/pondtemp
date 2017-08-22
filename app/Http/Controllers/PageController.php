@@ -64,13 +64,16 @@ class PageController extends Controller
     {
 
         $dirList = Cameras::all();
-        $camIdsList=Cameras::where('is_cloudBased', 1)->get();
+        $camIdsList = Cameras::where('is_cloudBased', 1)->get();
         $ftpDir = storage_path('ftp');
         $dirFiles = [];
-        $dirFiles['files']=[];
+        $dirFiles['files'] = [];
 
         foreach ($dirList as $dir) {
             $filesPath = $ftpDir . '/' . $dir->name . '/today';
+            if (!File::exists($ftpDir . '/' . $dir->name)) {
+                Cameras::makePathForCam($dir->name);
+            }
             $dirFiles['files'][$dir->name] = File::allFiles($filesPath);
             $dirFiles['dirs'][$dir->name] = File::directories($ftpDir . '/' . $dir->name);
             $dirFiles['changed'][$dir->name] = File::lastModified($filesPath);
@@ -98,12 +101,13 @@ class PageController extends Controller
         $folder = $request->get('folder', null);
         $page = $request->get('page', 0);
         $subfolder = $request->get('subfolder', null);
-
+        $result = [];
+        $next='';
 
         if (!$query || (!$folder)) {
             throw new PageNotFound('please specify query');
         }
-        if (Cameras::where('name',$folder)->count()==0) {
+        if (Cameras::where('name', $folder)->count() == 0) {
             throw new PageNotFound('Unrecognized Folder Name');
         }
 
@@ -132,14 +136,16 @@ class PageController extends Controller
 
         $chunkedRes = array_chunk($result, $limit);
 
-        if (isset($chunkedRes[$page])) {
-            $result = $chunkedRes[$page];
-            $page++;
-        } else {
-            $result = end($chunkedRes);
-        }
+        if (count($chunkedRes)) {
+            if (isset($chunkedRes[$page])) {
+                $result = $chunkedRes[$page];
+                $page++;
+            } else {
+                $result = end($chunkedRes);
+            }
 
-        $next = '/' . $request->path() . "?folder={$folder}&subfolder={$subfolder}&limit={$limit}&q={$query}&page={$page}";
+            $next = '/' . $request->path() . "?folder={$folder}&subfolder={$subfolder}&limit={$limit}&q={$query}&page={$page}";
+        }
         return view('pages.deatails', compact(['title', 'folder', 'result', 'filesPath', 'next']));
     }
 
