@@ -68,12 +68,13 @@ class Cameras extends Model
         if (File::exists($path . $newCamName)) {
             throw new \Exception('Cam is already exists Please choose different newcam name');
         }
-        if (!File::copyDirectory($path . $oldCamName, $path . $newCamName, null)) {
+
+        if (!rename($path . $oldCamName, $path . $newCamName)) {
             throw new \Exception('Error in copying directory');
         }
 
-        if (!File::deleteDirectory($path . $oldCamName)) {
-            throw new \Exception('Error in deleting old directory');
+        if (File::exists($path . $oldCamName)) {
+            throw new \Exception('there some other problems in renaming');
         }
         return true;
     }
@@ -90,8 +91,8 @@ class Cameras extends Model
         if (!File::exists($oldCamPath)) {
             return true;
         }
-        File::copyDirectory($oldCamPath, $archivePath . '/' . $camName."_{$time}", null);
-        if (File::exists($archivePath . $camName."_{$time}")) {
+        File::copyDirectory($oldCamPath, $archivePath . '/' . $camName . "_{$time}", null);
+        if (File::exists($archivePath . $camName . "_{$time}")) {
             File::deleteDirectory($oldCamPath);
             if (!File::exists($oldCamPath)) {
                 return $time;
