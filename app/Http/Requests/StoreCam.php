@@ -28,6 +28,7 @@ class StoreCam extends FormRequest
             'name' => 'unique:cameras|required|max:255|min:2|regex:~^[a-zA-Z0-9_.-]*$~i',
             'cam_id'=>'unique:cameras',
             'login' => 'required',
+            'realpath' => 'unique:cameras|required|max:255|min:2|regex:~^[a-zA-Z0-9_.-]*$~i',
             'password' => 'required',
             'alarmServerUrl' => 'required',
         ];

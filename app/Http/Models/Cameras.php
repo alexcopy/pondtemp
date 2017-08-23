@@ -22,6 +22,9 @@ class Cameras extends Model
         'channel',
         'clientExistsUrl',
         'is_cloudBased',
+        'is_enabled',
+        'realpath',
+        'description',
     ];
 
     public static function parseRequest(Request $request)
@@ -36,6 +39,9 @@ class Cameras extends Model
             'channel' => $request->input('channel'),
             'clientExistsUrl' => $request->input('clientExistsUrl'),
             'is_cloudBased' => $request->input('is_cloudBased'),
+            'is_enabled' => $request->input('is_enabled'),
+            'realpath' => $request->input('realpath'),
+            'description' => $request->input('description'),
         ];
     }
 

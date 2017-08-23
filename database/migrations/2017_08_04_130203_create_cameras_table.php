@@ -18,6 +18,7 @@ class CreateCamerasTable extends Migration
             $table->increments('id');
             $table->integer('cam_id')->default(0);
             $table->string('name');
+            $table->string('realpath')->default('');
             $table->string('login');
             $table->string('password');
             $table->string('alarmServerUrl');
@@ -25,6 +26,8 @@ class CreateCamerasTable extends Migration
             $table->integer('channel')->default(0);
             $table->string('clientExistsUrl')->default('');
             $table->tinyInteger('is_cloudBased')->default(0);
+            $table->tinyInteger('is_enabled')->default(1);
+            $table->text('description')->default('');
             $table->timestamps();
         });
     }

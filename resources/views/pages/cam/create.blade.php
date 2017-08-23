@@ -40,6 +40,14 @@
                 {!! Form::text('name', null, ["class"=>"form-control"]) !!}
             </div>
         </div>
+
+        <div class="form-group">
+            {!! Form::label('realpath','realpath',["class"=>"col-sm-2 control-label"]) !!}
+            <div class="col-sm-5">
+                {!! Form::text('realpath', null, ["class"=>"form-control"]) !!}
+            </div>
+        </div>
+
         <div class="form-group">
             {!! Form::label('login','login',["class"=>"col-sm-2 control-label"]) !!}
             <div class="col-sm-5">
@@ -77,9 +85,9 @@
             </div>
         </div>
         <div class="form-group">
-            {!! Form::label('other','other',["class"=>"col-sm-2 control-label"]) !!}
+            {!! Form::label('description','description',["class"=>"col-sm-2 control-label"]) !!}
             <div class="col-sm-5">
-                {!! Form::textarea('other',null , ["class"=>"form-control"]) !!}
+                {!! Form::textarea('description',null , ["class"=>"form-control"]) !!}
             </div>
         </div>
 
