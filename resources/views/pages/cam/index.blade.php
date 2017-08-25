@@ -32,6 +32,7 @@
                             <th>#</th>
                             <th>Cam Id</th>
                             <th>Cam Name</th>
+                            <th>RealPath</th>
                             <th>url</th>
                             <th>port</th>
                             <th>is_cloud</th>
@@ -47,6 +48,7 @@
                                 <td>{{$i++}}</td>
                                 <td>{{$cam->cam_id}}</td>
                                 <td>{{$cam->name}}</td>
+                                <td>{{$cam->realpath}}</td>
                                 <td><a href="#">link</a></td>
                                 <td>{{$cam->port}}</td>
                                 <td>{{$cam->is_cloudBased?'yes':'no'}}</td>

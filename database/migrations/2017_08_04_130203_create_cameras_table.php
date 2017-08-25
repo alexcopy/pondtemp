@@ -27,7 +27,7 @@ class CreateCamerasTable extends Migration
             $table->string('clientExistsUrl')->default('');
             $table->tinyInteger('is_cloudBased')->default(0);
             $table->tinyInteger('is_enabled')->default(1);
-            $table->text('description')->default('');
+            $table->text('description');
             $table->timestamps();
         });
     }

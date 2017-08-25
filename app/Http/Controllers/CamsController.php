@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Models\Cameras;
 use App\Http\Requests\StoreCam;
+use App\Http\Requests\UpdateCams;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
@@ -45,17 +46,19 @@ class CamsController extends Controller
      */
     public function store(StoreCam $request)
     {
+
         if ($request->isMethod('post')) {
             $params = array_filter(Cameras::parseRequest($request));
             try {
                 $cam = Cameras::create($params);
-                Cameras::makePathForCam($cam->name);
+                Cameras::makePathForCam($cam->realpath);
 
             } catch (\Exception $exception) {
                 if (isset($cam) && $cam) {
                     Cameras::destroy($cam->id);
                 }
                 Log::alert("Failed to create Cam  " . $exception->getMessage());
+                return Redirect::to('cam');
             }
         }
         $cams = Cameras::all();
@@ -66,7 +69,7 @@ class CamsController extends Controller
     public function destroy($id)
     {
         try {
-            $camName = Cameras::find($id)->name;
+            $camName = Cameras::find($id)->realpath;
             Cameras::destroy($id);
             $res = Cameras::destroyCamFolder($camName);
             if (!$res) throw new \Exception('Problems in moving directory to archive folder');
@@ -79,7 +82,7 @@ class CamsController extends Controller
         }
         $cams = Cameras::all();
         if (!Cameras::find($id)) {
-            return Redirect::to('cam');
+            return Redirect::to('create');
         }
 
 
@@ -95,13 +98,13 @@ class CamsController extends Controller
         return view('pages.cam.edit', compact(['cam']));
     }
 
-    public function update($id, Request $request)
+    public function update($id, UpdateCams $request)
     {
         $cam = Cameras::find($id);
         if ($cam) {
             $params = array_filter(Cameras::parseRequest($request));
-            if ($params['name'] && ($cam->name != $params['name'])) {
-                Cameras::renameCamsFolder($cam->name, $params['name']);
+            if ($params['realpath'] && ($cam->realpath != $params['realpath'])) {
+                Cameras::renameCamsFolder($cam->realpath, $params['realpath']);
             }
             $cam->update($params);
         }
