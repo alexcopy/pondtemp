@@ -6,7 +6,6 @@ namespace App\Http\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
-use Monolog\Logger;
 
 class Camalarms extends Model
 {
