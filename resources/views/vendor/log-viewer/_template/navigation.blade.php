@@ -7,8 +7,8 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="{{ route('log-viewer::dashboard') }}" class="navbar-brand">
-                <i class="fa fa-fw fa-book"></i> LogViewer
+            <a href="/" class="navbar-brand">
+                <i class="fa fa-fw fa-book"></i> PondTemp
             </a>
         </div>
         <div class="collapse navbar-collapse" id="navbar">
