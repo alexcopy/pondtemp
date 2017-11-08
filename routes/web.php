@@ -28,6 +28,21 @@ Route::post('/api/v3/getfilesstats', 'ApiController@filesStat');
 Route::post('/api/v3/chemicalanalyse', 'ApiController@chemicalAnalyse');
 
 
+Route::group(['prefix' => 'pond', 'middleware' => 'auth'], function () {
+    Route::resource('/devices', 'Pond\DevicesController');
+    Route::resource('/tanks', 'Pond\TanksController');
+    Route::resource('/filters', 'Pond\FiltersController');
+    Route::resource('/meters', 'Pond\MetersController');
+    Route::resource('/chemicals', 'Pond\ChemicalsController');
+
+    Route::resource('/jobs/cleandevice', 'PageController');
+    Route::resource('/jobs/meteading', 'PageController');
+    Route::resource('/jobs/livestock', 'Pond\LivestocksController');
+    Route::resource('/jobs/chemicals', 'PageController');
+    Route::resource('/jobs/cleanfilter', 'PageController');
+});
+
+
 Route::resource('cam', 'CamsController');
 //Route::post('addcam', 'CamsController@create');
 

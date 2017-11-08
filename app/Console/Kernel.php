@@ -31,9 +31,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('alarm:cams')->everyFiveMinutes();
-        $schedule->command('alarm:process')->everyFiveMinutes();
-        $schedule->command('alarm:mutipage')->dailyAt('03:00');
+//        $schedule->command('alarm:cams')->everyFiveMinutes();
+//        $schedule->command('alarm:process')->everyFiveMinutes();
+//        $schedule->command('alarm:mutipage')->dailyAt('03:00');
     }
 
     /**
