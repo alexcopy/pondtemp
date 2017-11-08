@@ -5,9 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="/assets/css/bootstrap.css">
-    <link rel="stylesheet" href="/assets/css/awesome.css">
+
 
     @yield('custom_css')
     <title>PondTemp</title>
@@ -15,7 +13,7 @@
 
     @yield('custom_css')
     <title>{{ config('app.name', 'PondTemp') }}</title>
-
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
 <div id="app">
@@ -89,7 +87,7 @@
             <div class="panel-heading">
                 <h4 class="panel-title">@yield('panelHeader') </h4>
             </div>
-            <div class="panel-body">
+            <div id="rootdiv" class="panel-body">
                 <br>
                 @yield('content')
             </div>
@@ -98,9 +96,8 @@
 </div>
 @section('footer_scripts')
 
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="/assets/js/jquery.js"></script>
-    <script src="/assets/js/bootstrap.js"></script>
+
+    <script src="{{ asset('js/app.js') }}"></script>
 
     <script>
         $.ajaxSetup({
