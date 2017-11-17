@@ -87,9 +87,12 @@
             <div class="panel-heading">
                 <h4 class="panel-title">@yield('panelHeader') </h4>
             </div>
-            <div id="rootdiv" class="panel-body">
-                <br>
-                @yield('content')
+            <div  class="panel-body">
+                <div id="rootdiv" class="container">
+                    <br>
+                    @yield('content')
+
+                </div>
             </div>
         </div>
     </div>
