@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\Test;
+use App\Console\Commands\ZipCamFiles;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Console\Commands\GetAlarmPicsMsgFromCloud;
@@ -20,6 +21,7 @@ class Kernel extends ConsoleKernel
         GetAlarmPicsMsgFromCloud::class,
         ProcessAlarmImages::class,
         MultiPageAlarmMsg::class,
+        ZipCamFiles::class,
         Test::class
     ];
 

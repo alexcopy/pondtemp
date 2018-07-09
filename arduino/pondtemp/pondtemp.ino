@@ -4,6 +4,8 @@
 #include <LiquidCrystal_I2C.h>
 #include <DHT.h>
 #include <IRremote.h>
+#include <OneWire.h> 
+#include <DallasTemperature.h>
 
 
 // set the DHT Pin
@@ -235,6 +237,7 @@ String sendData() {
   lglcd(resp);
   return resp;
 }
+
 
 
 

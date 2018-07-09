@@ -184,7 +184,7 @@ void lglcd(String txt, int i) {
 bool connectWiFi() {
   lglcd("Conn to WIFI....", 0);
   readEsp();
-  esp8266.println("AT+CWJAP=\"redkot\",\"Gorkogo177\"");
+  esp8266.println("AT+CWJAP=\"username\",\"password\"");
   delay(2000);
   return true;
 }
