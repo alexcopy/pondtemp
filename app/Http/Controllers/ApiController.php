@@ -173,8 +173,9 @@ class ApiController extends Controller
 
     public function smsToPusherAPI(Request $req)
     {
+
         $pattern = "~Your[^>]+code\s+is\s+(?P<id>\d+)~i";
-        Log::alert($req->toArray());
+        Log::alert($req->getQueryString());
         if (preg_match($pattern, $req->get('Text'), $code)) {
             Pusher::trigger('my-channel', 'my-event', ['message' => $code['id']]);
             return $code['id'];
