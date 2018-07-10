@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Http\Controllers\ApiController;
 use App\Http\Models\Camalarms;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -41,7 +42,7 @@ class Test extends Command
     public function handle()
     {
 
-
+        (new ApiController)->smsToPusherAPI();
 
     }
 }

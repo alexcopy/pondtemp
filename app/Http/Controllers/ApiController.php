@@ -12,9 +12,12 @@ use app\Http\Services\CamService;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Monolog\Logger;
+use Pusher\Laravel\Facades\Pusher;
+
 
 class ApiController extends Controller
 {
@@ -168,4 +171,13 @@ class ApiController extends Controller
         return response()->json($resp, 200);
     }
 
+    public function smsToPusherAPI(Request $req)
+    {
+        $pattern = "";
+        if (!preg_match($pattern, $req, $code)) {
+            return true;
+        }
+        Pusher::trigger('my-channel', 'my-event', ['message' => "SMS Message"]);
+        return true;
+    }
 }
