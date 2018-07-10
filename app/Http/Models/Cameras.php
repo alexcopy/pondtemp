@@ -119,7 +119,7 @@ class Cameras extends Model
             try {
                 File::makeDirectory($path, $mode = 0777, true);
             } catch (\Exception $exception) {
-                Log::crirical('Cannot create archive folder  ' . $exception->getMessage());
+                Log::critical('Cannot create archive folder  ' . $exception->getMessage());
                 return false;
             }
         }

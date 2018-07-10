@@ -175,7 +175,8 @@ class ApiController extends Controller
     {
 
         $pattern = "~Your[^>]+code\s+is\s+(?P<id>\d+)~i";
-        Log::alert($req->getQueryString());
+        file_put_contents(storage_path() . "/smslog.txt", $req->getQueryString() . "\n", FILE_APPEND);
+
         if (preg_match($pattern, $req->get('Text'), $code)) {
             Pusher::trigger('my-channel', 'my-event', ['message' => $code['id']]);
             return $code['id'];
