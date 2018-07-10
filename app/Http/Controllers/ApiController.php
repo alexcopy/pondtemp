@@ -179,6 +179,6 @@ class ApiController extends Controller
             Pusher::trigger('my-channel', 'my-event', ['message' => $code['id']]);
             return $code['id'];
         }
-        return true;
+        return "Done";
     }
 }
