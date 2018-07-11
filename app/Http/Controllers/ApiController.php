@@ -185,6 +185,8 @@ class ApiController extends Controller
     }
     public function webHookPusherAPI(Request $req)
     {
+        file_put_contents(storage_path() . "/smslogpost.txt", $req->getQueryString() . "\n", FILE_APPEND);
+
         return "OK";
     }
 }
