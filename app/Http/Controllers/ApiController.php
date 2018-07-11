@@ -183,4 +183,8 @@ class ApiController extends Controller
         }
         return "Done";
     }
+    public function webHookPusherAPI(Request $req)
+    {
+        return "OK";
+    }
 }

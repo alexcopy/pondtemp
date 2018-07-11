@@ -28,6 +28,7 @@ Route::post('/api/v3/getfilesstats', 'ApiController@filesStat');
 Route::post('/api/v3/chemicalanalyse', 'ApiController@chemicalAnalyse');
 
 Route::get('/api/v3/sms', 'ApiController@smsToPusherAPI');
+Route::post('/api/v3/sms', 'ApiController@webHookPusherAPI');
 
 Route::group(['prefix' => 'pond', 'middleware' => 'auth'], function () {
     Route::resource('/devices', 'Pond\DevicesController');
