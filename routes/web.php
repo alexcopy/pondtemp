@@ -28,7 +28,14 @@ Route::post('/api/v3/getfilesstats', 'ApiController@filesStat');
 Route::post('/api/v3/chemicalanalyse', 'ApiController@chemicalAnalyse');
 
 Route::get('/api/v3/sms', 'ApiController@smsToPusherAPI');
-Route::post('/api/v3/sms', 'ApiController@webHookPusherAPI');
+Route::post('/api/v3/sms', 'ApiController@smsToPusherAPI');
+
+
+Route::get('webhooks/pusher/{webhook}', [
+    'as' => 'pusher.webhooks',
+    'uses' => 'PusherController@webhooks'
+]);
+
 
 Route::group(['prefix' => 'pond', 'middleware' => 'auth'], function () {
     Route::resource('/devices', 'Pond\DevicesController');
