@@ -9,12 +9,14 @@ use Closure;
 
 class PusherWebhook
 {
+
     /**
      * Handle an incoming request
      *
      * @param Request $request
      * @param Closure $next
      * @return mixed
+     * @throws \Exception
      */
     public function handle($request, Closure $next)
     {

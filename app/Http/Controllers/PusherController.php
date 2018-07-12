@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 class PusherController extends Controller
 {
 
-    public function webhooks()
+    public function webhooks(Request $request)
     {
-        print_r('asdasdasdasd');
-        exit;
+        return response([], 200);
     }
+
 }
