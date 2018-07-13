@@ -11,7 +11,7 @@ class PusherController extends Controller
     {
         $req->input('events');
 
-        file_put_contents(storage_path() . "/smslog.txt", $req->input('events'). $req->getQueryString() . "\n", FILE_APPEND);
+        file_put_contents(storage_path() . "/smslog.txt", "something is came: " .$req->input('events'). $req->getQueryString() . "\n", FILE_APPEND);
 //        foreach ($request()->input('events') as $event) {
 //            $channel = $event[‘channel’];
 //            $user_id = $event[‘user_id’];
