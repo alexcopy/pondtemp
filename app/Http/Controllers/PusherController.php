@@ -9,9 +9,10 @@ class PusherController extends Controller
 
     public function webhooks(Request $req)
     {
-        $req->input('events');
+        $payload=$req->getContent();
 
-        file_put_contents(storage_path() . "/smslog.txt", "something is came: " .$req->input('events'). $req->getQueryString() . "\n", FILE_APPEND);
+
+        file_put_contents(storage_path() . "/smslog.txt", "JSON payload is: " . $payload . "\n", FILE_APPEND);
 //        foreach ($request()->input('events') as $event) {
 //            $channel = $event[‘channel’];
 //            $user_id = $event[‘user_id’];

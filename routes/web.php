@@ -31,7 +31,7 @@ Route::get('/api/v3/sms', 'ApiController@smsToPusherAPI');
 Route::post('/api/v3/sms', 'ApiController@smsToPusherAPI');
 
 
-Route::post('webhooks/pusher/{webhook}', [
+Route::post('webhooks/pusher', [
     'as' => 'pusher.webhooks',
     'uses' => 'PusherController@webhooks'
 ]);
