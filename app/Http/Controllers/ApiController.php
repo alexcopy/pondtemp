@@ -174,11 +174,17 @@ class ApiController extends Controller
     public function smsToPusherAPI(Request $req)
     {
 
+        $msg = [
+            "name" => 'PondTest',
+            'Second' => "anotherTest"
+        ];
+        Pusher::trigger("pondtest-channel", 'new cam added', ['message' => $msg]);
+
+        return "DOne";
         $pattern = "~Your[^>]+code\s+is\s+(?P<id>\d+)~i";
         file_put_contents(storage_path() . "/smslog.txt", $req->getQueryString() . "\n", FILE_APPEND);
 
         if (preg_match($pattern, $req->get('Text'), $code)) {
-            Pusher::trigger('my-channel', 'my-event', ['message' => $code['id']]);
             return $code['id'];
         }
         return "Done";
