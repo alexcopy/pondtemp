@@ -171,7 +171,7 @@ class ApiController extends Controller
         return response()->json($resp, 200);
     }
 
-    public function smsToPusherAPI(Request $req)
+    public function smsToPusherAPI()
     {
 
         $msg = [
