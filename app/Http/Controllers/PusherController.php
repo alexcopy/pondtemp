@@ -23,7 +23,7 @@ class PusherController extends Controller
            //if ($event->isValid()) $event->handle();
 //        }
 
-        //return response([], 200);
+         return response("OK", 200);
     }
 
 }
