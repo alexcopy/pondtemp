@@ -6,6 +6,7 @@ use App\Http\Controllers\ApiController;
 use App\Http\Models\Camalarms;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Pusher\Laravel\Facades\Pusher;
 
 class Test extends Command
 {
@@ -43,6 +44,7 @@ class Test extends Command
     {
 
         (new ApiController)->smsToPusherAPI();
+        dd(Pusher::get('/channels'));
 
     }
 }

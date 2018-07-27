@@ -4,16 +4,8 @@
 
 const char* ssid     = "secret";
 const char* password = "secret";
-/*
-  Public URL
 
-  http://pondtemp.m2mcom.ru/ping?private_key=[privateKey]&lastaccess=[value]&lastupdate=[value]&sensor=[value]&timecreated=[value]&value=[value]
-  ===========================
-  Example:
-  http://pondtemp.m2mcom.ru/ping?private_key=AJrmav1n53CaR0dr9x6o?private_key=rze6mN0xB4uG10nl9DyE&lastaccess=15.80&lastupdate=5.65&sensor=12.45&timecreated=9.06&value=25.14
-  ===========================
-*/
-const char* host = "pondtemp.m2mcom.ru";
+const char* host = "your_server_and_host";
 const char* dst_ip = "192.168.50.58";
 const char* streamId   = "/ping";
 const char* privateKey = "rze6mN0xB4uG10nl9DyE";
