@@ -14,7 +14,7 @@ class CamAlarmFilesFilters
             $alarmFile = $file->getPathName();
             $keys = explode('_', $alarmFile);
             if (($camType == 'koridor') || (count($keys) <= 1)) {
-                $keys = str_replace('Koridor-2017-', '', $alarmFile);
+                $keys = preg_replace('~Koridor-20\d\d\-~i', '', $alarmFile);
                 $keys = [str_replace('-', '', $alarmFile)];
             }
             $sortArg = self::getSortArgBasedOnCamType($camType);
