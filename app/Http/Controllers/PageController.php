@@ -82,12 +82,12 @@ class PageController extends Controller
         $tableStats = [];
         foreach ($camIdsList as $item) {
             $tableStats[$item->cam_id] = [
-                'processed' => Camalarms::where('dev_id', $item->cam_id)->where('processed', 1)->count(),
-                'waiting' => Camalarms::where('dev_id', $item->cam_id)->where('processed', 0)->whereBetween('process_fail', [0, 9])->count(),
-                'zerofail' => Camalarms::where('dev_id', $item->cam_id)->where('process_fail', 0)->count(),
-                'overFive' => Camalarms::where('dev_id', $item->cam_id)->whereBetween('process_fail', [4, 9])->count(),
-                'tenFail' => Camalarms::where('dev_id', $item->cam_id)->where('process_fail', '>', 9)->count(),
-                'total' => Camalarms::where('dev_id', $item->cam_id)->count(),
+//                'processed' => Camalarms::where('dev_id', $item->cam_id)->where('processed', 1)->count(),
+//                'waiting' => Camalarms::where('dev_id', $item->cam_id)->where('processed', 0)->whereBetween('process_fail', [0, 9])->count(),
+//                'zerofail' => Camalarms::where('dev_id', $item->cam_id)->where('process_fail', 0)->count(),
+//                'overFive' => Camalarms::where('dev_id', $item->cam_id)->whereBetween('process_fail', [4, 9])->count(),
+//                'tenFail' => Camalarms::where('dev_id', $item->cam_id)->where('process_fail', '>', 9)->count(),
+//                'total' => Camalarms::where('dev_id', $item->cam_id)->count(),
             ];
         }
 
