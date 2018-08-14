@@ -96,7 +96,7 @@ class PageController extends Controller
 
     protected function showFiles($filesPath, Request $request)
     {
-        $pagesize = 78;
+        $pagesize = 60;
         $page = $request->get('page', 0);
         $camFiles = new CamAlarmFilesFilters;
         $title = '  Show Folder ' . $request->get('folder', null)
@@ -111,7 +111,7 @@ class PageController extends Controller
 
     protected function showFolders($folderPath, Request $request)
     {
-        $pageSize = 20;
+        $pageSize = 10;
         $folderName = $request->get('folder', null);
         $page = $request->get('page', 0);
         $camFiles = new CamAlarmFilesFilters;
