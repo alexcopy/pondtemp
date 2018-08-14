@@ -96,17 +96,17 @@ class PageController extends Controller
 
     protected function showFiles($filesPath, Request $request)
     {
-        $pagesize = 70;
+        $pagesize = 78;
         $page = $request->get('page', 0);
         $camFiles= new CamAlarmFilesFilters;
-//      $title = 'Show Folder Files for ' . $folder . ' and subfolder ' . $subfolder;
+        $title = 'Show Folder <b>' . $request->get('folder', null)
+            . '</b> and subfolder <b>'
+            . $request->get('subfolder', null).'</b>';
         $pictures = $camFiles->sortFiles($filesPath, $pagesize, $page, [
             'query'=> $request->toArray(),
             'path'=>'/'.$request->path(),
         ]);
-
-
-        return view('pages.camssnapshots', compact(['pictures']));
+        return view('pages.camssnapshots', compact(['pictures', 'title']));
     }
 
     public function allFilesDetails(Request $request)

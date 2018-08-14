@@ -1,8 +1,8 @@
 @extends('layouts.main')
-
+@section('subtabs')
+    <h5>{{title_case($title)}}</h5>
+@stop
 @section('content')
-
-
     {{ $pictures->links() }}
     <br/>
     @foreach($pictures->chunk(6) as $pictureRow)
