@@ -57,14 +57,14 @@ class CamAlarmFilesFilters
                 return in_array($file->getExtension(), ['png', 'gif', 'jpg']);
             })
             ->sortBy(function ($file) {
-                return $file->getCTime();
+                return $file->getMTime();
             })
             ->map(function ($file) {
                 return [
                     'origPath'=>$file->getBaseName(),
                     'imgpath'=>preg_replace('~[^\.]+storage~i', '/assets/pics', $file->getPathName()),
                     'path'=>$file->getPath(),
-                    'date'=>Carbon::createFromTimestamp($file->getCTime()),
+                    'date'=>Carbon::createFromTimestamp($file->getMTime()),
                     'realPathName'=>$file->getRealPath()];
             }), $pageSize, $page, $options);
     }

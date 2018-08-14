@@ -18,3 +18,5 @@ npm-debug.log
 /public/assets/pics/ftp
 composer.lock
 storage/smslog.txt
+storage/ftp
+public/assets/pics/ftp
