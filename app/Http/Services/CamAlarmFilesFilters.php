@@ -71,7 +71,6 @@ class CamAlarmFilesFilters
 
 
     /**
-     * Gera a paginação dos itens de um array ou collection.
      *
      * @param array|Collection      $items
      * @param int   $perPage
@@ -85,5 +84,20 @@ class CamAlarmFilesFilters
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $items = $items instanceof Collection ? $items : Collection::make($items);
         return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+    }
+
+
+    public function sortFolders($filesPath)
+    {
+        $camFolders = File::directories($filesPath);
+        $folders=[];
+        foreach ($camFolders as $foldePath) {
+            if (!preg_match('~day-~i', class_basename($foldePath))) continue;
+            $folderName = str_replace('day-', '', class_basename($foldePath));
+            $timeStamp = Carbon::parse($folderName);
+            $folders[$timeStamp->timestamp] = ['date' => $timeStamp->format('d-m-Y'), 'origPath' => $foldePath, 'folder' => $folderName];
+        }
+        krsort($folders);
+        return $folders;
     }
 }

@@ -98,26 +98,36 @@ class PageController extends Controller
     {
         $pagesize = 78;
         $page = $request->get('page', 0);
-        $camFiles= new CamAlarmFilesFilters;
-        $title = 'Show Folder <b>' . $request->get('folder', null)
-            . '</b> and subfolder <b>'
-            . $request->get('subfolder', null).'</b>';
+        $camFiles = new CamAlarmFilesFilters;
+        $title = '  Show Folder ' . $request->get('folder', null)
+            . '  and subfolder '
+            . $request->get('subfolder', null) . ' ';
         $pictures = $camFiles->sortFiles($filesPath, $pagesize, $page, [
-            'query'=> $request->toArray(),
-            'path'=>'/'.$request->path(),
+            'query' => $request->toArray(),
+            'path' => '/' . $request->path(),
         ]);
         return view('pages.camssnapshots', compact(['pictures', 'title']));
     }
 
+    protected function showFolders($folderPath, Request $request)
+    {
+        $pageSize = 20;
+        $folderName = $request->get('folder', null);
+        $page = $request->get('page', 0);
+        $camFiles = new CamAlarmFilesFilters;
+        $sortedFolders = $camFiles->sortFolders($folderPath);
+        $result =$camFiles->paginate($sortedFolders, $pageSize, $page, [
+            'query' => $request->toArray(),
+            'path' => '/' . $request->path(),
+        ]);
+        return view('pages.deatails', compact(['result', 'folderName']));
+    }
+
     public function allFilesDetails(Request $request)
     {
-        $limit = 70;
         $query = $request->get('q', null);
         $folder = $request->get('folder', null);
-        $page = $request->get('page', 0);
         $subfolder = $request->get('subfolder', null);
-        $result = [];
-        $next = '';
 
         if (!$query || (!$folder)) {
             throw new PageNotFound('please specify query');
@@ -125,22 +135,19 @@ class PageController extends Controller
         if (Cameras::where('name', $folder)->count() == 0) {
             throw new PageNotFound('Unrecognized Folder Name');
         }
-
         try {
             $filesPath = storage_path('ftp/' . $folder);
             if ($query == 'showtoday') {
                 return $this->showFiles($filesPath . '/today', $request);
             } elseif ($query == 'showfolders') {
-                $title = 'Show Archived folders for ' . $folder;
-                $result = self::sortFolders(File::directories($filesPath));
+                return $this->showFolders($filesPath, $request);
             } elseif ($query == 'showfolderfiles') {
-                return $this->showFiles($filesPath.'/' . $subfolder, $request);
+                return $this->showFiles($filesPath . '/' . $subfolder, $request);
             }
         } catch (\Exception $exception) {
             throw new PageNotFound($exception->getMessage());
         }
-
-        return view('pages.deatails', compact(['title', 'folder', 'result', 'filesPath', 'next']));
+        throw new \Exception('Something went very wrong');
     }
 
     public static function human_folderSize($path, $h = 'h')
@@ -154,16 +161,5 @@ class PageController extends Controller
 
     }
 
-    public static function sortFolders(array $foldersList)
-    {
-        $folders = [];
-        foreach ($foldersList as $foldePath) {
-            if (!preg_match('~day-~i', class_basename($foldePath))) continue;
-            $folderName = str_replace('day-', '', class_basename($foldePath));
-            $timeStamp = Carbon::parse($folderName);
-            $folders[$timeStamp->timestamp] = ['date' => $timeStamp->format('d-m-Y'), 'origPath' => $foldePath, 'folder' => $folderName];
-        }
-        krsort($folders);
-        return $folders;
-    }
+
 }
