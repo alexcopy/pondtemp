@@ -94,15 +94,30 @@ class PageController extends Controller
         return view('pages.camfiles', compact(['dirFiles', 'ftpDir', 'tableStats']));
     }
 
+    protected function showFiles($filesPath, Request $request)
+    {
+        $pagesize = 70;
+        $page = $request->get('page', 0);
+        $camFiles= new CamAlarmFilesFilters;
+//      $title = 'Show Folder Files for ' . $folder . ' and subfolder ' . $subfolder;
+        $pictures = $camFiles->sortFiles($filesPath, $pagesize, $page, [
+            'query'=> $request->toArray(),
+            'path'=>'/'.$request->path(),
+        ]);
+
+
+        return view('pages.camssnapshots', compact(['pictures']));
+    }
+
     public function allFilesDetails(Request $request)
     {
-        $limit = 15;
+        $limit = 70;
         $query = $request->get('q', null);
         $folder = $request->get('folder', null);
         $page = $request->get('page', 0);
         $subfolder = $request->get('subfolder', null);
         $result = [];
-        $next='';
+        $next = '';
 
         if (!$query || (!$folder)) {
             throw new PageNotFound('please specify query');
@@ -114,38 +129,17 @@ class PageController extends Controller
         try {
             $filesPath = storage_path('ftp/' . $folder);
             if ($query == 'showtoday') {
-                $title = 'Show Today Files for ' . $folder;
-                $result = File::allFiles($filesPath . '/today');
-                $result = CamAlarmFilesFilters::fileNameIsKeyToSort($result, $folder);
+                return $this->showFiles($filesPath . '/today', $request);
             } elseif ($query == 'showfolders') {
                 $title = 'Show Archived folders for ' . $folder;
                 $result = self::sortFolders(File::directories($filesPath));
             } elseif ($query == 'showfolderfiles') {
-                if (!$subfolder) throw new PageNotFound('Please specify subfolder');
-                $title = 'Show Folder Files for ' . $folder . ' and subfolder ' . $subfolder;
-                $result = File::allFiles($filesPath . '/' . $subfolder);
-                $result = CamAlarmFilesFilters::fileNameIsKeyToSort($result, $folder);
-            } else {
-                throw new PageNotFound('didn\'t match any query params ');
+                return $this->showFiles($filesPath.'/' . $subfolder, $request);
             }
-
         } catch (\Exception $exception) {
             throw new PageNotFound($exception->getMessage());
         }
 
-
-        $chunkedRes = array_chunk($result, $limit);
-
-        if (count($chunkedRes)) {
-            if (isset($chunkedRes[$page])) {
-                $result = $chunkedRes[$page];
-                $page++;
-            } else {
-                $result = end($chunkedRes);
-            }
-
-            $next = '/' . $request->path() . "?folder={$folder}&subfolder={$subfolder}&limit={$limit}&q={$query}&page={$page}";
-        }
         return view('pages.deatails', compact(['title', 'folder', 'result', 'filesPath', 'next']));
     }
 

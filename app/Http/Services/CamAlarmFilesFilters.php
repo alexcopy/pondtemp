@@ -3,6 +3,12 @@
 namespace App\Http\Services;
 
 
+use Carbon\Carbon;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\File;
+
 class CamAlarmFilesFilters
 {
 
@@ -43,4 +49,41 @@ class CamAlarmFilesFilters
 
     }
 
+
+    public function sortFiles($dir, $pageSize=15, $page=null, $options=[])
+    {
+        return $this->paginate(collect(File::allFiles($dir))
+            ->filter(function ($file) {
+                return in_array($file->getExtension(), ['png', 'gif', 'jpg']);
+            })
+            ->sortBy(function ($file) {
+                return $file->getCTime();
+            })
+            ->map(function ($file) {
+                return [
+                    'origPath'=>$file->getBaseName(),
+                    'imgpath'=>preg_replace('~[^\.]+storage~i', '/assets/pics', $file->getPathName()),
+                    'path'=>$file->getPath(),
+                    'date'=>Carbon::createFromTimestamp($file->getCTime()),
+                    'realPathName'=>$file->getRealPath()];
+            }), $pageSize, $page, $options);
+    }
+
+
+    /**
+     * Gera a paginação dos itens de um array ou collection.
+     *
+     * @param array|Collection      $items
+     * @param int   $perPage
+     * @param int  $page
+     * @param array $options
+     *
+     * @return LengthAwarePaginator
+     */
+    public function paginate($items, $perPage = 15, $page = null, $options = [])
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+    }
 }
