@@ -6,14 +6,12 @@ ALEX.getFilesData = function () {
 
     })
         .done(function (msg) {
-
             setTimeout(function () {
                 msg.data.x.unshift('x');
                 msg.data.mamacam.unshift('Mama Cam');
                 msg.data.koridor.unshift('Koridor');
                 msg.data.pond.unshift('Pond');
                 ALEX.drawTable(msg.data, '');
-
                 ALEX.temps.load({
                     columns: [
                         msg.data.x,
@@ -71,4 +69,5 @@ ALEX.drawTable = function (data) {
 
 $(document).ready(function () {
     ALEX.getFilesData(null, null);
+
 });

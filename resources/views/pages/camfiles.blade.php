@@ -133,27 +133,7 @@
         </div>
     </div>
         <div class="row">
-    @foreach($tableStats as $id=>$stat  )
-            <div class="col-sm-3">
-            <h4>{{$id}}</h4>
-                <table id="filestimeline" class="table table-responsive table-bordered">
-                    <thead>
-                    <tr>
-                        <th> Name </th>
-                        <th> Value </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($stat as $key=> $data)
-                        <tr>
-                            <th>{{$key}}</th>
-                            <td>{{$data}}</td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
-    @endforeach
+
         </div>
 @stop
 
