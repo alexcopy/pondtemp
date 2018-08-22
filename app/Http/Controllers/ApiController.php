@@ -163,7 +163,7 @@ class ApiController extends Controller
             });
         }
 
-        $resp = ['data' => ['x' => array_keys($dateChunks['mamaca'])]];
+        $resp = ['data' => ['x' => array_keys($dateChunks['mamacam'])]];
         $dirs = [];
         foreach ($dirList as $dir) {
             $resp['data'][$name] = array_values($dateChunks[$name]);
