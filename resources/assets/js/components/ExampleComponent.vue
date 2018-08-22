@@ -92,19 +92,24 @@
                     lastchanged: 0,
                     size: 0,
                     camname: 0,
-                    stats:{
-                        alldirs:0,
-                        filescount:0
+                    stats: {
+                        alldirs: 0,
+                        filescount: 0
                     }
                 },
-                totalstats: [],
+                totalstats: {
+                    stats: {
+                        dirscount: 0,
+                        alldirs: 0
+                    }
+                },
                 totalstat: {
                     camname: '',
                     dirs: 0,
                     size: 0,
-                    stats:{
-                        dirscount:0,
-                        alldirs:0
+                    stats: {
+                        dirscount: 0,
+                        alldirs: 0
                     }
                 },
                 statuses: [],
