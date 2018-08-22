@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Monolog\Logger;
+use phpDocumentor\Reflection\DocBlock;
 use Pusher\Laravel\Facades\Pusher;
 
 
@@ -142,17 +143,19 @@ class ApiController extends Controller
         $chunks = array_chunk($datesInterval, $chunk);
 
         foreach ($dirList as $dir) {
-            $filesPath = $ftpDir . '/' . $dir->name . '/today';
+            $name = $dir->realpath;
+            $filesPath = $ftpDir . '/' . $name . '/today';
+//            $this->createFolderIfNotExists($directory, $dir);
 
             foreach (File::allFiles($filesPath) as $fileObj) {
                 $lastModified = File::lastModified($fileObj->getPathName());
-                $data[$dir->name][] = $lastModified;
+                $data[$name][] = $lastModified;
             }
-            if (empty($data[$dir->name])) {
-                $data[$dir->name] = [];
+            if (empty($data[$name])) {
+                $data[$name] = [];
             }
-            asort($data[$dir->name]);
-            $dirName = $dir->name;
+            asort($data[$name]);
+            $dirName = $name;
             array_walk($chunks, function (&$chunk) use ($data, $dirName, &$dateChunks) {
                 $end = Carbon::createFromTimestamp(end($chunk))->format('H:i');
                 $dateChunks[$dirName][$end] = count(array_intersect($data[$dirName], $chunk));
@@ -160,11 +163,11 @@ class ApiController extends Controller
             });
         }
 
-        $resp = ['data' => ['x' => array_keys($dateChunks['mamacam'])]];
+        $resp = ['data' => ['x' => array_keys($dateChunks['mamaca'])]];
         $dirs = [];
         foreach ($dirList as $dir) {
-            $resp['data'][$dir->name] = array_values($dateChunks[$dir->name]);
-            $dirs[] = $dir->name;
+            $resp['data'][$name] = array_values($dateChunks[$name]);
+            $dirs[] = $name;
         }
 
         $resp['data']['dirs'] = $dirs;
@@ -189,4 +192,71 @@ class ApiController extends Controller
         }
         return "Done";
     }
+
+    public function getTodayStats($type = 'today')
+    {
+        $dirList = Cameras::all();
+        $allDirs = [];
+        $dirFiles = collect();
+        foreach ($dirList as $dir) {
+            $name = $dir->name;
+            $this->createFolderIfNotExists($dir);
+            $filesPath = storage_path('ftp') . '/' . $dir->realpath . '/today';
+            $modified = File::lastModified($filesPath);
+            $allDirs[] = $filesPath;
+            $dirFiles->push([
+                'filescount' => count(File::allFiles($filesPath)),
+                'lastchanged' => Carbon::createFromTimestamp($modified)->toDateTimeString(),
+                'isOK' => time() - $modified,
+                'size' => PageController::human_folderSize($filesPath),
+                'camname' => $name
+            ]);
+        }
+        return response()->json([
+            'data' => $dirFiles,
+            'stats' => [
+                'alldirs'=>PageController::getHumanFoldersSize($allDirs),
+                'filescount'=>$dirFiles->sum('filescount')
+            ]
+        ]);
+    }
+
+    public function getTotalStats()
+    {
+        $result = collect();
+        $allDirs = [];
+        foreach (Cameras::all() as $cam) {
+            $name = $cam->name;
+            $this->createFolderIfNotExists($cam);
+            $filesPath = storage_path('ftp') . '/' . $cam->realpath;
+            $allDirs[] = $filesPath;
+            $directories = File::directories($filesPath);
+            $result->push([
+                'camname' => $name,
+                'dirs' => count($directories),
+                'size' => PageController::human_folderSize($filesPath)
+            ]);
+        }
+        return response()->json([
+            'data' => $result,
+            'stats' => [
+                'alldirs' => PageController::getHumanFoldersSize($allDirs),
+                'dirscount' => $result->sum('dirs')]
+        ]);
+    }
+
+    /**
+     * @param $dir
+     * @throws \Exception
+     */
+    protected function createFolderIfNotExists($dir)
+    {
+        $ftpDir = storage_path('ftp');
+        $directory = $ftpDir . '/' . $dir->realpath;
+        if (!File::exists($directory)) {
+            Cameras::makePathForCam($dir->realpath);
+        }
+    }
+
+
 }

@@ -98,10 +98,7 @@
     </div>
 </div>
 @section('footer_scripts')
-
-
     <script src="{{ asset('js/app.js') }}"></script>
-
     <script>
         $.ajaxSetup({
             headers: {
@@ -109,7 +106,6 @@
             }
         });
     </script>
-
     @yield('custom_scripts')
 @show
 

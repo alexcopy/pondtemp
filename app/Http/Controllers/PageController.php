@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use phpDocumentor\Reflection\Types\Self_;
 
 class PageController extends Controller
 {
@@ -70,12 +71,12 @@ class PageController extends Controller
         $dirFiles['files'] = [];
 
         foreach ($dirList as $dir) {
-            $filesPath = $ftpDir . '/' . $dir->name . '/today';
-            if (!File::exists($ftpDir . '/' . $dir->name)) {
-                Cameras::makePathForCam($dir->name);
+            $filesPath = $ftpDir . '/' . $dir->realpath . '/today';
+            if (!File::exists($ftpDir . '/' . $dir->realpath)) {
+                Cameras::makePathForCam($dir->realpath);
             }
             $dirFiles['files'][$dir->name] = File::allFiles($filesPath);
-            $dirFiles['dirs'][$dir->name] = File::directories($ftpDir . '/' . $dir->name);
+            $dirFiles['dirs'][$dir->name] = File::directories($ftpDir . '/' . $dir->realpath);
             $dirFiles['changed'][$dir->name] = File::lastModified($filesPath);
             $dirFiles['size'][$dir->name] = self::human_folderSize($filesPath);
         }
@@ -116,7 +117,7 @@ class PageController extends Controller
         $page = $request->get('page', 0);
         $camFiles = new CamAlarmFilesFilters;
         $sortedFolders = $camFiles->sortFolders($folderPath);
-        $result =$camFiles->paginate($sortedFolders, $pageSize, $page, [
+        $result = $camFiles->paginate($sortedFolders, $pageSize, $page, [
             'query' => $request->toArray(),
             'path' => '/' . $request->path(),
         ]);
@@ -126,15 +127,14 @@ class PageController extends Controller
     public function allFilesDetails(Request $request)
     {
         $query = $request->get('q', null);
-        $folder = $request->get('folder', null);
+        $camname= $request->get('folder', null);
+        $camera =Cameras::where('name', $camname)->get()->first();
+        $folder =optional($camera)->realpath;
         $subfolder = $request->get('subfolder', null);
-
         if (!$query || (!$folder)) {
             throw new PageNotFound('please specify query');
         }
-        if (Cameras::where('name', $folder)->count() == 0) {
-            throw new PageNotFound('Unrecognized Folder Name');
-        }
+
         try {
             $filesPath = storage_path('ftp/' . $folder);
             if ($query == 'showtoday') {
@@ -150,16 +150,19 @@ class PageController extends Controller
         throw new \Exception('Something went very wrong');
     }
 
-    public static function human_folderSize($path, $h = 'h')
+    public static function human_folderSize($path, $h = 'h', $total = ' ')
     {
-
-        $io = popen('/usr/bin/du -sk' . $h . ' ' . $path, 'r');
-        $size = fgets($io, 4096);
-        $size = substr($size, 0, strpos($size, "\t"));
-        pclose($io);
-        return $size;
-
+// $total='--total'
+        if(!in_array(trim($total), [' ', '', '--total'])) return '0 KB';
+        $io = exec('/usr/bin/du -sk' . $h . '  ' . $total . ' ' . $path);
+        $sizes = explode("\t", $io);
+        return $sizes[0];
     }
 
-
+    public static function getHumanFoldersSize(array $folders)
+    {
+        if (empty($folders)) return '0 kb';
+        $path = implode('  ', $folders);
+        return self::human_folderSize($path, 'h', ' --total');
+    }
 }

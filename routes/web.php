@@ -31,6 +31,11 @@ Route::get('/api/v3/sms', 'ApiController@smsToPusherAPI');
 Route::post('/api/v3/sms', 'ApiController@smsToPusherAPI');
 
 
+Route::group(['prefix' => '/api/v3', 'middleware' => 'auth'], function () {
+    Route::get('/stats/today', 'ApiController@getTodayStats');
+    Route::get('/stats/total', 'ApiController@getTotalStats');
+});
+
 Route::post('webhooks/pusher', [
     'as' => 'pusher.webhooks',
     'uses' => 'PusherController@webhooks'
