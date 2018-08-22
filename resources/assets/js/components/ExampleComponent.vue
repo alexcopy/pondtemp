@@ -63,7 +63,7 @@
                     <tfoot>
                     <tr>
                         <td class="total"><b>Total</b></td>
-                        <td><b><span class="alert-success badge">{{totalstats.stats.dirscount.toLocaleString()}}</span></b>
+                        <td><b><span class="alert-success badge">{{totalstats.stats.dirscount}}</span></b>
                         </td>
                         <td><b><span class="alert-success">{{totalstats.stats.alldirs.toLocaleString()}}</span></b></td>
                     </tr>
