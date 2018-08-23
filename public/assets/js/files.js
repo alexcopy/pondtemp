@@ -24,9 +24,6 @@ ALEX.getFilesData = function () {
                 });
             });
         })
-        .error(function (msg, status) {
-            alert(msg.statusText);
-        });
 };
 ALEX.temps = c3.generate({
     bindto: '#qty',

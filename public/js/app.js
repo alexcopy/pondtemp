@@ -62788,7 +62788,12 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                     filescount: 0
                 }
             },
-            totalstats: [],
+            totalstats: {
+                stats: {
+                    dirscount: 0,
+                    alldirs: 0
+                }
+            },
             totalstat: {
                 camname: '',
                 dirs: 0,
@@ -62967,9 +62972,7 @@ var render = function() {
               _c("td", [
                 _c("b", [
                   _c("span", { staticClass: "alert-success badge" }, [
-                    _vm._v(
-                      _vm._s(_vm.totalstats.stats.dirscount.toLocaleString())
-                    )
+                    _vm._v(_vm._s(_vm.totalstats.stats.dirscount))
                   ])
                 ])
               ]),
