@@ -62687,8 +62687,14 @@ module.exports = function normalizeComponent (
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -62782,11 +62788,8 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                 dirs: 0,
                 lastchanged: 0,
                 size: 0,
-                camname: 0,
-                stats: {
-                    alldirs: 0,
-                    filescount: 0
-                }
+                camname: 0
+
             },
             totalstats: {
                 stats: {
@@ -62797,11 +62800,8 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
             totalstat: {
                 camname: '',
                 dirs: 0,
-                size: 0,
-                stats: {
-                    dirscount: 0,
-                    alldirs: 0
-                }
+                size: 0
+
             },
             statuses: [],
             status: {
@@ -62811,28 +62811,9 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
             }
         };
     },
-    mounted: function () {
-        var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-            return regeneratorRuntime.wrap(function _callee$(_context) {
-                while (1) {
-                    switch (_context.prev = _context.next) {
-                        case 0:
-                            this.getTodayResults(), this.todayStats(), this.getTotalResults();
-
-                        case 1:
-                        case 'end':
-                            return _context.stop();
-                    }
-                }
-            }, _callee, this);
-        }));
-
-        function mounted() {
-            return _ref.apply(this, arguments);
-        }
-
-        return mounted;
-    }(),
+    mounted: function mounted() {
+        this.getTodayResults(), this.todayStats(), this.getTotalResults();
+    },
 
     methods: {
         getTodayResults: function getTodayResults() {
@@ -62884,17 +62865,21 @@ var render = function() {
               _vm._v(" "),
               _c("td", [
                 _c("b", [
-                  _c("span", { staticClass: "alert-success badge" }, [
-                    _vm._v(_vm._s(_vm.cams.stats.filescount.toLocaleString()))
-                  ])
+                  _vm.cams.stats
+                    ? _c("span", { staticClass: "alert-success badge" }, [
+                        _vm._v(_vm._s(_vm.cams.stats.filescount))
+                      ])
+                    : _vm._e()
                 ])
               ]),
               _vm._v(" "),
               _c("td", [
                 _c("b", [
-                  _c("span", { staticClass: "alert-success" }, [
-                    _vm._v(_vm._s(_vm.cams.stats.alldirs.toLocaleString()))
-                  ])
+                  _vm.cams.stats
+                    ? _c("span", { staticClass: "alert-success" }, [
+                        _vm._v(_vm._s(_vm.cams.stats.alldirs))
+                      ])
+                    : _vm._e()
                 ])
               ])
             ])
@@ -62921,7 +62906,7 @@ var render = function() {
                 _vm._v(" "),
                 _c("td", [
                   _c("span", { staticClass: "alert-info badge" }, [
-                    _vm._v(_vm._s(cam.filescount.toLocaleString()))
+                    _vm._v(_vm._s(cam.filescount))
                   ])
                 ]),
                 _vm._v(" "),
@@ -62971,19 +62956,23 @@ var render = function() {
               _vm._v(" "),
               _c("td", [
                 _c("b", [
-                  _c("span", { staticClass: "alert-success badge" }, [
-                    _vm._v(_vm._s(_vm.totalstats.stats.dirscount))
-                  ])
+                  _vm.totalstats.stats
+                    ? _c("span", { staticClass: "alert-success badge" }, [
+                        _vm._v(_vm._s(_vm.totalstats.stats.dirscount))
+                      ])
+                    : _vm._e()
                 ])
               ]),
               _vm._v(" "),
               _c("td", [
                 _c("b", [
-                  _c("span", { staticClass: "alert-success" }, [
-                    _vm._v(
-                      _vm._s(_vm.totalstats.stats.alldirs.toLocaleString())
-                    )
-                  ])
+                  _vm.totalstats.stats
+                    ? _c("span", { staticClass: "alert-success" }, [
+                        _vm._v(
+                          _vm._s(_vm.totalstats.stats.alldirs.toLocaleString())
+                        )
+                      ])
+                    : _vm._e()
                 ])
               ])
             ])

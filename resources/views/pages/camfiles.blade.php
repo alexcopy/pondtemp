@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="assets/css/c3.min.css">
 @stop
 
+@include('helpers.functions')
 @section('content')
     <div >
         <example-component></example-component>

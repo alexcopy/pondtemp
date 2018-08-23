@@ -14,16 +14,20 @@
                     <tfoot>
                     <tr>
                         <td class="total"><b>Total</b></td>
-                        <td><b><span class="alert-success badge">{{cams.stats.filescount.toLocaleString()}}</span></b>
+                        <td><b>
+                            <span class="alert-success badge" v-if="cams.stats">{{cams.stats.filescount}}</span>
+                        </b>
                         </td>
-                        <td><b><span class="alert-success">{{cams.stats.alldirs.toLocaleString()}}</span></b></td>
+                        <td><b>
+                            <span class="alert-success" v-if="cams.stats">{{cams.stats.alldirs}}</span>
+                        </b></td>
                     </tr>
                     </tfoot>
                     <tbody>
                     <tr v-for="cam in cams.data">
                         <td><a v-bind:href="'/allfiles/details?q=showtoday&folder='+ cam.camname+'&limit=500'">{{cam.camname.toLocaleString()}}</a>
                         </td>
-                        <td><span class="alert-info badge">{{cam.filescount.toLocaleString()}}</span></td>
+                        <td><span class="alert-info badge">{{cam.filescount}}</span></td>
                         <td>{{cam.size}}</td>
                     </tr>
                     </tbody>
@@ -63,9 +67,13 @@
                     <tfoot>
                     <tr>
                         <td class="total"><b>Total</b></td>
-                        <td><b><span class="alert-success badge">{{totalstats.stats.dirscount}}</span></b>
+                        <td><b>
+                            <span class="alert-success badge" v-if="totalstats.stats" >{{totalstats.stats.dirscount}}</span>
+                        </b>
                         </td>
-                        <td><b><span class="alert-success">{{totalstats.stats.alldirs.toLocaleString()}}</span></b></td>
+                        <td><b>
+                            <span class="alert-success" v-if="totalstats.stats" >{{totalstats.stats.alldirs.toLocaleString()}}</span>
+                        </b></td>
                     </tr>
                     </tfoot>
                     <tbody>
@@ -92,10 +100,7 @@
                     lastchanged: 0,
                     size: 0,
                     camname: 0,
-                    stats: {
-                        alldirs: 0,
-                        filescount: 0
-                    }
+
                 },
                 totalstats: {
                     stats: {
@@ -107,10 +112,7 @@
                     camname: '',
                     dirs: 0,
                     size: 0,
-                    stats: {
-                        dirscount: 0,
-                        alldirs: 0
-                    }
+
                 },
                 statuses: [],
                 status: {
@@ -120,7 +122,7 @@
                 }
             }
         },
-        async mounted() {
+         mounted() {
             this.getTodayResults(),
                 this.todayStats(),
                 this.getTotalResults()
