@@ -1,7 +1,7 @@
 @extends('layouts.main')
 @section('custom_css')
-    <link rel="stylesheet" href="assets/css/daterangepicker.css">
-    <link rel="stylesheet" href="assets/css/c3.min.css">
+    <link rel="stylesheet" href="/assets/css/daterangepicker.css">
+    <link rel="stylesheet" href="/assets/css/c3.min.css">
 @stop
 
 @include('helpers.functions')
@@ -35,9 +35,9 @@
 @stop
 
 @section('custom_scripts')
-    <script src="assets/js/d3-3.4.3.min.js"></script>
-    <script src="assets/js/moment.js"></script>
-    <script src="assets/js/daterangepicker.js"></script>
-    <script src="assets/js/c3.js"></script>
-    <script type="text/javascript" src="assets/js/files.js"></script>
+    <script src="/assets/js/d3-3.4.3.min.js"></script>
+    <script src="/assets/js/moment.js"></script>
+    <script src="/assets/js/daterangepicker.js"></script>
+    <script src="/assets/js/c3.js"></script>
+    <script type="text/javascript" src="/assets/js/files.js"></script>
 @stop

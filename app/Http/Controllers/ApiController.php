@@ -10,8 +10,12 @@ use App\Http\Models\TempMeter;
 use App\Http\Models\WeatherReading;
 use app\Http\Services\CamService;
 use Carbon\Carbon;
+use function Couchbase\defaultDecoder;
+use DateInterval;
+use DatePeriod;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
@@ -135,41 +139,60 @@ class ApiController extends Controller
 
         $dirList = Cameras::all();
         $ftpDir = storage_path('ftp');
-        $data = [];
-        $dateChunks = [];
-
-        $datesInterval = range(Carbon::now()->startOfDay()->timestamp, time());
-        $chunk = (int)count($datesInterval) / 24;
-        $chunks = array_chunk($datesInterval, $chunk);
+        $data = collect();
+        $timeChunks = iterator_to_array(new DatePeriod(Carbon::now()->startOfDay(), new DateInterval('PT30M'), Carbon::now()));
 
         foreach ($dirList as $dir) {
             $name = $dir->realpath;
             $filesPath = $ftpDir . '/' . $name . '/today';
-//            $this->createFolderIfNotExists($directory, $dir);
 
             foreach (File::allFiles($filesPath) as $fileObj) {
-                $lastModified = File::lastModified($fileObj->getPathName());
-                $data[$name][] = $lastModified;
+                $path = $fileObj->getPathName();
+                $lastModified = File::lastModified($path);
+                $data->push([
+                    'time' => $lastModified,
+                    'name' => $dir->name,
+                ]);
             }
+
             if (empty($data[$name])) {
                 $data[$name] = [];
             }
-            asort($data[$name]);
-            $dirName = $name;
-            array_walk($chunks, function (&$chunk) use ($data, $dirName, &$dateChunks) {
-                $end = Carbon::createFromTimestamp(end($chunk))->format('H:i');
-                $dateChunks[$dirName][$end] = count(array_intersect($data[$dirName], $chunk));
-                //$dateChunks[$dir][$end] = rand(1,30);
-            });
+        }
+        $intervals = collect();
+        foreach ($timeChunks as $chunk) {
+            $next = next($timeChunks);
+            $current = current($timeChunks);
+            if (!$next) continue;
+            $intervals->push(
+                (object)[
+                    'start' => $current->timestamp,
+                    'finish' => $next->timestamp,
+                    'count' => 0
+                ]);
         }
 
-        $resp = ['data' => ['x' => array_keys($dateChunks['mamacam'])]];
-        $dirs = [];
+        dd($intervals);
+
+        $intervals->map(function ($item) use ($data) {
+            $item->count = $data
+                ->where('time', '>', $item->start)
+                ->where('time', '<', $item->finish)
+                ->count();
+        });
+
+        $groupedByValue = $data->groupBy('time');
+        $dupes = $groupedByValue->filter(function (Collection $groups) {
+            return $groups->count() > 1;
+        });
+
+
+// TODO combine time intervals with $data array
+        dd($intervals, $timeChunks, $data->toArray(), $dupes->toArray());
         foreach ($dirList as $dir) {
-            $resp['data'][$name] = array_values($dateChunks[$name]);
+            $resp['data'][$name] = array_values($dateChunks[$dir->realpath]);
             $dirs[] = $name;
         }
-
         $resp['data']['dirs'] = $dirs;
         return response()->json($resp, 200);
     }
@@ -215,8 +238,8 @@ class ApiController extends Controller
         return response()->json([
             'data' => $dirFiles,
             'stats' => [
-                'alldirs'=>PageController::getHumanFoldersSize($allDirs),
-                'filescount'=>$dirFiles->sum('filescount')
+                'alldirs' => PageController::getHumanFoldersSize($allDirs),
+                'filescount' => $dirFiles->sum('filescount')
             ]
         ]);
     }

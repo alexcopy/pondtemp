@@ -1,7 +1,7 @@
 var ALEX = ALEX || {};
 ALEX.getFilesData = function () {
     $.ajax({
-        method: "POST",
+        method: "GET",
         url: "/api/v3/getfilesstats"
 
     })
@@ -42,27 +42,7 @@ ALEX.temps = c3.generate({
         }
     }
 });
-ALEX.drawTable = function (data) {
 
-    table = '<thead><tr>';
-
-    for (var hd in data.x) {
-        table += '<th>' + data.x[hd] + '</th>';
-    }
-    table += '</tr></thead><tbody>';
-
-    for (var rw in data) {
-        table += '<tr>';
-        if (rw !== 'x') {
-            for (var td in data[rw]) {
-                table += '<td class="text-nowrap">' + data[rw][td] + '</td>';
-            }
-        }
-        table += '</tr>';
-    }
-    table += '</tbody>';
-    $("#filestimeline").append(table);
-};
 
 $(document).ready(function () {
     ALEX.getFilesData(null, null);
