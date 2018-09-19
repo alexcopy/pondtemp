@@ -45,4 +45,4 @@
     </ul>
 </li>
 
-<li><a href="/log-viewer/logs">Logs</a></li>
+<li><a href="/log-viewer">All Logs</a></li>
