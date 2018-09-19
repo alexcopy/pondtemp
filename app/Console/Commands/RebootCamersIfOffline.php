@@ -56,6 +56,7 @@ class RebootCamersIfOffline extends Command
 
     private function restartCam($cam)
     {
+
         $url = $cam->alarmServerUrl . ':' . $cam->port;
         $curlHeader = ' ';
         $timout=5;
@@ -81,6 +82,7 @@ class RebootCamersIfOffline extends Command
             }
             $str = "curl --max-time $timout -X GET  '$url/cgi-bin/control.cgi?$params'" . $curlHeader;
             $exec = exec($str);
+            Log::alert('The cam has been restarted at: '. Carbon::today()->toDateTimeString() . "   " . "the camname is  $cam->name");
             return $exec . ' - Done';
         } catch (\Exception $exception) {
 
