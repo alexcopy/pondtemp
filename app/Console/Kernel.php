@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\RebootCamersIfOffline;
 use App\Console\Commands\Test;
 use App\Console\Commands\ZipCamFiles;
 use Illuminate\Console\Scheduling\Schedule;
@@ -22,6 +23,7 @@ class Kernel extends ConsoleKernel
         ProcessAlarmImages::class,
         MultiPageAlarmMsg::class,
         ZipCamFiles::class,
+        RebootCamersIfOffline::class,
         Test::class
     ];
 
@@ -34,7 +36,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
 //        $schedule->command('alarm:cams')->everyFiveMinutes();
-//        $schedule->command('alarm:process')->everyFiveMinutes();
+        $schedule->command('cam:reboot')->hourly()->between("7:00", "23:00");
 //        $schedule->command('alarm:mutipage')->dailyAt('03:00');
     }
 

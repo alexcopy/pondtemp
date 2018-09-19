@@ -134,7 +134,7 @@ class ApiController extends Controller
         ], 200);
     }
 
-    public function filesStat(Request $request)
+    public function filesStat()
     {
 
         $dirList = Cameras::all();

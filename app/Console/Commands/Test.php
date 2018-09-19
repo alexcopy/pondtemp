@@ -5,7 +5,9 @@ namespace App\Console\Commands;
 use App\Http\Controllers\ApiController;
 use App\Http\Models\Camalarms;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\File;
 use Pusher\Laravel\Facades\Pusher;
 
 class Test extends Command
@@ -43,8 +45,15 @@ class Test extends Command
     public function handle()
     {
 
+
+        $deviation = rand(1, 20);
+
+        $time = time() - 3600;
+        touch('some_file.txt', $time);
+        dd((new ApiController())->filesStat());
         (new ApiController)->smsToPusherAPI();
         dd(Pusher::get('/channels'));
 
     }
+
 }
