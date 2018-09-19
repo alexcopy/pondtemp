@@ -8,6 +8,7 @@ use function Couchbase\defaultDecoder;
 use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 
 class RebootCamersIfOffline extends Command
 {
