@@ -18,7 +18,7 @@ class RebootCamersIfOffline extends Command
      *
      * @var string
      */
-    protected $signature = 'cam:reboot';
+    protected $signature = 'cam:reboot {interval}';
 
     /**
      * The console command description.
@@ -44,12 +44,18 @@ class RebootCamersIfOffline extends Command
      */
     public function handle()
     {
-        $cams = Cameras::where('name', 'koridor')->get();
+        $camName=env('REBOOTCAMS');
+        $cams = Cameras::where('name', $camName)->get();
+        $interval = (int)$this->argument('interval');
+        if (!is_int($interval) || $interval < 600) {
+            Log::alert('Wrong Interval in RebootCamersIfOffline class the value is ' . $interval);
+            return '';
+        }
         foreach ($cams as $cam) {
             $filesPath = storage_path('ftp') . '/' . $cam->realpath . '/today';
             $modified = File::lastModified($filesPath);
             $difference = time() - $modified;
-            if ($difference > 7200) {
+            if ($difference > $interval) {
                 $this->restartCam($cam);
             }
         }
@@ -60,7 +66,7 @@ class RebootCamersIfOffline extends Command
 
         $url = $cam->alarmServerUrl . ':' . $cam->port;
         $curlHeader = ' ';
-        $timout=5;
+        $timout = 5;
         $params = http_build_query([
             'action' => 'cmd',
             'code' => '255',
@@ -83,10 +89,9 @@ class RebootCamersIfOffline extends Command
             }
             $str = "curl --max-time $timout -X GET  '$url/cgi-bin/control.cgi?$params'" . $curlHeader;
             $exec = exec($str);
-            Log::alert('The cam has been restarted at: '. Carbon::today()->toDateTimeString() . "   " . "the camname is  $cam->name");
+            Log::alert('The cam has been restarted at: ' . Carbon::today()->toDateTimeString() . "   " . "the camname is  $cam->name");
             return $exec . ' - Done';
         } catch (\Exception $exception) {
-
             return 'FAIL -    ' . $exception->getMessage();
         }
     }

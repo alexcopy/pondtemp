@@ -36,7 +36,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
 //        $schedule->command('alarm:cams')->everyFiveMinutes();
-        $schedule->command('cam:reboot')->hourly()->between("7:00", "23:00");
+        $schedule->command('cam:reboot 1800')->everyThirtyMinutes()->between("03:00", "06:00");
+        $schedule->command('cam:reboot 3600')->hourly()->between("7:00", "23:00");
 //        $schedule->command('alarm:mutipage')->dailyAt('03:00');
     }
 
