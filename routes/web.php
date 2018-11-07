@@ -24,6 +24,10 @@ Route::get('/restoredata', 'Controller@restoreData');
 Route::get('/allfiles/details', 'PageController@allFilesDetails');
 
 Route::post('/api/v3/getdate', 'ApiController@jsonGraph');
+
+Route::post('/api/v3/dockerhub', 'ApiController@testDockerHub'); // todo delete after test
+
+
 Route::get('/api/v3/getfilesstats', 'ApiController@filesStat');
 Route::post('/api/v3/chemicalanalyse', 'ApiController@chemicalAnalyse');
 

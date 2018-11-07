@@ -197,6 +197,14 @@ class ApiController extends Controller
         return response()->json($resp, 200);
     }
 
+
+    //TODO Delete after test
+    public function testDockerHub(Request $req)
+    {
+        file_put_contents(storage_path() . "/smslog.txt", $req->getQueryString() . "\n ---==== AND PAYLOAD IS ====--- \n\n", FILE_APPEND);
+        file_put_contents(storage_path() . "/smslog.txt", $req->getContent() . "\n END OF PAYLOAD \n\n", FILE_APPEND);
+    }
+
     public function smsToPusherAPI()
     {
 
