@@ -36,4 +36,11 @@ RUN apk add --no-cache --virtual .build-deps \
 WORKDIR /var/www
 COPY   .  /var/www
 RUN composer install
+#RUN set -x ; \
+#  addgroup -g 82 -S www-data ; \
+#  adduser -u 82 -D -S -G www-data www-data && exit 0 ; exit 1
+ADD docker/app/entrypoint.sh entrypoint.sh
+RUN chmod 755 entrypoint.sh && chown www-data:www-data entrypoint.sh
+RUN     chgrp -R www-data /var/www/storage /var/www/bootstrap/cache
+RUN     chmod -R ug+rwx /var/www/storage /var/www/bootstrap/cache
 EXPOSE 8000

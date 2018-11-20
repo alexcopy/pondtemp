@@ -8,21 +8,21 @@ networks:
 
 services:
   # traefik as reverse-proxy
-  traefik:
-    build:
-      context: ../..
-      dockerfile: ./Dockerfile-for-traefik # including traefik.toml
-    command: --docker
-    restart: always
-    volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
-    # this file you'll have to create manually `touch acme.json && chmod 600 acme.json`
-    - /home/docker/volumes/traefik/acme.json:/opt/traefik/acme.jso
-    networks:
-    - overlay
-    ports:
-    - 8888:80
-    - 443:443
+#  traefik:
+#    build:
+#      context: ../..
+#      dockerfile: ./Dockerfile-for-traefik # including traefik.toml
+#    command: --docker
+#    restart: always
+#    volumes:
+#    - /var/run/docker.sock:/var/run/docker.sock
+#    # this file you'll have to create manually `touch acme.json && chmod 600 acme.json`
+#    - /home/docker/volumes/traefik/acme.json:/opt/traefik/acme.jso
+#    networks:
+#    - overlay
+#    ports:
+#    - 8888:80
+#    - 443:443
 
 
   app:
@@ -32,7 +32,7 @@ services:
       context: .
 
     working_dir: /var/www
-    env_file: '.env.prod'
+    env_file: '.env'
     extra_hosts:
     - "mysql:127.0.0.1"
 
