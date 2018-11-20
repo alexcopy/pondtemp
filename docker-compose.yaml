@@ -1,8 +1,5 @@
 version: '3'
 
-# Instantiate your own configuration with a Dockerfile!
-# This way you can build somewhere and just deploy your container
-# anywhere without the need to copy files around.
 networks:
   frontend:
     driver: bridge
@@ -13,15 +10,14 @@ services:
   app:
     image: redcopy/pond_temp_app:latest
     build:
-      dockerfile:  ../Dockerfile
-      context: ../
+      dockerfile:  Dockerfile
+      context: .
     working_dir: /var/www
     extra_hosts:
     - "mysql:127.0.0.1"
 
     volumes:
     - database
-#    - ../:/var/www/
     - $HOME/.composer/:$HOME/.composer/
     environment:
     - "DB_HOST=database"
@@ -35,12 +31,13 @@ services:
 
     networks:
     - backend
-#  # The Web Server
+
+# The Web Server
   web:
     image: redcopy/pond_web:1.00
     build:
       context: .
-      dockerfile: web/Dockerfile
+      dockerfile: docker/web/Dockerfile
     volumes:
        - app
     ports:
@@ -51,9 +48,8 @@ services:
   #  # The Database
   database:
     build:
-      context: ./database
+      context: docker/database
     volumes:
-#      - ${DATA_PATH_HOST}/mariadb:/var/lib/mysql
       - ./database/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     environment:
     - "MYSQL_DATABASE=homestead"
@@ -62,4 +58,4 @@ services:
     - "MYSQL_ROOT_PASSWORD=secret"
     networks:
      - backend
-#
+
