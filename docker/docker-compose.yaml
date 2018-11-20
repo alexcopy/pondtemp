@@ -1,0 +1,47 @@
+version: '2'
+
+# Instantiate your own configuration with a Dockerfile!
+# This way you can build somewhere and just deploy your container
+# anywhere without the need to copy files around.
+
+services:
+  app:
+    image: redcopy/pond_temp_app:latest
+    build:
+      dockerfile:  ../Dockerfile
+      context: ../
+    working_dir: /var/www
+    volumes:
+#    - ../:/var/www/
+    - $HOME/.composer/:$HOME/.composer/
+    environment:
+    - "DB_HOST=mysql"
+    - "DB_DATABASE=homestead"
+    - "DB_USERNAME=homestead"
+    - "DB_PASSWORD=homestead"
+#    - "REDIS_HOST=redis"
+#    - "REDIS_PORT=6379"
+
+#  # The Web Server
+  web:
+    image: redcopy/pond_web:1.00
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+    working_dir: /var/www
+    volumes_from:
+       - app
+    ports:
+     - 8000:80
+
+#  # The Database
+  database:
+    image: mysql:5.6
+    environment:
+    - "MYSQL_DATABASE=homestead"
+    - "MYSQL_USER=homestead"
+    - "MYSQL_PASSWORD=secret"
+    - "MYSQL_ROOT_PASSWORD=secret"
+    ports:
+    - "33061:3306"
+#

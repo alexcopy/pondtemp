@@ -1,0 +1,74 @@
+version: '3'
+
+# Instantiate your own configuration with a Dockerfile!
+# This way you can build somewhere and just deploy your container
+# anywhere without the need to copy files around.
+
+services:
+  # traefik as reverse-proxy
+  traefik:
+    build:
+      context: ../..
+      dockerfile: ./Dockerfile-for-traefik # including traefik.toml
+    command: --docker
+    restart: always
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    # this file you'll have to create manually `touch acme.json && chmod 600 acme.json`
+    - /home/docker/volumes/traefik/acme.json:/opt/traefik/acme.jso
+    networks:
+    - overlay
+    ports:
+    - 8888:80
+    - 443:443
+
+  nginx:
+    build:
+      context: ../..
+      dockerfile: ./Dockerfile-for-nginx
+    networks:
+    - overlay
+    depends_on:
+    - laravel
+    volumes:
+    # you can copy your assets to production with
+    # `tar -c -C ./myassets . | docker cp - myfolder_nginx_1:/var/www/assets`
+    # there are many other ways to achieve this!
+    - assets:/var/www/assets
+
+  # define your application + whatever it needs to run
+  # important:
+  # - "build:" will search for a Dockerfile in the directory you're specifying
+  laravel:
+    build: ./path/to/laravel/app
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      ENVIRONMENT: development
+      MYSQL_DATABASE: your_database
+      MYSQL_USER: your_database_user
+    networks:
+    - overlay
+    links:
+    - mysql
+    volumes:
+    # this path is for development
+    - ./path/to/laravel/app:/app
+
+  # you need a database, right?
+  mysql:
+    image: mysql:5
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: your_database
+      MYSQL_USER: your_database_user
+    networks:
+    - overlay
+    volumes:
+    - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:
+  assets:
+
+networks:
+  overlay:
