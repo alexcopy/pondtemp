@@ -1,30 +1,14 @@
 version: '3'
-
 networks:
+  web:
+    external: true
   frontend:
     driver: bridge
   backend:
     driver: bridge
+    external: false
 
 services:
-  # traefik as reverse-proxy
-#  traefik:
-#    build:
-#      context: ../..
-#      dockerfile: ./Dockerfile-for-traefik # including traefik.toml
-#    command: --docker
-#    restart: always
-#    volumes:
-#    - /var/run/docker.sock:/var/run/docker.sock
-#    # this file you'll have to create manually `touch acme.json && chmod 600 acme.json`
-#    - /home/docker/volumes/traefik/acme.json:/opt/traefik/acme.jso
-#    networks:
-#    - overlay
-#    ports:
-#    - 8888:80
-#    - 443:443
-
-
   app:
     image: redcopy/pond_temp_app:latest
     build:
@@ -44,38 +28,63 @@ services:
     - "DB_DATABASE=homestead"
     - "DB_USERNAME=admin"
     - "DB_PASSWORD=secret"
-#    - "REDIS_HOST=redis"
-#    - "REDIS_PORT=6379"
+    #    - "REDIS_HOST=redis"
+    #    - "REDIS_PORT=6379"
     expose:
-     - "9000"
+    - "9000"
 
     networks:
     - backend
 
-# The Web Server
+  # The Web Server
   web:
     image: redcopy/pond_web:1.00
+    env_file: .env
     build:
       context: .
       dockerfile: docker/web/Dockerfile
     volumes:
-       - app
+    - app
     ports:
-     - 80:80
+    - 8080:8080
+    labels:
+    - "traefik.enable=true"
+    - "traefik.frontend.rule=Host:dokersto.test"
+    - "traefik.port=80"
     networks:
-     - frontend
-     - backend
+    - frontend
+    - backend
   #  # The Database
   database:
     build:
       context: docker/database
     volumes:
-      - ./database/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    - ./database/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     environment:
     - "MYSQL_DATABASE=homestead"
     - "MYSQL_USER=admin"
     - "MYSQL_PASSWORD=secret"
     - "MYSQL_ROOT_PASSWORD=secret"
     networks:
-     - backend
+    - backend
+
+
+  traefik:
+    build:
+      dockerfile:  docker/traefik/Dockerfile
+      context: .
+    env_file: .env
+    command: --docker.domain=${APP_URL} --logLevel=DEBUG
+    restart: always
+    ports:
+    - 80:80
+    - 443:443
+    networks:
+    - backend
+    - frontend
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    - ./traefik/traefik.toml:/traefik.toml
+    - ./traefik/acme.json:/acme.json
+    container_name: pondtemp_traefik
 
