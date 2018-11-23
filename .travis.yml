@@ -1,25 +1,40 @@
 language: php
 
 php:
-  - 7.2
+- 7.2
 
 matrix:
-    allow_failures:
-        - php: hhvm
+  allow_failures:
+  - php: hhvm
 
 
 before_script:
-  - cp .env.travis .env
-  - mysql -e 'create database pond_testing;'
-  - composer self-update
-  - composer install --prefer-source --no-interaction --dev
-  - php artisan migrate
+- cp .env.travis .env
+- mysql -e 'create database pond_testing;'
+- composer self-update
+- composer install --prefer-source --no-interaction --dev
+- php artisan migrate
 
 script: vendor/bin/phpunit
 
 cache:
   directories:
-    - vendor
+  - vendor
 
 services:
-  - mysql
+- mysql
+
+notifications:
+  slack:
+    rooms:
+    - ${ALEXROOM}
+    template:
+    - "%{repository_slug} (%{commit}) : %{message} %{foo} - Build details: %{build_url}"
+    - '%{repository_slug}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}'
+    - "Build details: %{build_url}"
+    on_success: always
+    on_failure: always
+  webhooks:
+    on_success: always  # options: [always|never|change] default: always
+    on_failure: always  # options: [always|never|change] default: always
+    on_start: false     # default: false
