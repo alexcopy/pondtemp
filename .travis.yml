@@ -22,9 +22,7 @@ env:
 notifications:
   slack:
     rooms:
-      - "ALEXROOM"
-      - $ALEXROOM
-      - ${ALEXROOM}
+      - redcopy:5zQAgno4oRV2gG8NqhtqtXkh
     template:
     - "%{repository_slug} (%{commit}) : %{message} %{foo} - Build details: %{build_url}"
     - "%{repository_slug}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}"
