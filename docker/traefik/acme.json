@@ -1,5 +1,5 @@
 {
-  "Email": "alexcopy@example.com",
+  "Email": "alexcopy@dockersto.com",
   "Registration": {
     "body": {
       "resource": "reg",
@@ -10,7 +10,7 @@
         "e": "AQAB"
       },
       "contact": [
-        "mailto:alexcopy@example.com"
+        "mailto:your-email@dockersto.com"
       ],
       "agreement": "https://letsencrypt.org/documents/LE-SA-v1.2-November-15-2017.pdf"
     },
@@ -23,5 +23,5 @@
     "Certs": []
   },
   "ChallengeCerts": {},
-  "HTTPChallenge": null
+  "HTTPChallenge": {}
 }

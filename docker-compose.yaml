@@ -16,7 +16,6 @@ services:
       context: .
 
     working_dir: /var/www
-    env_file: '.env'
     extra_hosts:
     - "mysql:127.0.0.1"
 
@@ -39,7 +38,6 @@ services:
   # The Web Server
   web:
     image: redcopy/pond_web:1.00
-    env_file: .env
     build:
       context: .
       dockerfile: docker/web/Dockerfile
@@ -49,7 +47,7 @@ services:
     - 8080:8080
     labels:
     - "traefik.enable=true"
-    - "traefik.frontend.rule=Host:dokersto.test"
+    - "traefik.frontend.rule=Host:${DOMAIN}"
     - "traefik.port=80"
     networks:
     - frontend
@@ -68,23 +66,30 @@ services:
     networks:
     - backend
 
-
+  whoami:
+    image: emilevauge/whoami
+    labels:
+    - "traefik.frontend.rule=Host:whoami.${DOMAIN}"
+    networks:
+    - frontend
   traefik:
     build:
-      dockerfile:  docker/traefik/Dockerfile
       context: .
-    env_file: .env
-    command: --docker.domain=${APP_URL} --logLevel=DEBUG
+      dockerfile:  docker/traefik/Dockerfile
+    command: --docker.domain=${DOMAIN} --logLevel=DEBUG
     restart: always
     ports:
     - 80:80
     - 443:443
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+#    - .traefik/traefik.toml:/traefik.toml
+#    - .traefik/acme.json:/acme.json
+#
+#    - ./docker/traefik/traefik.toml:/traefik.toml
+#    - ./docker/traefik/acme.json:/acme.json
+    container_name: pondtemp_traefik
     networks:
     - backend
     - frontend
-    volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
-    - ./traefik/traefik.toml:/traefik.toml
-    - ./traefik/acme.json:/acme.json
-    container_name: pondtemp_traefik
 
