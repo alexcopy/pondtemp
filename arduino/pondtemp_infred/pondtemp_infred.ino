@@ -5,20 +5,25 @@
 #include <LiquidCrystal_I2C.h>
 #include <DHT.h>
 #include <IRremote.h>
-
+#include <OneWire.h> 
+#include <DallasTemperature.h>
 
 // set the DHT Pin
 #define DHTPIN 8
 #define DHTTYPE DHT11
 #define DST_IP "192.168.50.58"
 #define ALTITUDE 53.0 // Altitude in sutton uk 
-
+#define ONE_WIRE_BUS 9  //pond analog pin
 
 float temperature;
 float humidity;
 float pressure;
+float tempC = 0;
 
-int tempPin = 0; //pond analog pin
+  
+OneWire oneWire(ONE_WIRE_BUS);
+DallasTemperature sensors(&oneWire);
+ 
 bool backlght = true;
 int prevSensorVal = 0;
 bool pond = false;
@@ -48,7 +53,7 @@ void setup() {
   showBmeStatus(status);
   readEsp(); // read comport output from esp(wifi module)
   wifiModulePrepare();
-
+  sensors.begin(); // start analog temp measure 
   prevSensorVal = digitalRead(7);
   lcd.clear();
   irrecv.enableIRIn();
@@ -131,9 +136,9 @@ void prntTemp() {
 }
 
 float pondTemp() {
-  float val = analogRead(tempPin);
-  float mv = (val / 1024.0) * 5000;
-  return mv / 10;
+ sensors.requestTemperatures();  
+  tempC=sensors.getTempCByIndex(0); 
+  return tempC;
 }
 
 

@@ -12,14 +12,21 @@
 #define DHTPIN 8
 #define DHTTYPE DHT11
 #define DST_IP "192.168.50.58"
+#define ONE_WIRE_BUS 0  //pond analog pin
+  
+OneWire oneWire(ONE_WIRE_BUS);
+DallasTemperature sensors(&oneWire);
 
-int tempPin = 0; //pond analog pin
+
+
 int prevSensorVal = 0;
 bool pond = false;
 int counter = 0;
 float totalPond = 0; // the running total
 float averagePond = 0; // the average
 int RECV_PIN = 11;
+
+
 
 
 DHT dht(DHTPIN, DHTTYPE);
@@ -41,6 +48,7 @@ void setup() {
   prevSensorVal = digitalRead(7);
   lcd.clear();
   irrecv.enableIRIn();
+  sensors.begin(); // init analog temperature 
   pinMode(7, INPUT_PULLUP); //button
   pinMode(6, INPUT_PULLUP); //fltr3
   pinMode(5, INPUT_PULLUP); //pond level
@@ -113,9 +121,8 @@ void showTempAndHumid() {
 }
 
 float pondTemp() {
-  float val = analogRead(tempPin);
-  float mv = (val / 1024.0) * 5000;
-  return mv / 10;
+  sensors.requestTemperatures(); 
+  return sensors.getTempCByIndex(0);   
 }
 
 
