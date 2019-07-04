@@ -2,21 +2,35 @@
 
 @section('content')
 
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addMeter">
-        Launch demo modal
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addMeter">
+        New Readings
     </button>
-
+    <br>
+    <br>
     <modal>
-    <p slot="header">Test Title from Slot</p>
-        Lorem ipsum
-        <p slot="footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-        </p>
-
+        <stats>
+        </stats>
     </modal>
-@stop
 
+    <table class="table table-bordered">
+        <thead>
+        <th>id</th>
+        <th>meter_id</th>
+        <th>readings</th>
+        <th>created_at</th>
+        </thead>
+        <tbody>
+        @foreach( $allValues as $readingsRow )
+            <tr>
+                <td>{{$readingsRow->id}}</td>
+                <td>{{$readingsRow->meter_id}}</td>
+                <td>{{$readingsRow->readings}}</td>
+                <td>{{$readingsRow->created_at}}</td>
+            </tr>
+        @endforeach
+        </tbody>
+
+    </table>
+@stop
 @section('custom_scripts')
-    <script src="/assets/js/pond/meters.js"></script>
 @stop

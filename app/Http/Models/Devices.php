@@ -10,8 +10,9 @@ class Devices extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'pond_id',
+        'type_id',
         'deviceName',
-        'deviceType',
         'description',
     ];
 }

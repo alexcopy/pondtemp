@@ -16,8 +16,9 @@ class Device extends Migration
     {
         Schema::create('devices', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('pond_id');
+            $table->integer('type_id');
             $table->string('deviceName');
-            $table->string('deviceType');
             $table->string('description');
             $table->tinyInteger('is_disabled')->default(0);
             $table->integer('timestamp')->default(time());

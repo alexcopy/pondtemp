@@ -53,6 +53,8 @@ Route::group(['prefix' => 'pond', 'middleware' => 'auth'], function () {
     Route::resource('/meters', 'Pond\MetersController');
     Route::resource('/chemicals', 'Pond\ChemicalsController');
 
+    Route::post('/meters/submit', 'Pond\MetersController@metersSubmit');
+
     Route::resource('/jobs/cleandevice', 'PageController');
     Route::resource('/jobs/meteading', 'PageController');
     Route::resource('/jobs/livestock', 'Pond\LivestocksController');

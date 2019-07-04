@@ -16,9 +16,12 @@ class MeterReadings extends Migration
     {
         Schema::create('meter_readings', function (Blueprint $table) {
             $table->increments('id');
-            $table->dateTimeTz('readingDate');
+            $table->integer('meter_id');
             $table->double('readings');
+            $table->string('message');
             $table->integer('timestamp')->default(time());
+            $table->tinyInteger('is_disabled')->default(0);
+            $table->timestamps();
         });
 
     }

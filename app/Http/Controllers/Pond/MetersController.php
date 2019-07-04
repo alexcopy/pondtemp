@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Pond;
 
+use App\Http\Models\MeterReadings;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -15,7 +16,8 @@ class MetersController extends Controller
      */
     public function index()
     {
-        return view('pages.pond.meters.index');
+        $allValues= MeterReadings::orderBy('id', 'desc')->get();
+        return view('pages.pond.meters.index',compact(['allValues']));
     }
 
     /**
@@ -83,4 +85,18 @@ class MetersController extends Controller
     {
         //
     }
+
+
+    public function metersSubmit(Request $request)
+    {
+
+        $this->validate($request, [
+            'meter_id' => 'required|numeric',
+            'readings' => 'required|regex:/^\d+(\.\d{1,5})?$/',
+        ]);
+        $items = $request->all();
+
+        (new MeterReadings())->create($items );
+        return response()->json(null, 200);
+     }
 }

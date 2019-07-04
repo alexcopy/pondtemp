@@ -18,6 +18,9 @@ import BootstrapVue from 'bootstrap-vue'
  */
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
+Vue.component('stats', require('./components/meter.vue'));
+Vue.component('device', require('./components/devices.vue'));
+
 Vue.use(BootstrapVue);
 
 const app = new Vue({

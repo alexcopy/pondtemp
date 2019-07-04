@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,5 +18,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('/getMeters', 'ApiController@getMeters');
+Route::get('/getPonds', 'ApiController@getPonds');
+Route::get('/getTypes', 'ApiController@getTypes');
 
 Route::post('/v3/dockerhub', 'ApiController@testDockerHub'); // todo delete after test

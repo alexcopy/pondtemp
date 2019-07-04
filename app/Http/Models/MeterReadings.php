@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class MeterReadings extends Model
 {
-
-    public $timestamps = false;
+    public $timestamps = true;
     protected $fillable = [
-        'readingDate',
-        'readings'
+        'readings',
+        'meter_id',
+        'message'
     ];
 }
