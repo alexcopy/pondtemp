@@ -26,7 +26,7 @@
         <li><a href="/pond/tanks"><i class="fa fa-bars" aria-hidden="true"></i> Tanks</a></li>
         <li role="separator" class="divider"></li>
         <li><a href="/pond/devices"><i class="fa fa-book" aria-hidden="true"></i> Electric Devices</a></li>
-        <li><a href="/pond/filters"><i class="fa fa-plus" aria-hidden="true"></i> Filters</a></li>
+        <li><a href="/pond/types"><i class="fa fa-plus" aria-hidden="true"></i> Device Types</a></li>
         <li><a href="/pond/meters"><i class="fa fa-bars" aria-hidden="true"></i> Meters</a></li>
         <li><a href="/pond/chemicals"><i class="fa fa-bars" aria-hidden="true"></i> Chemicals</a></li>
     </ul>

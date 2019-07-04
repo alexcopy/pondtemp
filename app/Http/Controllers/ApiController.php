@@ -291,7 +291,7 @@ class ApiController extends Controller
 
     public function getPonds()
     {
-        return response()->json( Tanks::get() );
+        return response()->json( Devices::get() );
     }
 
     public function getTypes()

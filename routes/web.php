@@ -48,6 +48,7 @@ Route::post('webhooks/pusher', [
 
 Route::group(['prefix' => 'pond', 'middleware' => 'auth'], function () {
     Route::resource('/devices', 'Pond\DevicesController');
+    Route::resource('/types', 'Pond\DeviceTypesController');
     Route::resource('/tanks', 'Pond\TanksController');
     Route::resource('/filters', 'Pond\FiltersController');
     Route::resource('/meters', 'Pond\MetersController');
