@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Pond;
 
-use App\DeviceTypes;
+
 use App\Http\Controllers\Controller;
+use App\Http\Models\DeviceTypes as DeviceTypesAlias;
 use Illuminate\Http\Request;
 
 class DeviceTypesController extends Controller
@@ -36,7 +37,8 @@ class DeviceTypesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        DeviceTypesAlias::create($request->all());
+        return response()->json(null, 200);
     }
 
     /**

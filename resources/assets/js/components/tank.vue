@@ -14,32 +14,12 @@
                 <div class="modal-body">
                     <slot></slot>
                     <form @submit.prevent="submit">
-
                         <div class="form-group">
-                            <label for="pond_id">Pond ID:</label>
-                            <select class='form-control' v-model='fields.pond_id' @change='getPonds()' name="pond_id" id="pond_id">
-                                <option value='0' >Select meter ID</option>
-                                <option v-for='data in ponds' :value='data.id'>{{ data.tankName }}</option>
-                            </select>
-                            <div v-if="errors && errors.pond_id" class="text-danger">{{ errors.pond_id[0] }}</div>
+                            <label for="tankName">Tank Name:</label>
+                            <input type="text" class="form-control" name="tankName" id="tankName"
+                                   v-model="fields.tankName" autocomplete="off" />
+                            <div v-if="errors && errors.tankName" class="text-danger">{{ errors.tankName[0] }}</div>
                         </div>
-
-                        <div class="form-group">
-                            <label for="deviceType">Device Type:</label>
-                            <select class='form-control' v-model='fields.type_id' @change='getTypes()' name="deviceType" id="deviceType">
-                                <option value='0' >Select meter ID</option>
-                                <option v-for='data in types' :value='data.id'>{{ data.name }}</option>
-                            </select>
-                            <div v-if="errors && errors.deviceType" class="text-danger">{{ errors.deviceType[0] }}</div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="deviceName">Device Name:</label>
-                            <input type="text" class="form-control" name="deviceName" id="deviceName"
-                                   v-model="fields.deviceName" autocomplete="off" />
-                            <div v-if="errors && errors.deviceName" class="text-danger">{{ errors.deviceName[0] }}</div>
-                        </div>
-
                         <div class="form-group">
                             <label for="description">Description:</label>
                             <textarea class="form-control" id="description" name="description" rows="5"
@@ -61,14 +41,13 @@
     </div>
 </template>
 <script>
-    import FormMixin from '../MixDevices';
+    import FormMixin from '../MixTanks';
 
     export default {
         mixins: [FormMixin],
-
         data() {
             return {
-                'action': '/pond/devices',
+                'action': '/pond/tanks',
             }
         }
     }

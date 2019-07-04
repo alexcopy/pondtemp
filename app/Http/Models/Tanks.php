@@ -11,9 +11,7 @@ class Tanks extends Model
     public $timestamps = false;
     protected $fillable = [
         'tankName',
-        'tankType',
         'description',
-        'timestamp',
     ];
 
 }

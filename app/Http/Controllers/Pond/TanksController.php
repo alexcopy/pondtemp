@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Pond;
 
+use App\Http\Models\Tanks;
 use Arcanedev\Support\Http\Controller;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,6 @@ class TanksController extends Controller
      */
     public function index()
     {
-
         return view('pages.pond.tanks.index');
     }
 
@@ -36,7 +36,8 @@ class TanksController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Tanks::create($request->all());
+        return response()->json(null, 200);
     }
 
     /**

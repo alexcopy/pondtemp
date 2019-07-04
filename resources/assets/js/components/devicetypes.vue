@@ -19,7 +19,7 @@
                             <label for="pond_id">Pond ID:</label>
                             <select class='form-control' v-model='fields.pond_id' @change='getPonds()' name="pond_id" id="pond_id">
                                 <option value='0' >Select meter ID</option>
-                                <option v-for='data in ponds' :value='data.id'>{{ data.deviceName }}</option>
+                                <option v-for='data in ponds' :value='data.id'>{{ data.tankName }}</option>
                             </select>
                             <div v-if="errors && errors.pond_id" class="text-danger">{{ errors.pond_id[0] }}</div>
                         </div>
@@ -28,7 +28,7 @@
                         <div class="form-group">
                             <label for="typeName">Type Name:</label>
                             <input type="text" class="form-control" name="typeName" id="typeName"
-                                   v-model="fields.typeName" autocomplete="off" />
+                                   v-model="fields.name" autocomplete="off" />
                             <div v-if="errors && errors.typeName" class="text-danger">{{ errors.typeName[0] }}</div>
                         </div>
 
@@ -60,7 +60,7 @@
 
         data() {
             return {
-                'action': '/pond/devices',
+                'action': '/pond/types',
             }
         }
     }

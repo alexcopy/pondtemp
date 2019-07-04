@@ -8,7 +8,7 @@ class DeviceTypes extends Model
 {
    protected $fillable=[
        'pond_id',
-       'deviceType',
+       'name',
        'description'
    ];
 }

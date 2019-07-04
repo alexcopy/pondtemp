@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Models\Camalarms;
 use App\Http\Models\Cameras;
 use App\Http\Models\Devices;
+use App\Http\Models\DeviceTypes;
 use App\Http\Models\Gauges;
 use App\Http\Models\Tanks;
 use App\Http\Models\TempMeter;
@@ -291,12 +292,12 @@ class ApiController extends Controller
 
     public function getPonds()
     {
-        return response()->json( Devices::get() );
+        return response()->json( Tanks::get() );
     }
 
     public function getTypes()
     {
-        return response()->json( Devices::get() );
+        return response()->json( DeviceTypes::get() );
     }
 
 }

@@ -16,7 +16,7 @@ class CreateDeviceTypesTable extends Migration
         Schema::create('device_types', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('pond_id');
-            $table->string('deviceType');
+            $table->string('name');
             $table->string('description');
             $table->tinyInteger('is_disabled')->default(0);
             $table->timestamps();

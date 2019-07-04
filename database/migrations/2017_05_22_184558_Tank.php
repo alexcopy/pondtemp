@@ -17,9 +17,10 @@ class Tank extends Migration
         Schema::create('tanks', function (Blueprint $table) {
             $table->increments('id');
             $table->string('tankName');
-            $table->string('tankType');
             $table->string('description');
             $table->integer('timestamp')->default(time());
+            $table->tinyInteger('is_disabled')->default(0);
+            $table->timestamps();
         });
 
     }
