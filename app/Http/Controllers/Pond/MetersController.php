@@ -16,8 +16,8 @@ class MetersController extends Controller
      */
     public function index()
     {
-        $allValues= MeterReadings::orderBy('id', 'desc')->get();
-        return view('pages.pond.meters.index',compact(['allValues']));
+        $allValues = MeterReadings::orderBy('id', 'desc')->get();
+        return view('pages.pond.meters.index', compact(['allValues']));
     }
 
     /**
@@ -33,7 +33,7 @@ class MetersController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -44,7 +44,7 @@ class MetersController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -55,7 +55,7 @@ class MetersController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -66,8 +66,8 @@ class MetersController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -78,7 +78,7 @@ class MetersController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -95,8 +95,10 @@ class MetersController extends Controller
             'readings' => 'required|regex:/^\d+(\.\d{1,5})?$/',
         ]);
         $items = $request->all();
-
-        (new MeterReadings())->create($items );
+        if (!isset($items['message']) || $items['message'] == '') {
+            $items['message'] = '';
+        }
+        (new MeterReadings())->create($items);
         return response()->json(null, 200);
-     }
+    }
 }
