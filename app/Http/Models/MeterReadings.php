@@ -11,6 +11,7 @@ class MeterReadings extends Model
     protected $fillable = [
         'readings',
         'meter_id',
-        'message'
+        'message',
+        'timestamp'
     ];
 }

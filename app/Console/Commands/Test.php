@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Http\Controllers\ApiController;
 use App\Http\Models\Camalarms;
+use App\Http\Models\MeterReadings;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Console\Command;
@@ -44,19 +45,18 @@ class Test extends Command
      */
     public function handle()
     {
-$var='O:8:"stdClass":4:{s:6:"status";O:8:"stdClass":2:{s:7:"intType";i:10;s:11:"arrMessages";a:0:{}}s:4:"info";O:18:"CNRAPIResponseInfo":2:{s:12:"intStartTime";i:1543952061;s:10:"intEndTime";i:1543952061;}s:7:"payload";s:3:"157";s:13:"combomessages";s:0:"";}
-';
-print_r(unserialize($var));
 
-exit;
+        $all = MeterReadings::all();
+        foreach ($all as $item) {
+            $item->cratedAt;
 
-        $deviation = rand(1, 20);
 
-        $time = time() - 3600;
-        touch('some_file.txt', $time);
-        dd((new ApiController())->filesStat());
-        (new ApiController)->smsToPusherAPI();
-        dd(Pusher::get('/channels'));
+            $timestamp = $item->created_at->timestamp;
+            $item->timestamp = $timestamp;
+            $item->save();
+
+        }
+
 
     }
 

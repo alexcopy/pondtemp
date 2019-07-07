@@ -3,7 +3,7 @@
 @section('content')
 
     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addMeter">
-        New Readings
+        Add New Readings
     </button>
     <br>
     <br>
@@ -17,14 +17,18 @@
         <th>id</th>
         <th>meter_id</th>
         <th>readings</th>
+        <th>differ</th>
+        <th>speed</th>
         <th>created_at</th>
         </thead>
         <tbody>
-        @foreach( $allValues as $readingsRow )
+        @foreach( $allValues->reverse() as $readingsRow )
             <tr>
                 <td>{{$readingsRow->id}}</td>
                 <td>{{$readingsRow->meter_id}}</td>
                 <td>{{$readingsRow->readings}}</td>
+                <td>{{$readingsRow->diff}}</td>
+                <td> <span class="text-danger">{{$readingsRow->perHour}} l/h</span></td>
                 <td>{{$readingsRow->created_at}}</td>
             </tr>
         @endforeach
