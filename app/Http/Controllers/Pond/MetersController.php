@@ -20,7 +20,7 @@ class MetersController extends Controller
         $oldTime = 0;
         $allValues = MeterReadings::orderBy('id', 'asc')->get()
             ->each(function (&$item, $key) use (&$prevValue, &$oldTime) {
-                $item->diff = round(($item->readings - $prevValue) * 100, 2);
+                $item->diff = round(($item->readings - $prevValue) * 1000, 2);
 
                 $oldTime = $oldTime == 0 ? $item->timestamp : $oldTime;
                 $hours = ($item->timestamp - $oldTime) / 3600;
