@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Pond;
 
 use App\Http\Models\Devices;
+use App\Http\Models\DeviceTypes;
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -15,7 +17,8 @@ class DevicesController extends Controller
      */
     public function index(Request $request)
     {
-        return view('pages.pond.devices.index');
+        $allTypes = Devices::all();
+        return view('pages.pond.devices.index', compact(['allTypes']));
     }
 
     /**
@@ -36,8 +39,6 @@ class DevicesController extends Controller
      */
     public function store(Request $request)
     {
-
-
         Devices::create($request->all());
         return response()->json(null, 200);
     }

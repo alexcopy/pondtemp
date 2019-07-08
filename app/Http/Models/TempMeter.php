@@ -11,7 +11,7 @@ class TempMeter extends Model
 
     protected $fillable = ['readingDate', 'tempVal', 'timestamp', 'userId'];
     protected $table = 'temp_meter';
-    public $timestamps = false;
+    public $timestamps = true;
 
     public static function writeToTextFile(Request $request)
     {

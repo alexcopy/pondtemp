@@ -74328,6 +74328,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -74494,7 +74496,12 @@ var render = function() {
                         _vm._l(_vm.meters, function(data) {
                           return _c(
                             "option",
-                            { domProps: { value: data.id } },
+                            {
+                              domProps: {
+                                selected: data.id == 1,
+                                value: data.id
+                              }
+                            },
                             [_vm._v(_vm._s(data.deviceName))]
                           )
                         })
@@ -74769,6 +74776,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -74946,7 +74955,12 @@ var render = function() {
                         _vm._l(_vm.ponds, function(data) {
                           return _c(
                             "option",
-                            { domProps: { value: data.id } },
+                            {
+                              domProps: {
+                                selected: data.id == 1,
+                                value: data.id
+                              }
+                            },
                             [_vm._v(_vm._s(data.tankName))]
                           )
                         })
@@ -75815,7 +75829,12 @@ var render = function() {
                         _vm._l(_vm.ponds, function(data) {
                           return _c(
                             "option",
-                            { domProps: { value: data.id } },
+                            {
+                              domProps: {
+                                selected: data.id == 1,
+                                value: data.id
+                              }
+                            },
                             [_vm._v(_vm._s(data.tankName))]
                           )
                         })

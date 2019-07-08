@@ -15,7 +15,8 @@ class TanksController extends Controller
      */
     public function index()
     {
-        return view('pages.pond.tanks.index');
+        $allTypes = Tanks::all();
+        return view('pages.pond.tanks.index',compact(['allTypes']));
     }
 
       /**git remote add origin git@gitlab.nr-online.com:netresult/revlookup.gitgit remote add origin git@gitlab.nr-online.com:netresult/revlookup.gitgit push -u origin mastergit push -u origin master

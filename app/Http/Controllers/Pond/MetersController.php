@@ -16,23 +16,7 @@ class MetersController extends Controller
      */
     public function index()
     {
-        $prevValue = 0;
-        $oldTime = 0;
-        $allValues = MeterReadings::orderBy('id', 'asc')->get()
-            ->each(function (&$item, $key) use (&$prevValue, &$oldTime) {
-                $item->diff = round(($item->readings - $prevValue) * 1000, 2);
-
-                $oldTime = $oldTime == 0 ? $item->timestamp : $oldTime;
-                $hours = ($item->timestamp - $oldTime) / 3600;
-                if ($hours !== 0)
-                    $item->perHour = round($item->diff / $hours, 2);
-                else
-                    $item->perHour = 0;
-
-                $oldTime = $item->timestamp;
-                $prevValue = $item->readings;
-            });
-
+        $allValues = MeterReadings::meterValuesStructured();
         return view('pages.pond.meters.index', compact(['allValues']));
     }
 

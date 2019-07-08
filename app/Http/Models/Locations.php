@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Locations extends Model
 {
 
-    public $timestamps = false;
+    public $timestamps = true;
     protected $fillable = [
         'streetAddress',
         'postalCode',

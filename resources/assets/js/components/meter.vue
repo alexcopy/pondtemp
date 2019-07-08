@@ -19,7 +19,9 @@
                             <label>Meter ID:</label>
                             <select class='form-control' v-model='fields.meter_id' @change='getMeters()' name="meter_id" id="meter_id">
                                 <option value='0' >Select meter ID</option>
-                                <option v-for='data in meters' :value='data.id'>{{ data.deviceName }}</option>
+                                <option v-for='data in meters'
+                                        :selected="data.id == 1"
+                                        :value='data.id'>{{ data.deviceName }}</option>
                             </select>
                             <div v-if="errors && errors.meter_id" class="text-danger">{{ errors.meter_id[0] }}</div>
                         </div>

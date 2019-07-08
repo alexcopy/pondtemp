@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pond;
 
 use App\Http\Controllers\Controller;
 use App\Http\Models\DeviceTypes as DeviceTypesAlias;
+use App\Http\Models\DeviceTypes;
 use Illuminate\Http\Request;
 
 class DeviceTypesController extends Controller
@@ -16,7 +17,8 @@ class DeviceTypesController extends Controller
      */
     public function index()
     {
-        return view('pages.pond.types.index');
+        $allTypes = DeviceTypes::all();
+        return view('pages.pond.types.index', compact(['allTypes']));
     }
 
     /**

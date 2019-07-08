@@ -14,12 +14,12 @@
 
     <table class="table table-bordered">
         <thead>
-        <th>id</th>
-        <th>meter_id</th>
-        <th>readings</th>
-        <th>differ</th>
+        <th>#</th>
+        <th>meter</th>
+        <th>read</th>
+        <th>litters</th>
         <th>speed</th>
-        <th>created_at</th>
+        <th>data</th>
         </thead>
         <tbody>
         @foreach( $allValues->reverse() as $readingsRow )
