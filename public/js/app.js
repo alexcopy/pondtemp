@@ -74330,6 +74330,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -74357,7 +74368,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             loaded: true,
             action: '',
             meters: [],
-            meter: 0
+            meter: 0,
+            showModal: true
         };
     },
     mounted: function mounted() {
@@ -74366,6 +74378,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         getMeters: function getMeters() {
+            axios.get('/api/getMeters').then(function (response) {
+                this.meters = response.data;
+            }.bind(this));
+        },
+        update: function update(val) {
+            this.$emit('update', this.id, val.target.selectedOptions[0].value);
+        },
+        del: function del() {
+            this.$emit('delete', this.id);
+        },
+        disableReading: function disableReading(val) {
             axios.get('/api/getMeters').then(function (response) {
                 this.meters = response.data;
             }.bind(this));
@@ -74401,236 +74424,273 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    {
-      staticClass: "modal fade",
-      attrs: {
-        id: "addMeter",
-        tabindex: "-1",
-        role: "dialog",
-        "aria-labelledby": "exampleModalLabel",
-        "aria-hidden": "true"
-      }
-    },
-    [
-      _c("div", { staticClass: "modal-dialog", attrs: { role: "document" } }, [
-        _c("div", { staticClass: "modal-content" }, [
-          _c("div", { staticClass: "modal-header" }, [
-            _vm._m(0),
-            _vm._v(" "),
-            _c(
-              "h5",
-              {
-                staticClass: "modal-title",
-                attrs: { id: "exampleModalLabel" }
-              },
-              [_vm._t("header")],
-              2
-            )
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "modal-body" },
-            [
-              _vm._t("default"),
+  return _c("div", [
+    _c(
+      "button",
+      {
+        staticClass: "btn btn-success",
+        attrs: {
+          type: "button",
+          "data-toggle": "modal",
+          "data-target": "#addMeter"
+        }
+      },
+      [_vm._v("\n        Add New Readings\n    ")]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "addMeter",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                _vm._m(0),
+                _vm._v(" "),
+                _c(
+                  "h5",
+                  {
+                    staticClass: "modal-title",
+                    attrs: { id: "exampleModalLabel" }
+                  },
+                  [_vm._t("header")],
+                  2
+                )
+              ]),
               _vm._v(" "),
               _c(
-                "form",
-                {
-                  on: {
-                    submit: function($event) {
-                      $event.preventDefault()
-                      return _vm.submit($event)
-                    }
-                  }
-                },
+                "div",
+                { staticClass: "modal-body" },
                 [
-                  _c("div", { staticClass: "form-group" }, [
-                    _c("label", [_vm._v("Meter ID:")]),
-                    _vm._v(" "),
-                    _c(
-                      "select",
-                      {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.fields.meter_id,
-                            expression: "fields.meter_id"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { name: "meter_id", id: "meter_id" },
-                        on: {
-                          change: [
-                            function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.$set(
-                                _vm.fields,
-                                "meter_id",
-                                $event.target.multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
-                              )
-                            },
-                            function($event) {
-                              return _vm.getMeters()
-                            }
-                          ]
+                  _vm._t("default"),
+                  _vm._v(" "),
+                  _c(
+                    "form",
+                    {
+                      on: {
+                        submit: function($event) {
+                          $event.preventDefault()
+                          return _vm.submit($event)
                         }
-                      },
-                      [
-                        _c("option", { attrs: { value: "0" } }, [
-                          _vm._v("Select meter ID")
+                      }
+                    },
+                    [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", [_vm._v("Meter ID:")]),
+                        _vm._v(" "),
+                        _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.fields.meter_id,
+                                expression: "fields.meter_id"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: { name: "meter_id", id: "meter_id" },
+                            on: {
+                              change: [
+                                function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.fields,
+                                    "meter_id",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                },
+                                function($event) {
+                                  return _vm.getMeters()
+                                }
+                              ]
+                            }
+                          },
+                          [
+                            _c("option", { attrs: { value: "0" } }, [
+                              _vm._v("Select meter ID")
+                            ]),
+                            _vm._v(" "),
+                            _vm._l(_vm.meters, function(data) {
+                              return _c(
+                                "option",
+                                {
+                                  domProps: {
+                                    selected: data.id === 1,
+                                    value: data.id
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    _vm._s(data.deviceName) +
+                                      "\n                                "
+                                  )
+                                ]
+                              )
+                            })
+                          ],
+                          2
+                        ),
+                        _vm._v(" "),
+                        _vm.errors && _vm.errors.meter_id
+                          ? _c("div", { staticClass: "text-danger" }, [
+                              _vm._v(_vm._s(_vm.errors.meter_id[0]))
+                            ])
+                          : _vm._e()
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", { attrs: { for: "readings" } }, [
+                          _vm._v("Readings")
                         ]),
                         _vm._v(" "),
-                        _vm._l(_vm.meters, function(data) {
-                          return _c(
-                            "option",
+                        _c("input", {
+                          directives: [
                             {
-                              domProps: {
-                                selected: data.id == 1,
-                                value: data.id
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.fields.readings,
+                              expression: "fields.readings"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: {
+                            type: "text",
+                            name: "readings",
+                            id: "readings",
+                            autocomplete: "off"
+                          },
+                          domProps: { value: _vm.fields.readings },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
                               }
-                            },
-                            [_vm._v(_vm._s(data.deviceName))]
-                          )
-                        })
-                      ],
-                      2
-                    ),
-                    _vm._v(" "),
-                    _vm.errors && _vm.errors.meter_id
-                      ? _c("div", { staticClass: "text-danger" }, [
-                          _vm._v(_vm._s(_vm.errors.meter_id[0]))
-                        ])
-                      : _vm._e()
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-group" }, [
-                    _c("label", { attrs: { for: "readings" } }, [
-                      _vm._v("Readings")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.fields.readings,
-                          expression: "fields.readings"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: {
-                        type: "text",
-                        name: "readings",
-                        id: "readings",
-                        autocomplete: "off"
-                      },
-                      domProps: { value: _vm.fields.readings },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
+                              _vm.$set(
+                                _vm.fields,
+                                "readings",
+                                $event.target.value
+                              )
+                            }
                           }
-                          _vm.$set(_vm.fields, "readings", $event.target.value)
-                        }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _vm.errors && _vm.errors.readings
-                      ? _c("div", { staticClass: "text-danger" }, [
-                          _vm._v(_vm._s(_vm.errors.readings[0]))
-                        ])
-                      : _vm._e()
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-group" }, [
-                    _c("label", { attrs: { for: "message" } }, [
-                      _vm._v("Message")
-                    ]),
-                    _vm._v(" "),
-                    _c("textarea", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.fields.message,
-                          expression: "fields.message"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { id: "message", name: "message", rows: "5" },
-                      domProps: { value: _vm.fields.message },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
+                        }),
+                        _vm._v(" "),
+                        _vm.errors && _vm.errors.readings
+                          ? _c("div", { staticClass: "text-danger" }, [
+                              _vm._v(_vm._s(_vm.errors.readings[0]))
+                            ])
+                          : _vm._e()
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", { attrs: { for: "message" } }, [
+                          _vm._v("Message")
+                        ]),
+                        _vm._v(" "),
+                        _c("textarea", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.fields.message,
+                              expression: "fields.message"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { id: "message", name: "message", rows: "5" },
+                          domProps: { value: _vm.fields.message },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.fields,
+                                "message",
+                                $event.target.value
+                              )
+                            }
                           }
-                          _vm.$set(_vm.fields, "message", $event.target.value)
-                        }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _vm.errors && _vm.errors.message
-                      ? _c("div", { staticClass: "text-danger" }, [
-                          _vm._v(_vm._s(_vm.errors.message[0]))
-                        ])
-                      : _vm._e()
-                  ])
-                ]
-              )
-            ],
-            2
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass: "pull-right",
-              attrs: { slot: "modal-footer" },
-              slot: "modal-footer"
-            },
-            [
-              _vm._t("footer", [
-                _c("p", { attrs: { slot: "footer" }, slot: "footer" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-primary",
-                      attrs: { type: "submit" },
-                      on: { click: _vm.submit }
-                    },
-                    [_vm._v("Save changes")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn  btn-danger",
-                      attrs: { type: "button", "data-dismiss": "modal" }
-                    },
-                    [_vm._v("Close")]
+                        }),
+                        _vm._v(" "),
+                        _vm.errors && _vm.errors.message
+                          ? _c("div", { staticClass: "text-danger" }, [
+                              _vm._v(_vm._s(_vm.errors.message[0]))
+                            ])
+                          : _vm._e()
+                      ])
+                    ]
                   )
-                ])
-              ])
-            ],
-            2
-          )
-        ])
-      ])
-    ]
-  )
+                ],
+                2
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "pull-right",
+                  attrs: { slot: "modal-footer" },
+                  slot: "modal-footer"
+                },
+                [
+                  _vm._t("footer", [
+                    _c("p", { attrs: { slot: "footer" }, slot: "footer" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { type: "submit" },
+                          on: { click: _vm.submit }
+                        },
+                        [
+                          _vm._v(
+                            "Save\n                                changes\n                            "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn  btn-danger",
+                          attrs: { type: "button", "data-dismiss": "modal" }
+                        },
+                        [_vm._v("Close")]
+                      )
+                    ])
+                  ])
+                ],
+                2
+              )
+            ])
+          ]
+        )
+      ]
+    )
+  ])
 }
 var staticRenderFns = [
   function() {

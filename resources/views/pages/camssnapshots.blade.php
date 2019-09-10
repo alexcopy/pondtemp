@@ -11,7 +11,9 @@
             @foreach($pictureRow as $picture)
                 <div class="col-sm-2">
                     <a href="#" data-toggle="modal" data-target="#trainpopup" class="trainpopup">
-                        <img src="{{$picture['imgpath']}}" class="img-fluid img-thumbnail" name="{{$picture['origPath']}}" date="{{$picture['date']->toDateTimeString()}}"
+                        <img src="{{$picture['imgpath']}}" class="img-fluid img-thumbnail"
+                             name="{{$picture['origPath']}}"  loading="lazy"
+                             date="{{$picture['date']->toDateTimeString()}}"
                              style="border:1px solid #021a40;"/>
                     </a>
                     <div>

@@ -7,7 +7,8 @@ export default {
             loaded: true,
             action: '',
             meters:[],
-            meter:0
+            meter:0,
+            showModal: true
         }
     },
     mounted() {
@@ -20,6 +21,18 @@ export default {
                     this.meters = response.data;
                 }.bind(this));
 
+        },
+        update(val) {
+            this.$emit('update', this.id, val.target.selectedOptions[0].value);
+        },
+        del() {
+            this.$emit('delete', this.id);
+        },
+        disableReading(val){
+            axios.get('/api/getMeters')
+                .then(function (response) {
+                    this.meters = response.data;
+                }.bind(this));
         },
         submit() {
             if (this.loaded) {
@@ -39,6 +52,5 @@ export default {
                 });
             }
         },
-
     },
 }

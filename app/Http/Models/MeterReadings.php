@@ -23,7 +23,7 @@ class MeterReadings extends Model
     {
         $prevValue = 0;
         $oldTime = 0;
-        $allValues = MeterReadings::orderBy('id', 'asc')->get()
+        $allValues = MeterReadings::where('is_disabled','=','0')->orderBy('id', 'asc')->get()
             ->each(function (&$item, $key) use (&$prevValue, &$oldTime) {
                 $item->diff = round(($item->readings - $prevValue) * 1000, 2);
                 $oldTime = $oldTime == 0 ? $item->timestamp : $oldTime;
