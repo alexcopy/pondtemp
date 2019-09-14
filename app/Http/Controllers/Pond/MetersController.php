@@ -18,8 +18,9 @@ class MetersController extends Controller
     {
         $allValues = MeterReadings::meterValuesStructured();
         $weekStats = MeterReadings::averageWaterCalculator(604800);
+        $monthStats = MeterReadings::averageWaterCalculator(2592000);
 
-        return view('pages.pond.meters.index', compact(['allValues', 'weekStats']));
+        return view('pages.pond.meters.index', compact(['allValues', 'weekStats', 'monthStats']));
     }
 
     /**
