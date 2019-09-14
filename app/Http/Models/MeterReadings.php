@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class MeterReadings extends Model
 {
+
     public $timestamps = true;
 
     protected $fillable = [
@@ -23,9 +24,13 @@ class MeterReadings extends Model
     {
         $prevValue = 0;
         $oldTime = 0;
-        $allValues = MeterReadings::where('is_disabled','=','0')->orderBy('id', 'asc')->get()
+        $allValues = MeterReadings::where('is_disabled', '=', '0')->orderBy('id', 'asc')->get()
             ->each(function (&$item, $key) use (&$prevValue, &$oldTime) {
-                $item->diff = round(($item->readings - $prevValue) * 1000, 2);
+                if ($oldTime == 0)
+                    $item->diff = 0;
+                else
+                    $item->diff = round(($item->readings - $prevValue) * 1000, 2);
+                $item->meterName = Devices::find($item->meter_id)->deviceName;
                 $oldTime = $oldTime == 0 ? $item->timestamp : $oldTime;
                 $hours = ($item->timestamp - $oldTime) / 3600;
                 if ($hours !== 0)
@@ -35,7 +40,26 @@ class MeterReadings extends Model
                 $oldTime = $item->timestamp;
                 $prevValue = $item->readings;
             });
+
         return $allValues;
     }
 
+    public static function averageWaterCalculator($interval)
+    {
+
+        $weekInterval = self::whereBetween('timestamp', [time() - $interval, time()])->orderBy('timestamp', 'DESC');
+        $min = $weekInterval->min('readings');
+        $max = $weekInterval->max('readings');
+        $used = ($max - $min) * 1000;
+        $timeInterval = $weekInterval->max('timestamp') - $weekInterval->min('timestamp');
+
+        if (($timeInterval + 3600) < $interval)
+            $interval = $timeInterval;
+        $days = intdiv($interval, 86400);
+        $hours = intdiv($interval, 3600);
+
+        $aveInDays = $days > 0 ? round($used / $days, 2) : $used;
+        $aveInHours = $hours > 0 ? round($used / $hours, 2) : $used;
+       return ['daily'=>$aveInDays, 'hourly'=>$aveInHours];
+    }
 }

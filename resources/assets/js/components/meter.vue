@@ -77,3 +77,19 @@
         }
     }
 </script>
+<style>
+    .limtext {
+        display:inline-block;
+        width:70px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .limtext_100 {
+        display:inline-block;
+        width:120px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>

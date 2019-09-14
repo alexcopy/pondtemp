@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Http\Models\Cameras;
-use Chumper\Zipper\Zipper;
+
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 
@@ -42,11 +42,11 @@ class ZipCamFiles extends Command
      */
     public function handle()
     {
-        $zipper = new Zipper;
+
         $dirList = Cameras::all();
         $ftpDir = storage_path('ftp');
-        $logFiles = $zipper->make('test.zip')->listFiles('/\.log$/i');
-        dd($logFiles);
+
+
         $dirFiles=[];
         foreach ($dirList as $dir) {
             $filesPath = $ftpDir . '/' . $dir->name . '/today';
