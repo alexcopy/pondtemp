@@ -60,6 +60,6 @@ class MeterReadings extends Model
 
         $aveInDays = $days > 0 ? round($used / $days, 2) : $used;
         $aveInHours = $hours > 0 ? round($used / $hours, 2) : $used;
-       return ['daily'=>$aveInDays, 'hourly'=>$aveInHours];
+       return ['daily'=>$aveInDays, 'hourly'=>$aveInHours, 'used'=>$used];
     }
 }

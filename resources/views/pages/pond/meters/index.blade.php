@@ -9,12 +9,14 @@
 
     <div class="row">
         <div class="col-sm-3 pull-right">
-            <h5 class="text-danger">month speed :<i id="minstr"> {{  $monthStats['hourly'] }} </i> L/hour</h5>
-            <h5 class="text-info">month speed:<i id="minpnd"> {{  $monthStats['daily']  }} </i> L/day</h5>
+            <h5 class="text-danger">month speed :<i id="minstr"> {{  $monthStats['hourly'] }}  </i> L/hour</h5>
+            <h5 class="text-info">month speed:<i id="minpnd"> {{  $monthStats['daily']  }}  </i> L/day</h5>
+            <h5 class="text-info">total used :<i id="minpnd">  {{$monthStats['used']}}</i> L/day</h5>
         </div>
         <div class="col-sm-3 pull-right">
-            <h5 class="text-danger">weekly speed :<i id="minstr"> {{  $weekStats['hourly'] }} </i> L/hour</h5>
+            <h5 class="text-danger">weekly speed :<i id="minstr"> {{  $weekStats['hourly'] }}  </i> L/hour</h5>
             <h5 class="text-info">weekly speed:<i id="minpnd"> {{  $weekStats['daily']  }} </i> L/day</h5>
+            <h5 class="text-info">total used :<i id="minpnd">  {{$weekStats['used']}}</i> L/day</h5>
         </div>
     </div>
 
