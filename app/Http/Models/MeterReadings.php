@@ -21,17 +21,19 @@ class MeterReadings extends Model
     /**
      * @return array
      */
-    public static function meterValuesStructured($pageSize=20): object
+    public static function meterValuesStructured($pageSize=20): array
     {
         $prevValue = 0;
         $oldTime = 0;
         $allValues = MeterReadings::where('is_disabled', '=', '0')->orderBy('timestamp', 'desc')->paginate($pageSize);
-        $allValues ->each(function (&$item, $key) use (&$prevValue, &$oldTime) {
+        $meterValues = MeterReadings::where('is_disabled', '=', '0')->orderBy('timestamp', 'asc')->get() ;
+        $meterValues ->each(function (&$item, $key) use (&$prevValue, &$oldTime) {
+
                 if ($oldTime == 0)
                     $item->diff = 0;
                 else
                     $item->diff = round(($item->readings - $prevValue) * 1000, 2);
-                $item->meterName = Devices::find($item->meter_id)->deviceName;
+
                 $oldTime = $oldTime == 0 ? $item->timestamp : $oldTime;
                 $hours = ($item->timestamp - $oldTime) / 3600;
                 if ($hours !== 0)
@@ -41,8 +43,7 @@ class MeterReadings extends Model
                 $oldTime = $item->timestamp;
                 $prevValue = $item->readings;
             });
-
-        return $allValues;
+        return [$allValues, $meterValues];
     }
 
     public static function averageWaterCalculator($interval)

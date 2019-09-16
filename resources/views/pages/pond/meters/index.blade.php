@@ -38,10 +38,12 @@
         </thead>
         <tbody>
         @foreach( $allValues  as $readingsRow )
+            <?php $reading = $diffValues->where('id', $readingsRow->id)->toArray();$diff=reset($reading); ?>
+
             <tr>
                 <td>{{$readingsRow->readings}}</td>
-                <td>{{$readingsRow->diff}}</td>
-                <td><span class="text-danger">{{$readingsRow->perHour}} l/h</span></td>
+                <td>{{$diff['diff']}}</td>
+                <td><span class="text-danger">{{$diff['perHour']}} l/h</span></td>
                 <td><span class="limtext_100">{{$readingsRow->message}}</span></td>
                 <td>{{$readingsRow->created_at->formatLocalized('%d-%b %H:%M') }}</td>
                 <td>
@@ -58,6 +60,8 @@
                         <i class="fa fa-times "></i>
                     </button>
                 </td>
+
+
             </tr>
         @endforeach
         </tbody>

@@ -16,13 +16,13 @@ class MetersController extends Controller
      */
     public function index()
     {
-        $pageSize=15;
-        $allValues = MeterReadings::meterValuesStructured($pageSize);
+        $pageSize=2;
+        list($allValues, $diffValues) = MeterReadings::meterValuesStructured($pageSize);
         $annualStats = MeterReadings::averageWaterCalculator(31536000);
         $weekStats = MeterReadings::averageWaterCalculator(604800);
         $monthStats = MeterReadings::averageWaterCalculator(2592000);
 
-        return view('pages.pond.meters.index', compact(['allValues', 'weekStats', 'monthStats', 'annualStats']));
+        return view('pages.pond.meters.index', compact(['allValues', 'weekStats', 'monthStats', 'annualStats', 'diffValues']));
     }
 
     /**
