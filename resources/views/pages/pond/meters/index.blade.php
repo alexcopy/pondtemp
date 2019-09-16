@@ -29,8 +29,6 @@
 
     <table class="table table-bordered">
         <thead>
-        <th>#</th>
-        <th>meter</th>
         <th>read</th>
         <th>used</th>
         <th>speed</th>
@@ -41,13 +39,11 @@
         <tbody>
         @foreach( $allValues->reverse() as $readingsRow )
             <tr>
-                <td>{{$readingsRow->id}}</td>
-                <td><span class="limtext">{{$readingsRow->meterName}}</span></td>
                 <td>{{$readingsRow->readings}}</td>
                 <td>{{$readingsRow->diff}}</td>
                 <td><span class="text-danger">{{$readingsRow->perHour}} l/h</span></td>
                 <td><span class="limtext_100">{{$readingsRow->message}}</span></td>
-                <td>{{$readingsRow->created_at->format('d/m   H:m')}}</td>
+                <td>{{$readingsRow->created_at->formatLocalized('%d-%b %H:%m') }}</td>
                 <td>
                     <button @click="showModal=true; setVal(item.id, item.name, item.age, item.profession)"
                             class="btn btn-xs btn-info">
