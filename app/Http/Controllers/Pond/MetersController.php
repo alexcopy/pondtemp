@@ -16,7 +16,7 @@ class MetersController extends Controller
      */
     public function index()
     {
-        $pageSize=2;
+        $pageSize=20;
         list($allValues, $diffValues) = MeterReadings::meterValuesStructured($pageSize);
         $annualStats = MeterReadings::averageWaterCalculator(31536000);
         $weekStats = MeterReadings::averageWaterCalculator(604800);
