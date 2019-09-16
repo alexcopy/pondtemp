@@ -4,6 +4,7 @@ namespace App\Http\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 class MeterReadings extends Model
 {
@@ -24,7 +25,7 @@ class MeterReadings extends Model
     {
         $prevValue = 0;
         $oldTime = 0;
-        $allValues = MeterReadings::where('is_disabled', '=', '0')->orderBy('id', 'asc')->paginate($pageSize);
+        $allValues = MeterReadings::where('is_disabled', '=', '0')->orderBy('timestamp', 'desc')->paginate($pageSize);
         $allValues ->each(function (&$item, $key) use (&$prevValue, &$oldTime) {
                 if ($oldTime == 0)
                     $item->diff = 0;

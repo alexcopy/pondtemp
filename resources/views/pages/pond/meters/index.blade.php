@@ -37,7 +37,7 @@
         <th></th>
         </thead>
         <tbody>
-        @foreach( $allValues->reverse() as $readingsRow )
+        @foreach( $allValues  as $readingsRow )
             <tr>
                 <td>{{$readingsRow->readings}}</td>
                 <td>{{$readingsRow->diff}}</td>
