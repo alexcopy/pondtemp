@@ -11,7 +11,7 @@
         <div class="col-sm-3 pull-right">
             <h5 class="text-danger">annual speed :<i id="minstr"> {{  $annualStats['hourly'] }}  </i> L/hour</h5>
             <h5 class="text-info">annual speed:<i id="minpnd"> {{  $annualStats['daily']  }}  </i> L/day</h5>
-            <h5 class="text-info">annual used :<i id="minpnd">  {{$annualStats['used']}}</i> m3</h5>
+            <h5 class="text-info">annual used ({{round($annualStats['interval']/86400,0)}} days):<i id="minpnd">  {{$annualStats['used']}}</i> m3</h5>
         </div>
 
         <div class="col-sm-3 pull-right">
