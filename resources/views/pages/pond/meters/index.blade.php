@@ -5,24 +5,25 @@
     <stats></stats>
 
     <br>
-    <br>
+
 
     <div class="row">
-        <div class="col-sm-3 pull-right">
-            <h5 class="text-danger">annual speed :<i id="minstr"> {{  $annualStats['hourly'] }}  </i> L/hour</h5>
-            <h5 class="text-info">annual speed:<i id="minpnd"> {{  $annualStats['daily']  }}  </i> L/day</h5>
-            <h5 class="text-info">annual used ({{round($annualStats['interval']/86400,0)}} days):<i id="minpnd">  {{$annualStats['used']}}</i> m3</h5>
+        <div class="col-sm-3 pull-left">
+            <h5 class="text-danger">weekly speed :<i> {{  $weekStats['hourly'] }}  </i> L/hour</h5>
+            <h5 class="text-info">weekly speed:<i> {{  $weekStats['daily']  }} </i> L/day</h5>
+            <h5 class="text-info">weekly used :<i>  {{$weekStats['used']}}</i> m3</h5>
         </div>
 
-        <div class="col-sm-3 pull-right">
-            <h5 class="text-danger">monthly speed :<i id="minstr"> {{  $monthStats['hourly'] }}  </i> L/hour</h5>
-            <h5 class="text-info">monthly speed:<i id="minpnd"> {{  $monthStats['daily']  }}  </i> L/day</h5>
-            <h5 class="text-info">monthly used :<i id="minpnd">  {{$monthStats['used']}}</i> m3</h5>
+        <div class="col-sm-3 pull-left">
+            <h5 class="text-danger">monthly speed :<i> {{  $monthStats['hourly'] }}  </i> L/hour</h5>
+            <h5 class="text-info">monthly speed:<i> {{  $monthStats['daily']  }}  </i> L/day</h5>
+            <h5 class="text-info">monthly used :<i>  {{$monthStats['used']}}</i> m3</h5>
         </div>
-        <div class="col-sm-3 pull-right">
-            <h5 class="text-danger">weekly speed :<i id="minstr"> {{  $weekStats['hourly'] }}  </i> L/hour</h5>
-            <h5 class="text-info">weekly speed:<i id="minpnd"> {{  $weekStats['daily']  }} </i> L/day</h5>
-            <h5 class="text-info">weekly used :<i id="minpnd">  {{$weekStats['used']}}</i> m3</h5>
+        <div class="col-sm-3 pull-left">
+            <h5 class="text-danger">annual speed :<i> {{  $annualStats['hourly'] }}  </i> L/hour</h5>
+            <h5 class="text-info">annual speed:<i> {{  $annualStats['daily']  }}  </i> L/day</h5>
+            <h5 class="text-info">annual used ({{round($annualStats['interval']/86400,0)}}
+                days):<i>  {{$annualStats['used']}}</i> m3</h5>
         </div>
     </div>
 
