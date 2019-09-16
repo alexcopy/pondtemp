@@ -62,6 +62,8 @@
         @endforeach
         </tbody>
     </table>
+
+    {{$allValues->render()}}
 @stop
 @section('custom_scripts')
 @stop
