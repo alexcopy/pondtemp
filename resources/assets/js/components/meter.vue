@@ -23,7 +23,7 @@
             <div class="col-sm-3 pull-left">
                 <h5 class="text-danger">annual speed :<i> {{ stats.annualStats['hourly'] }} </i> L/hour</h5>
                 <h5 class="text-info">annual speed:<i> {{ stats.annualStats['daily'] }} </i> L/day</h5>
-                <h5 class="text-info">annual used ({{(stats.annualStats['interval']/86400,0)}}
+                <h5 class="text-info">annual used ({{(stats.annualStats['interval']/86400).toFixed(0)}}
                     days):<i> {{(stats.annualStats['used']/1000).toFixed(0) }}</i> m3</h5>
             </div>
         </div>
