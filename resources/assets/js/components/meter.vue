@@ -12,19 +12,19 @@
             <div class="col-sm-3 pull-left">
                 <h5 class="text-danger">weekly speed :<i> {{ stats.weekStats['hourly'] }} </i> L/hour</h5>
                 <h5 class="text-info">weekly speed:<i> {{ stats.weekStats['daily'] }} </i> L/day</h5>
-                <h5 class="text-info">weekly used :<i> {{(stats.weekStats['used']/1000).toFixed(0) }}</i> m3</h5>
+                <h5 class="text-info">weekly used :<i> {{(stats.weekStats['used']/1000).toFixed(2) }}</i> m3</h5>
             </div>
 
             <div class="col-sm-3 pull-left">
                 <h5 class="text-danger">monthly speed :<i> {{ stats.monthStats['hourly'] }} </i> L/hour</h5>
                 <h5 class="text-info">monthly speed:<i> {{ stats.monthStats['daily'] }} </i> L/day</h5>
-                <h5 class="text-info">monthly used :<i> {{(stats.monthStats['used']/1000).toFixed(0)}}</i> m3</h5>
+                <h5 class="text-info">monthly used :<i> {{(stats.monthStats['used']/1000).toFixed(1)}}</i> m3</h5>
             </div>
             <div class="col-sm-3 pull-left">
                 <h5 class="text-danger">annual speed :<i> {{ stats.annualStats['hourly'] }} </i> L/hour</h5>
                 <h5 class="text-info">annual speed:<i> {{ stats.annualStats['daily'] }} </i> L/day</h5>
-                <h5 class="text-info">annual used ({{(stats.annualStats['interval']/86400).toFixed(0)}}
-                    days):<i> {{(stats.annualStats['used']/1000).toFixed(0) }}</i> m3</h5>
+                <h5 class="text-info">annual used ({{(stats.annualStats['interval']/86400).toFixed(1)}}
+                    days):<i> {{(stats.annualStats['used']/1000).toFixed(1) }}</i> m3</h5>
             </div>
         </div>
 
