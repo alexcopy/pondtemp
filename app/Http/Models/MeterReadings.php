@@ -58,7 +58,7 @@ class MeterReadings extends Model
             $interval = $timeInterval;
         $days = intdiv($interval, 86400);
         $hours = intdiv($interval, 3600);
-        $aveInDays = $days > 0 ? round($used / $days, 2) : $used;
+        $aveInDays = $days > 0 ? round($used / $days, 0) : $used;
         $aveInHours = $hours > 0 ? round($used / $hours, 2) : $used;
         return ['daily' => $aveInDays, 'hourly' => $aveInHours, 'used' => $used, 'interval' => $timeInterval];
     }
