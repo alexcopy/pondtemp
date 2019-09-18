@@ -2,6 +2,13 @@ export default {
     data() {
         return {
             fields: {},
+            metersData: {},
+            stats: {
+                annualStats:['hourly','daily', 'used'],
+                monthStats:['hourly','daily', 'used'],
+                weekStats:['hourly','daily', 'used']
+            },
+            metersDiffDataData: {},
             errors: {},
             success: false,
             loaded: true,
@@ -12,7 +19,8 @@ export default {
         }
     },
     mounted() {
-        this.getMeters();
+        this.getMeters()
+        this.getMetersData();
     },
     methods: {
         getMeters: function(){
@@ -20,7 +28,14 @@ export default {
                 .then(function (response) {
                     this.meters = response.data;
                 }.bind(this));
-
+        },
+        getMetersData: function (page = 1) {
+            axios.get('/api/metersData?page=' + page)
+                .then(function (response) {
+                    this.metersData = response.data.vals;
+                    this.metersDiffDataData = response.data.diffs;
+                    this.stats = response.data.stats;
+                }.bind(this));
         },
         update(val) {
             this.$emit('update', this.id, val.target.selectedOptions[0].value);
@@ -50,6 +65,7 @@ export default {
                         this.errors = error.response.data.errors || {};
                     }
                 });
+               window.location.href = '/pond/meters'
             }
         },
     },

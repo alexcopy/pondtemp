@@ -21,5 +21,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('/getMeters', 'ApiController@getMeters');
 Route::get('/getPonds', 'ApiController@getPonds');
 Route::get('/getTypes', 'ApiController@getTypes');
-
-Route::post('/v3/dockerhub', 'ApiController@testDockerHub'); // todo delete after test
+Route::get('/metersData', 'ApiController@metersData');

@@ -22,6 +22,7 @@ Vue.component('stats', require('./components/meter.vue'));
 Vue.component('device', require('./components/devices.vue'));
 Vue.component('tank', require('./components/tank.vue'));
 Vue.component('devicetypes', require('./components/devicetypes.vue'));
+Vue.component('pagination', require('laravel-vue-pagination'));
 
 Vue.use(BootstrapVue);
 

@@ -7,6 +7,7 @@ use App\Http\Models\Cameras;
 use App\Http\Models\Devices;
 use App\Http\Models\DeviceTypes;
 use App\Http\Models\Gauges;
+use App\Http\Models\MeterReadings;
 use App\Http\Models\Tanks;
 use App\Http\Models\TempMeter;
 
@@ -287,17 +288,42 @@ class ApiController extends Controller
 
     public function getMeters()
     {
-        return response()->json( Devices::get() );
+        return response()->json(Devices::get());
     }
 
     public function getPonds()
     {
-        return response()->json( Tanks::get() );
+        return response()->json(Tanks::get());
     }
 
     public function getTypes()
     {
-        return response()->json( DeviceTypes::get() );
+        return response()->json(DeviceTypes::get());
     }
 
+
+    public function metersData($pageNumber = 1)
+    {
+        $pageSize = 15;
+        $year = 31536000;
+        $week = 604800;
+        $month = 2592000;
+
+        list($allValues, $diffValues) = MeterReadings::meterValuesStructured($pageSize);
+        $diffVals = $diffValues->toArray();
+        array_walk($diffVals, function ($val) use (&$supportDiffs) {
+            $supportDiffs[$val['id']] = ['diff' => $val['diff'], 'perHour' => $val['perHour'], 'time' => Carbon::parse($val['created_at'])->formatLocalized('%d-%b %H:%M')];
+        });
+        return response()->json(
+            [
+                'vals' => $allValues->toArray(),
+                'diffs' => $supportDiffs,
+                'stats' => [
+                    'annualStats' => MeterReadings::averageWaterCalculator($year),
+                    'monthStats' => MeterReadings::averageWaterCalculator($month),
+                    'weekStats' => MeterReadings::averageWaterCalculator($week)
+                ]
+            ]
+            , 200);
+    }
 }

@@ -10,6 +10,9 @@
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "devDependencies": {
+    "acorn": "^7.0.0",
+    "acorn-dynamic-import": "^4.0.0",
+    "ajv-keywords": "^3.4.1",
     "axios": "^0.18.1",
     "bootstrap-sass": "^3.3.7",
     "bootstrap-vue": "^2.0.0",
@@ -18,15 +21,13 @@
     "laravel-mix": "^1.0",
     "lodash": "^4.17.4",
     "vue": "^2.5.7",
-    "vue-template-compiler": "^2.5.17",
-    "ajv-keywords": "^3.4.1",
-    "acorn": "^7.0.0",
-    "acorn-dynamic-import": "^4.0.0"
+    "vue-template-compiler": "^2.5.17"
   },
   "dependencies": {
     "archive-type": "^4.0.0",
-    "bootstrap": "^4.0.0-beta.2",
+    "bootstrap": "^4.3.0",
     "font-awesome": "^4.7.0",
+    "laravel-vue-pagination": "^2.3.0",
     "popper.js": "^1.12.6"
   },
   "name": "pondtemp",

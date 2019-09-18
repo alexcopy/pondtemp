@@ -3,6 +3,7 @@
 namespace App\Http\Models;
 
 
+use function GuzzleHttp\Promise\all;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
