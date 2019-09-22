@@ -77,12 +77,14 @@ class MetersController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param Request $request
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $id = (int)$request->get('id', 0);
+        MeterReadings::destroy($id);
     }
 
 

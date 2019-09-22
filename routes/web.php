@@ -52,11 +52,14 @@ Route::group(['prefix' => 'pond', 'middleware' => 'auth'], function () {
     Route::resource('/tanks', 'Pond\TanksController');
     Route::resource('/filters', 'Pond\FiltersController');
     Route::resource('/meters', 'Pond\MetersController');
+    Route::delete('/meters', 'Pond\MetersController@destroy');
     Route::resource('/chemicals', 'Pond\ChemicalsController');
-
     Route::post('/meters/submit', 'Pond\MetersController@metersSubmit');
 
-    Route::resource('/jobs/cleandevice', 'PageController');
+    Route::resource('/feed', 'Pond\FeedController');
+    Route::put('/feed', 'Pond\FeedController@create');
+
+
     Route::resource('/jobs/meteading', 'PageController');
     Route::resource('/jobs/livestock', 'Pond\LivestocksController');
     Route::resource('/jobs/chemicals', 'PageController');

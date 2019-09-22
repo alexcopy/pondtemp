@@ -47,6 +47,7 @@ export default {
                     }
                 });
             }
+            window.location.href = '/pond/devices'
         },
 
     },

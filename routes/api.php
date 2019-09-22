@@ -22,3 +22,4 @@ Route::get('/getMeters', 'ApiController@getMeters');
 Route::get('/getPonds', 'ApiController@getPonds');
 Route::get('/getTypes', 'ApiController@getTypes');
 Route::get('/metersData', 'ApiController@metersData');
+Route::get('/getFeeds', 'ApiController@getFeeds');

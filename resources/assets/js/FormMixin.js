@@ -4,17 +4,17 @@ export default {
             fields: {},
             metersData: {},
             stats: {
-                annualStats:['hourly','daily', 'used'],
-                monthStats:['hourly','daily', 'used'],
-                weekStats:['hourly','daily', 'used']
+                annualStats: {hourly: 0, daily: 0, used: 0},
+                monthStats: {hourly: 0, daily: 0, used: 0},
+                weekStats: {hourly: 0, daily: 0, used: 0}
             },
             metersDiffDataData: {},
             errors: {},
             success: false,
             loaded: true,
             action: '',
-            meters:[],
-            meter:0,
+            meters: [],
+            meter: 0,
             showModal: true
         }
     },
@@ -23,7 +23,7 @@ export default {
         this.getMetersData();
     },
     methods: {
-        getMeters: function(){
+        getMeters: function () {
             axios.get('/api/getMeters')
                 .then(function (response) {
                     this.meters = response.data;
@@ -40,10 +40,13 @@ export default {
         update(val) {
             this.$emit('update', this.id, val.target.selectedOptions[0].value);
         },
-        del() {
-            this.$emit('delete', this.id);
+        del(id) {
+            axios.delete("/pond/meters", {params: {id: id}}).then(response => {
+                window.location.href = '/pond/meters'
+            });
+
         },
-        disableReading(val){
+        disableReading(val) {
             axios.get('/api/getMeters')
                 .then(function (response) {
                     this.meters = response.data;
@@ -65,7 +68,7 @@ export default {
                         this.errors = error.response.data.errors || {};
                     }
                 });
-               window.location.href = '/pond/meters'
+                window.location.href = '/pond/meters'
             }
         },
     },

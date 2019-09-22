@@ -1,28 +1,31 @@
 <template>
     <div class="container">
 
-        <div>
-            <button type="button" class="btn btn-success" data-toggle="modal"
-                    data-target="#addMeter">
-                Add New Readings
-            </button>
+        <div class="row">
+            <div class="col-sm-3 pull-left">
+                <button type="button" class="btn btn-success" data-toggle="modal"
+                        data-target="#addMeter">
+                   Add New
+                </button>
+                <button class="btn btn-warning">Feed</button>
+            </div>
         </div>
 
         <div class="row">
             <div class="col-sm-3 pull-left">
                 <h5 class="text-danger">weekly speed :<i> {{ stats.weekStats['hourly'] }} </i> L/hour</h5>
-                <h5 class="text-info">weekly speed:<i> {{ stats.weekStats['daily'] }} </i> L/day</h5>
+                <h5 class="text-info">weekly speed:<i> {{ stats.weekStats['daily'].toFixed(2)  }} </i> L/day</h5>
                 <h5 class="text-info">weekly used :<i> {{(stats.weekStats['used']/1000).toFixed(2) }}</i> m3</h5>
             </div>
 
             <div class="col-sm-3 pull-left">
                 <h5 class="text-danger">monthly speed :<i> {{ stats.monthStats['hourly'] }} </i> L/hour</h5>
-                <h5 class="text-info">monthly speed:<i> {{ stats.monthStats['daily'] }} </i> L/day</h5>
+                <h5 class="text-info">monthly speed:<i> {{ stats.monthStats['daily'].toFixed(2)  }} </i> L/day</h5>
                 <h5 class="text-info">monthly used :<i> {{(stats.monthStats['used']/1000).toFixed(1)}}</i> m3</h5>
             </div>
             <div class="col-sm-3 pull-left">
                 <h5 class="text-danger">annual speed :<i> {{ stats.annualStats['hourly'] }} </i> L/hour</h5>
-                <h5 class="text-info">annual speed:<i> {{ stats.annualStats['daily'] }} </i> L/day</h5>
+                <h5 class="text-info">annual speed:<i> {{ stats.annualStats['daily'].toFixed(2) }} </i> L/day</h5>
                 <h5 class="text-info">annual used ({{(stats.annualStats['interval']/86400).toFixed(0)}}
                     days):<i> {{(stats.annualStats['used']/1000).toFixed(1) }}</i> m3</h5>
             </div>
@@ -53,7 +56,7 @@
                     <button class="btn btn-xs btn-danger danger">
                         <i class="fa fa-thumbs-down"></i>
                     </button>
-                    <button class="btn btn-danger btn-xs danger">
+                    <button @click="del(metersRow.id)" class="btn btn-danger btn-xs danger">
                         <i class="fa fa-times "></i>
                     </button>
                 </td>

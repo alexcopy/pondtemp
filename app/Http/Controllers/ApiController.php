@@ -6,6 +6,7 @@ use App\Http\Models\Camalarms;
 use App\Http\Models\Cameras;
 use App\Http\Models\Devices;
 use App\Http\Models\DeviceTypes;
+use App\Http\Models\FishFeed;
 use App\Http\Models\Gauges;
 use App\Http\Models\MeterReadings;
 use App\Http\Models\Tanks;
@@ -325,5 +326,18 @@ class ApiController extends Controller
                 ]
             ]
             , 200);
+    }
+
+    public function getFeeds(Request $request)
+    {
+        $daysInSeconds = $request->get('daysInSeconds', 1) * 86400;
+        $feed = FishFeed::whereBetween('timestamp', [ time() - $daysInSeconds, time()])->get();
+        $ponds = Tanks::all(['tankName', 'id'])->toArray();
+
+        return response()->json([
+            'pellets' => $feed->where('food_type','pellets')->count(),
+            'sinking' => $feed->where('food_type','sinkpellets')->count(),
+            'ponds' => $ponds
+        ]);
     }
 }
