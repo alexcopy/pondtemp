@@ -18,7 +18,15 @@
         <li><a href="/cam"><i class="fa fa-bars" aria-hidden="true"></i> Cams List</a></li>
     </ul>
 </li>
+<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Daily
+        <span class="caret"></span></a>
+    <ul class="dropdown-menu">
+        <li><a href="/pond/feed"><i class="fa fa-book" aria-hidden="true"></i> Pond Feed</a></li>
+        <li><a href="/pond/meters"><i class="fa fa-bars" aria-hidden="true"></i> Meters</a></li>
+    </ul>
 
+</li>
 <li class="dropdown">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pond
         <span class="caret"></span></a>
@@ -32,17 +40,17 @@
     </ul>
 </li>
 
-<li class="dropdown">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pond Jobs
-        <span class="caret"></span></a>
-    <ul class="dropdown-menu">
-        <li><a href="/pond/jobs/cleanfilter"><i class="fa fa-bars" aria-hidden="true"></i> Cleaning Filter</a></li>
-        <li role="separator" class="divider"></li>
-        <li><a href="/pond/jobs/cleandevice"><i class="fa fa-book" aria-hidden="true"></i> Electric Devices</a></li>
-        <li><a href="/pond/jobs/meteading"><i class="fa fa-plus" aria-hidden="true"></i> Meter Reading</a></li>
-        <li><a href="/pond/jobs/livestock"><i class="fa fa-bars" aria-hidden="true"></i> Livestock</a></li>
-        <li><a href="/pond/jobs/chemicals"><i class="fa fa-bars" aria-hidden="true"></i> Add Chemicals</a></li>
-    </ul>
-</li>
+{{--<li class="dropdown">--}}
+{{--    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pond Jobs--}}
+{{--        <span class="caret"></span></a>--}}
+{{--    <ul class="dropdown-menu">--}}
+{{--        <li><a href="/pond/jobs/cleanfilter"><i class="fa fa-bars" aria-hidden="true"></i> Cleaning Filter</a></li>--}}
+{{--        <li role="separator" class="divider"></li>--}}
+{{--        <li><a href="/pond/jobs/cleandevice"><i class="fa fa-book" aria-hidden="true"></i> Electric Devices</a></li>--}}
+{{--        <li><a href="/pond/jobs/meteading"><i class="fa fa-plus" aria-hidden="true"></i> Meter Reading</a></li>--}}
+{{--        <li><a href="/pond/jobs/livestock"><i class="fa fa-bars" aria-hidden="true"></i> Livestock</a></li>--}}
+{{--        <li><a href="/pond/jobs/chemicals"><i class="fa fa-bars" aria-hidden="true"></i> Add Chemicals</a></li>--}}
+{{--    </ul>--}}
+{{--</li>--}}
 
 <li><a href="/log-viewer">All Logs</a></li>

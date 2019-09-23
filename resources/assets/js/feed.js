@@ -32,8 +32,6 @@ export default {
                     this.total = response.data.total;
                 }.bind(this));
         },
-
-
     },
 
 }

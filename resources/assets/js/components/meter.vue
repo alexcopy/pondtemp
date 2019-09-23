@@ -7,7 +7,7 @@
                         data-target="#addMeter">
                    Add New
                 </button>
-                <button class="btn btn-warning">Feed</button>
+                <button onclick="window.location='/pond/feed'" class="btn btn-warning">Feed</button>
             </div>
         </div>
 
