@@ -37,29 +37,37 @@
         <br/>
         <br/>
 
-        <div class="row">
-            <p>Total pellets: 500</p>
-            <p>Total pellets: 500</p>
-        </div>
-
         <table class="table table-condensed">
             <thead>
             <tr>
-                <th></th>
-                <th></th>
-                <th></th>
+                <th>Date</th>
+                <th>Food</th>
+                <th>weight</th>
+                <th>scoops</th>
+                <th>total</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
+            <tr v-for="(food, index) in sortedTableData">
+                <td><b>{{index}}</b></td>
+                <td>
+                    <div>pellets</div>
+                    <div>sinkpell</div>
+                </td>
+                <td>
+                    <div>{{food.pellets.weight}} g</div>
+                    <div>{{food.sinkpellets.weight}} g</div>
+                </td>
+                <td>
+                    <div>{{food.pellets.count}}</div>
+                    <div>{{food.sinkpellets.count}}</div>
+                </td>
+                <td>
+                    <div><b>{{food.pellets.weight + food.sinkpellets.weight}} g </b></div>
+                </td>
             </tr>
             </tbody>
         </table>
-
-
     </div>
 </template>
 

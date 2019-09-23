@@ -11,6 +11,22 @@ use App\Http\Controllers\Controller;
 
 class FeedController extends Controller
 {
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    public static function feedComputedData(Request $request): array
+    {
+        $daysInSeconds = $request->get('daysInSeconds', 1) * 54000;
+        $ponds = Tanks::all(['tankName', 'id'])->toArray();
+        $feed = FishFeed::whereBetween('timestamp', [time() - $daysInSeconds, time()])->get();
+        $total = FishFeed::select(['food_type', 'weight', 'created_at']) ->get()->groupBy(function ($date) {
+            return Carbon::parse($date->created_at)->format('d/m');
+        });
+        return array($ponds, $feed, $total);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -28,13 +44,14 @@ class FeedController extends Controller
      */
     public function create(Request $request)
     {
-
-//        foodType: foodType, pond: pondId, scoops:
+        $pondName = $request->get('pond', null);
+        $scoops = $request->get('scoops', 1);
+        try {
+            $pondId = Tanks::where('tankName', $pondName)->firstOrFail()->id;
+        } catch (\Exception $exception) {
+            $pondId = 1;
+        }
         $foodType = $request->get('foodType');
-        $scoops = $request->get('scoops');
-        $pondId = Tanks::where('tankName', $request->get('pond'))->firstOrFail()->id;
-        $daysInSeconds = $request->get('daysInSeconds', 1) * 86400;
-        $ponds = Tanks::all(['tankName', 'id'])->toArray();
         FishFeed::create([
             'pond_id' => $pondId,
             'food_type' => $foodType,
@@ -43,22 +60,19 @@ class FeedController extends Controller
             'is_disabled' => 0,
             'timestamp' => time()
         ]);
-
-        $feed = FishFeed::whereBetween('timestamp', [time() - $daysInSeconds, time()])->get();
-       $total =FishFeed::select([ 'food_type', 'weight'])->get()->groupBy(function($date) {
-           return Carbon::parse($date->created_at)->format('d/m');
-       });
+        list($ponds, $feed, $total) = self::feedComputedData($request);
         return response()->json([
             'pellets' => $feed->where('food_type', 'pellets')->count(),
             'sinking' => $feed->where('food_type', 'sinkpellets')->count(),
             'ponds' => $ponds,
-            'total'=>$total
+            'total' => $total
         ]);
     }
+
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -69,7 +83,7 @@ class FeedController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -80,7 +94,7 @@ class FeedController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -91,8 +105,8 @@ class FeedController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -103,7 +117,7 @@ class FeedController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

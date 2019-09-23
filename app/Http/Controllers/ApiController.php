@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Pond\FeedController;
 use App\Http\Models\Camalarms;
 use App\Http\Models\Cameras;
 use App\Http\Models\Devices;
@@ -330,14 +331,12 @@ class ApiController extends Controller
 
     public function getFeeds(Request $request)
     {
-        $daysInSeconds = $request->get('daysInSeconds', 1) * 86400;
-        $feed = FishFeed::whereBetween('timestamp', [ time() - $daysInSeconds, time()])->get();
-        $ponds = Tanks::all(['tankName', 'id'])->toArray();
-
+        list($ponds, $feed, $total) = FeedController::feedComputedData($request);
         return response()->json([
             'pellets' => $feed->where('food_type','pellets')->count(),
             'sinking' => $feed->where('food_type','sinkpellets')->count(),
-            'ponds' => $ponds
+            'ponds' => $ponds,
+            'total'=>$total
         ]);
     }
 }
