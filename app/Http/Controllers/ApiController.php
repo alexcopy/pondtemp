@@ -331,12 +331,13 @@ class ApiController extends Controller
 
     public function getFeeds(Request $request)
     {
-        list($ponds, $feed, $total) = FeedController::feedComputedData($request);
+        list($ponds, $feed, $total, $feedIDs) = FeedController::feedComputedData($request);
         return response()->json([
             'pellets' => $feed->where('food_type','pellets')->count(),
             'sinking' => $feed->where('food_type','sinkpellets')->count(),
             'ponds' => $ponds,
-            'total'=>$total
+            'total'=>$total,
+            'feedids'=>$feedIDs,
         ]);
     }
 }

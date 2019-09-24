@@ -1,11 +1,18 @@
 <template>
     <div class="container">
         <div class="row">
-            <div class="col-lg-4">
+            <h4>Light Pellets</h4>
+            <div class="col-lg-1">
             <span>
-                <h4>Light Pellets</h4>
                <button @click="feed('pellets')" class="btn btn-success">
                    <i class="glyphicon glyphicon-plus"></i>
+               </button>
+            </span>
+            </div>
+            <div class="col-lg-1">
+            <span>
+               <button @click="delFeed('pellets')" class="btn btn-success">
+                   <i class="glyphicon glyphicon-minus"></i>
                </button>
             </span>
             </div>
@@ -13,11 +20,18 @@
         <h5>Today: <b class="text-danger">{{feeds['pellets']}}</b> scoops</h5>
 
         <div class="row">
-            <div class="col-lg-4">
+            <h4>Sink Pellets</h4>
+            <div class="col-lg-1">
                 <span>
-                    <h4>Sink Pellets</h4>
                     <button @click="feed('sinkpellets')" class="btn btn-warning">
                     <i class="glyphicon glyphicon-plus"></i>
+                    </button>
+                </span>
+            </div>
+            <div class="col-lg-1">
+                <span>
+                    <button @click="delFeed('sinkpellets')" class="btn btn-warning">
+                    <i class="glyphicon glyphicon-minus"></i>
                     </button>
                 </span>
             </div>
@@ -42,8 +56,8 @@
             <tr>
                 <th>Date</th>
                 <th>Food</th>
-                <th>weight</th>
                 <th>scoops</th>
+                <th>weight</th>
                 <th>total</th>
             </tr>
             </thead>
@@ -55,12 +69,12 @@
                     <div>sinkpell</div>
                 </td>
                 <td>
-                    <div>{{food.pellets.weight}} g</div>
-                    <div>{{food.sinkpellets.weight}} g</div>
-                </td>
-                <td>
                     <div>{{food.pellets.count}}</div>
                     <div>{{food.sinkpellets.count}}</div>
+                </td>
+                <td>
+                    <div>{{food.pellets.weight}} g</div>
+                    <div>{{food.sinkpellets.weight}} g</div>
                 </td>
                 <td>
                     <div><b>{{food.pellets.weight + food.sinkpellets.weight}} g </b></div>
@@ -76,7 +90,6 @@
 
     export default {
         mixins: [FormMixin],
-
     }
 </script>
 

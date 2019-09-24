@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Pond;
 
 use App\Http\Controllers\ApiController;
 use App\Http\Models\FishFeed;
+use App\Http\Models\MeterReadings;
 use App\Http\Models\Tanks;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -21,10 +22,14 @@ class FeedController extends Controller
         $daysInSeconds = $request->get('daysInSeconds', 1) * 54000;
         $ponds = Tanks::all(['tankName', 'id'])->toArray();
         $feed = FishFeed::whereBetween('timestamp', [time() - $daysInSeconds, time()])->get();
-        $total = FishFeed::select(['food_type', 'weight', 'created_at']) ->get()->groupBy(function ($date) {
+        $feedVals = $feed->toArray();
+        array_walk($feedVals, function ($v) use (&$feedIDs) {
+            $feedIDs[$v['food_type']][] = $v['id'];
+        });
+        $total = FishFeed::select(['food_type', 'weight', 'created_at'])->get()->groupBy(function ($date) {
             return Carbon::parse($date->created_at)->format('d/m');
         })->reverse();
-        return array($ponds, $feed, $total);
+        return array($ponds, $feed, $total, $feedIDs);
     }
 
     /**
@@ -60,12 +65,13 @@ class FeedController extends Controller
             'is_disabled' => 0,
             'timestamp' => time()
         ]);
-        list($ponds, $feed, $total) = self::feedComputedData($request);
+        list($ponds, $feed, $total, $feedIDs) = self::feedComputedData($request);
         return response()->json([
             'pellets' => $feed->where('food_type', 'pellets')->count(),
             'sinking' => $feed->where('food_type', 'sinkpellets')->count(),
             'ponds' => $ponds,
-            'total' => $total
+            'total' => $total,
+            'feedids' => $feedIDs,
         ]);
     }
 
@@ -109,19 +115,18 @@ class FeedController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function destroy(Request $request)
     {
-        //
-    }
+        $id = (int)$request->get('id', 0);
+        FishFeed::destroy($id);
+        list($ponds, $feed, $total, $feedIDs) = self::feedComputedData($request);
+        return response()->json([
+            'pellets' => $feed->where('food_type', 'pellets')->count(),
+            'sinking' => $feed->where('food_type', 'sinkpellets')->count(),
+            'ponds' => $ponds,
+            'total' => $total,
+            'feedids' => $feedIDs,
+        ]);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

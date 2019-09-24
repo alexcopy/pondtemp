@@ -3,6 +3,12 @@ export default {
         return {
             tankId: 0,
             ponds: [],
+
+            feedIds: {
+                pellets: [],
+                sinking: []
+            },
+
             feeds: {
                 pellets: 0,
                 sinking: 0
@@ -19,22 +25,31 @@ export default {
         getFeeds(days = 1) {
             axios.get('/api/getFeeds?days=' + days)
                 .then(function (response) {
-                    this.feeds = response.data;
-                    this.ponds = response.data.ponds;
-                    this.total = response.data.total;
-                    this.sortedTableData=this.tableData();
+                    this.updateVars(response);
                 }.bind(this));
         },
 
         feed(foodType) {
             axios.put('/pond/feed', {foodType: foodType, pond: this.pondId, scoops: 1})
                 .then(function (response) {
-                    this.feeds = response.data;
-                    this.ponds = response.data.ponds;
-                    this.total = response.data.total;
-                    this.sortedTableData=this.tableData();
+                    this.updateVars(response);
                 }.bind(this));
         },
+
+        delFeed(foodType) {
+
+            if (typeof (this.feedIds) == 'undefined' ||  this.feedIds === null)
+                return null;
+
+            if (this.feedIds[foodType].length > 0) {
+                let id = this.feedIds[foodType].pop();
+                axios.delete("/pond/feed", {params: {id: id}}).then(response => {
+                    this.updateVars(response);
+                });
+            }
+            return null;
+        },
+
         tableData() {
             var day = {};
             for (let i  in this.total) {
@@ -53,6 +68,13 @@ export default {
                 day[i] = food;
             }
             return day;
+        },
+        updateVars(response) {
+            this.feeds = response.data;
+            this.ponds = response.data.ponds;
+            this.total = response.data.total;
+            this.feedIds = response.data.feedids;
+            this.sortedTableData = this.tableData();
         }
     },
 

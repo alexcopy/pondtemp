@@ -44,7 +44,6 @@ export default {
             axios.delete("/pond/meters", {params: {id: id}}).then(response => {
                 window.location.href = '/pond/meters'
             });
-
         },
         disableReading(val) {
             axios.get('/api/getMeters')
