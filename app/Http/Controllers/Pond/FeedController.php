@@ -23,7 +23,7 @@ class FeedController extends Controller
         $feed = FishFeed::whereBetween('timestamp', [time() - $daysInSeconds, time()])->get();
         $total = FishFeed::select(['food_type', 'weight', 'created_at']) ->get()->groupBy(function ($date) {
             return Carbon::parse($date->created_at)->format('d/m');
-        });
+        })->reverse();
         return array($ponds, $feed, $total);
     }
 
