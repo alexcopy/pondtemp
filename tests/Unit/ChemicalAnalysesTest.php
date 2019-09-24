@@ -13,9 +13,10 @@ use Tests\TestCase;
 class ChemicalAnalysesTest extends TestCase
 {
 
-    public function setUp()
+    public function setUp():void
     {
         parent::setUp();
+        Artisan::call('mysql:createdb', ['name' => 'pond_testing']);
         Artisan::call('migrate');
     }
 
@@ -45,7 +46,7 @@ class ChemicalAnalysesTest extends TestCase
         $this->assertCount(1, $resutl);
     }
 
-    public function tearDown()
+    public function tearDown():void
     {
         Artisan::call('migrate:reset');
         parent::tearDown();

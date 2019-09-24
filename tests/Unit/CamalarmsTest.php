@@ -13,9 +13,10 @@ class CamalarmsTest extends TestCase
 
     protected $faker;
 
-    public function setUp()
+    public function setUp():void
     {
         parent::setUp();
+        Artisan::call('mysql:createdb', ['name' => 'pond_testing']);
         Artisan::call('migrate');
         $this->faker = Faker::create();
     }
@@ -31,8 +32,9 @@ class CamalarmsTest extends TestCase
     }
 
 
-    public function tearDown()
+    public function tearDown() :void
     {
+
         Artisan::call('migrate:reset');
         parent::tearDown();
     }

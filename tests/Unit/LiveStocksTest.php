@@ -15,9 +15,10 @@ use Tests\TestCase;
 class LiveStocksTest extends TestCase
 {
 
-    public function setUp()
+    public function setUp():void
     {
         parent::setUp();
+        Artisan::call('mysql:createdb', ['name' => 'pond_testing']);
         Artisan::call('migrate');
     }
 
@@ -32,7 +33,7 @@ class LiveStocksTest extends TestCase
         $this->assertCount(10, $resutl);
     }
 
-    public function tearDown()
+    public function tearDown():void
     {
         Artisan::call('migrate:reset');
         parent::tearDown();

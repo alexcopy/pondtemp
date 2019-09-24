@@ -14,9 +14,10 @@ use Tests\TestCase;
 class ApiControllerTest extends TestCase
 {
 
-    public function setUp()
+    public function setUp():void
     {
         parent::setUp();
+        Artisan::call('mysql:createdb', ['name' => 'pond_testing']);
         Artisan::call('migrate');
     }
 
@@ -116,7 +117,7 @@ class ApiControllerTest extends TestCase
         $this->assertCount(7, $aver);
     }
 
-    public function tearDown()
+    public function tearDown():void
     {
         Artisan::call('migrate:reset');
         parent::tearDown();

@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\CreateDataBase;
 use App\Console\Commands\RebootCamersIfOffline;
 use App\Console\Commands\Test;
 use App\Console\Commands\ZipCamFiles;
@@ -24,6 +25,7 @@ class Kernel extends ConsoleKernel
         MultiPageAlarmMsg::class,
         ZipCamFiles::class,
         RebootCamersIfOffline::class,
+        CreateDataBase::class,
         Test::class
     ];
 

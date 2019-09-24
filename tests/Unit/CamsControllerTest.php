@@ -12,7 +12,7 @@ class CamsControllerTest extends TestCase
     private $testCamName = '';
     private $ftppath;
 
-    protected function setUp()
+    protected function setUp():void
     {
         parent::setUp();
         $this->ftppath = '../storage/ftp';
