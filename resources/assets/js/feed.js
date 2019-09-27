@@ -50,31 +50,12 @@ export default {
             return null;
         },
 
-        tableData() {
-            var day = {};
-            for (let i  in this.total) {
-                var food = {sinkpellets: {count: 0, weight: 0}, pellets: {count: 0, weight: 0}};
-                var daily = this.total[i];
-                for (var k in daily) {
-                    var feed = daily[k];
-                    if (feed.food_type == "sinkpellets") {
-                        food.sinkpellets.count += 1;
-                        food.sinkpellets.weight += feed.weight;
-                    } else if (feed.food_type == "pellets") {
-                        food.pellets.count += 1;
-                        food.pellets.weight += feed.weight;
-                    }
-                }
-                day[i] = food;
-            }
-            return day;
-        },
         updateVars(response) {
             this.feeds = response.data;
             this.ponds = response.data.ponds;
-            this.total = response.data.total;
+            this.total = response.data.tableData;
             this.feedIds = response.data.feedids;
-            this.sortedTableData = this.tableData();
+            this.sortedTableData = this.total;
         }
     },
 

@@ -26,10 +26,7 @@ class FeedController extends Controller
         array_walk($feedVals, function ($v) use (&$feedIDs) {
             $feedIDs[$v['food_type']][] = $v['id'];
         });
-        $total = FishFeed::select(['food_type', 'weight', 'created_at'])->get()->groupBy(function ($date) {
-            return Carbon::parse($date->created_at)->format('d/m');
-        })->reverse();
-        return array($ponds, $feed, $total, $feedIDs);
+        return array($ponds, $feed, $feedIDs);
     }
 
     /**
@@ -49,6 +46,7 @@ class FeedController extends Controller
      */
     public function create(Request $request)
     {
+        $feedSeconds = 10* 86400;
         $pondName = $request->get('pond', null);
         $scoops = $request->get('scoops', 1);
         try {
@@ -65,12 +63,12 @@ class FeedController extends Controller
             'is_disabled' => 0,
             'timestamp' => time()
         ]);
-        list($ponds, $feed, $total, $feedIDs) = self::feedComputedData($request);
+        list($ponds, $feed, $feedIDs) = self::feedComputedData($request);
         return response()->json([
             'pellets' => $feed->where('food_type', 'pellets')->count(),
             'sinking' => $feed->where('food_type', 'sinkpellets')->count(),
             'ponds' => $ponds,
-            'total' => $total,
+            'tableData' => FishFeed::metersAndFeedCombined(time() - $feedSeconds, time()),
             'feedids' => $feedIDs,
         ]);
     }
@@ -117,14 +115,15 @@ class FeedController extends Controller
      */
     public function destroy(Request $request)
     {
+        $feedSeconds = 10* 86400;
         $id = (int)$request->get('id', 0);
         FishFeed::destroy($id);
-        list($ponds, $feed, $total, $feedIDs) = self::feedComputedData($request);
+        list($ponds, $feed, $feedIDs) = self::feedComputedData($request);
         return response()->json([
             'pellets' => $feed->where('food_type', 'pellets')->count(),
             'sinking' => $feed->where('food_type', 'sinkpellets')->count(),
             'ponds' => $ponds,
-            'total' => $total,
+            'tableData' => FishFeed::metersAndFeedCombined(time() - $feedSeconds, time()),
             'feedids' => $feedIDs,
         ]);
 

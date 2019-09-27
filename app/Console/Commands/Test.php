@@ -3,7 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\Pond\FeedController;
 use App\Http\Models\Camalarms;
+use App\Http\Models\FishFeed;
 use App\Http\Models\MeterReadings;
 use Carbon\Carbon;
 use DateTime;

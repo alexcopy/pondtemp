@@ -58,27 +58,29 @@
                 <th>Food</th>
                 <th>scoops</th>
                 <th>weight</th>
-                <th>total</th>
+                <th>Water L</th>
             </tr>
             </thead>
             <tbody>
             <tr v-for="(food, index) in sortedTableData">
-                <td><b>{{index}}</b></td>
-                <td>
-                    <div>pellets</div>
-                    <div>sinkpell</div>
-                </td>
-                <td>
-                    <div>{{food.pellets.count}}</div>
-                    <div>{{food.sinkpellets.count}}</div>
-                </td>
-                <td>
-                    <div>{{food.pellets.weight}} g</div>
-                    <div>{{food.sinkpellets.weight}} g</div>
-                </td>
-                <td>
-                    <div><b>{{food.pellets.weight + food.sinkpellets.weight}} g </b></div>
-                </td>
+                <template v-if="food.pellets.count>0 || food.sinkpellets.count>0 ">
+                    <td><b>{{index}}</b></td>
+                    <td>
+                        <div>pellets</div>
+                        <div>sinkpell</div>
+                    </td>
+                    <td>
+                        <div>{{food.pellets.count}}</div>
+                        <div>{{food.sinkpellets.count}}</div>
+                    </td>
+                    <td>
+                        <div>{{food.pellets.weight}} g</div>
+                        <div>{{food.sinkpellets.weight}} g</div>
+                    </td>
+                    <td>
+                        <div><b>{{food.used *1000}}  </b></div>
+                    </td>
+                </template>
             </tr>
             </tbody>
         </table>

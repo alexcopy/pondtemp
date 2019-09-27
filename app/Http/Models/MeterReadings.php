@@ -16,7 +16,8 @@ class MeterReadings extends Model
         'readings',
         'meter_id',
         'message',
-        'timestamp'
+        'timestamp',
+        'created_at'
     ];
 
     /**
