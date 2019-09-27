@@ -20,11 +20,14 @@ class FishFeed extends Model
 
     public static function metersAndFeedCombined($fromTime, $toTime)
     {
+        //to get prev values and compute water usage
+        $saveIntervalForReading = 86400*2;
+
         $fishFeeds = FishFeed::select(['timestamp', 'food_type', 'weight', 'created_at'])->whereBetween('timestamp', [$fromTime, $toTime])->get()->groupBy(function ($date) {
             return Carbon::parse($date->created_at)->format('d/m');
         });
 
-        MeterReadings::whereBetween('timestamp', [$fromTime - 1296000, $toTime])->get()->groupBy(function ($date) {
+        MeterReadings::whereBetween('timestamp', [$fromTime - $saveIntervalForReading, $toTime])->get()->groupBy(function ($date) {
             return Carbon::parse($date->created_at)->format('d-m-Y');
         })->each(function ($val, $key) use (&$maxValue) {
             $timestamp = Carbon::parse($key)->timestamp;
@@ -49,7 +52,7 @@ class FishFeed extends Model
             }
             $meterReadingsSorted[$date] = [
                 'readings' => $val,
-                'used' => $val - $prevValue,
+                'used' => round($val - $prevValue, 1),
                 'pellets' => ['weight' => $pelets, 'count' => $peletsCount],
                     'sinkpellets' => ['weight' => $sinking, 'count' => $sinkingCount],
                     ];
