@@ -52,7 +52,7 @@ class FishFeed extends Model
             }
             $meterReadingsSorted[$date] = [
                 'readings' => $val,
-                'used' => round($val - $prevValue, 1),
+                'used' => round($val - $prevValue, 3),
                 'pellets' => ['weight' => $pelets, 'count' => $peletsCount],
                     'sinkpellets' => ['weight' => $sinking, 'count' => $sinkingCount],
                     ];
