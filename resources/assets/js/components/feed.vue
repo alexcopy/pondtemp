@@ -1,6 +1,11 @@
 <template>
     <div class="container">
         <div class="row">
+            <div class="col-sm-2">
+                <button onclick="window.location='/pond/meters'" class="btn btn-warning">Meters</button>
+            </div>
+        </div>
+        <div class="row">
             <h4>Light Pellets</h4>
             <div class="col-lg-1">
             <span>
