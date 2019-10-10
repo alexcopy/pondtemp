@@ -228,11 +228,17 @@ class ApiController extends Controller
         $dirList = Cameras::all();
         $allDirs = [];
         $dirFiles = collect();
+        $date = Carbon::now()->format('Ymd');
         foreach ($dirList as $dir) {
             $name = $dir->name;
             $this->createFolderIfNotExists($dir);
+
             $filesPath = storage_path('ftp') . '/' . $dir->realpath . '/today';
-            $modified = File::lastModified($filesPath);
+            $megaCamFilesPath = $filesPath . '/' . $date . '/images';
+            if (File::exists($megaCamFilesPath))
+                $modified = File::lastModified($megaCamFilesPath);
+            else
+                $modified = File::lastModified($filesPath);
             $allDirs[] = $filesPath;
             $dirFiles->push([
                 'filescount' => count(File::allFiles($filesPath)),
@@ -332,15 +338,15 @@ class ApiController extends Controller
     public function getFeeds(Request $request)
     {
         //for last 10 days
-        $feedSeconds = 10* 86400;
+        $feedSeconds = 10 * 86400;
 
-        list($ponds, $feed,  $feedIDs) = FeedController::feedComputedData($request);
+        list($ponds, $feed, $feedIDs) = FeedController::feedComputedData($request);
         return response()->json([
-            'pellets' => $feed->where('food_type','pellets')->count(),
-            'sinking' => $feed->where('food_type','sinkpellets')->count(),
+            'pellets' => $feed->where('food_type', 'pellets')->count(),
+            'sinking' => $feed->where('food_type', 'sinkpellets')->count(),
             'ponds' => $ponds,
-            'tableData'=>FishFeed::metersAndFeedCombined(time()- $feedSeconds, time() ),
-            'feedids'=>$feedIDs,
+            'tableData' => FishFeed::metersAndFeedCombined(time() - $feedSeconds, time()),
+            'feedids' => $feedIDs,
         ]);
     }
 }
