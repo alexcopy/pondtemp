@@ -30,7 +30,6 @@ class MeterReadings extends Model
         $allValues = MeterReadings::where('is_disabled', '=', '0')->orderBy('timestamp', 'desc')->paginate($pageSize);
         $meterValues = MeterReadings::where('is_disabled', '=', '0')->orderBy('timestamp', 'asc')->get() ;
         $meterValues ->each(function (&$item, $key) use (&$prevValue, &$oldTime) {
-
                 if ($oldTime == 0)
                     $item->diff = 0;
                 else
@@ -50,7 +49,7 @@ class MeterReadings extends Model
 
     public static function averageWaterCalculator($interval)
     {
-        $weekInterval = self::whereBetween('timestamp', [time() - $interval, time()])->orderBy('timestamp', 'DESC');
+        $weekInterval = self::where('is_disabled', '=', '0')->whereBetween('timestamp', [time() - $interval, time()])->orderBy('timestamp', 'DESC');
         $min = $weekInterval->min('readings');
         $max = $weekInterval->max('readings');
         $used = ($max - $min) * 1000;
