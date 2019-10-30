@@ -48,6 +48,23 @@ class Test extends Command
     public function handle()
     {
 
+
+        dd(     json_encode([
+            [
+                "scheduleIds" => [214],
+                "url" => "https=>//www.youtube.com/watch?v=hOo69bmxKhE",
+                "provider" => "Kodi Addon 1",
+                "abstract" => "Lorem ipsum ",
+                "history" => ["history url 1.1", "history url 1.2", "history url 1.3"]
+            ],[
+                "scheduleIds" => [218],
+                "url" => "https=>//www.youtube.com/watch?v=hOo69bmxKhE",
+                "provider" => "Kodi Addon 1",
+                "abstract" => "Lorem ipsum ",
+                "history" => ["history url 1.1", "history url 1.2", "history url 1.3"]
+            ]
+        ]));
+
         $all = MeterReadings::all();
         foreach ($all as $item) {
             $item->cratedAt;
