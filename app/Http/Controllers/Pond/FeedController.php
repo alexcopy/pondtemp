@@ -58,7 +58,7 @@ class FeedController extends Controller
         FishFeed::create([
             'pond_id' => $pondId,
             'food_type' => $foodType,
-            'weight' => ($foodType == 'pellets' ? 40 : 80) * $scoops,
+            'weight' => ($foodType == 'pellets' ? 20 : 70) * $scoops,
             'description' => ' ',
             'is_disabled' => 0,
             'timestamp' => time()
