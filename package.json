@@ -22,7 +22,7 @@
     "bootstrap-sass": "^3.3.7",
     "bootstrap-vue": "^2.0.0",
     "cross-env": "^5.0.1",
-    "jquery": "^3.2.1",
+    "jquery": "^3.5.0",
     "laravel-mix": "^1.0",
     "archive-type": "^4.0.0",
     "bootstrap": "^4.3.0",
