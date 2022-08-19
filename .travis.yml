@@ -1,0 +1,35 @@
+language: php
+php:
+- 7.2
+matrix:
+  allow_failures:
+  - php: hhvm
+before_script:
+- cp .env.travis .env
+- mysql -e 'create database pond_testing;'
+- composer self-update
+- composer install --prefer-source --no-interaction --dev
+- php artisan migrate
+script: vendor/bin/phpunit
+cache:
+  directories:
+  - vendor
+services:
+- mysql
+env:
+  matrix:
+    secure: bLredBmZavZq0qFKlk+F2Z0uw8RoObOLZyH7vPfRvNSxgNDns973Id8vYiEtVtJuGcPFFofYJL1ljvDaBXapKDro8R/CZ8dRdAcn7LKy4s8q3w+/CrPH84Zc0lS7dZKs84/HP65A/F/0JDhV8jOWxiliDuZ9qyDeDAYhf2eSUpJreUopjiluBXKDm5vQPbxtiyj0s7qn6CK0YEIahj3j76qex2jM9TpO6oT27B1t1Cbt4Li0MeM72XP5NpXy96uTjAX69EGfPAoaBNbBG3DXHLyGy1LfZ0Klfj/tsoVSUkjW+wxe7amwtYNP5oF8PmD0Bq6iIhUW7bBpj9W7qmgbtL6d1zWHpaYzXFctbjguDdbU15WWEZbNh42kH3oV1LRmAEb/GZJWCsFj7p+4zy/99budWFwoxqCoVYTXSVrrqvsSK+RjyUq2lszzjpsosVi8fTaxBQ3A0iAaqyePtBetnuWfiTO0vYOaWFddBVWBzx2rB7kxegnG0c1eyeF1AADfj1D77s9XyhLn5SWJabDqEGZkRxEl6BdvtAvKZ0CrACrKEfIgZONjUitvf8WhAJQZK9QaSxQ96XWNEcRFe3NHGrx29f/R+TQeLvXuqrAH//45aSypH5JFi0JMIL7uRhSi3jhv6vQLXSA9XhVFqALh6ko2F1PElBDL5IjZSDmh0do=
+notifications:
+  slack:
+    rooms:
+      - redcopy:5zQAgno4oRV2gG8NqhtqtXkh
+    template:
+    - "%{repository_slug} (%{commit}) : %{message} %{foo} - Build details: %{build_url}"
+    - "%{repository_slug}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}"
+    - 'Build details: %{build_url}'
+    on_success: always
+    on_failure: always
+  webhooks:
+    on_success: always
+    on_failure: always
+    on_start: false

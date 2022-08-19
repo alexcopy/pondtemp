@@ -2,7 +2,7 @@
 @include('helpers.functions')
 
 @section('subtabs')
-    <h5>Show Archived folders for {{title_case($folderName)}}</h5>
+    <h5>Show Archived folders for {{\Illuminate\Support\Str::title($folderName)}}</h5>
 
 @stop
 @php $count=1; @endphp

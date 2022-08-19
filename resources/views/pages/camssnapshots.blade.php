@@ -1,6 +1,6 @@
 @extends('layouts.main')
 @section('subtabs')
-    <h5>{{title_case($title)}}</h5>
+    <h5>{{\Illuminate\Support\Str::title($title)}}</h5>
 @stop
 @section('content')
     {{ $pictures->links() }}
