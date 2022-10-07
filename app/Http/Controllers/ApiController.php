@@ -16,6 +16,7 @@ use App\Http\Models\TempMeter;
 use App\Http\Models\WeatherReading;
 use app\Http\Services\CamService;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 use function Couchbase\defaultDecoder;
 use DateInterval;
 use DatePeriod;
@@ -142,22 +143,24 @@ class ApiController extends Controller
 
     public function filesStat()
     {
-
-        $dirList = Cameras::all();
-        $ftpDir = storage_path('ftp');
+        dd();
+        print_r();
+//        $dirList=array_keys($request['dirFiles']['dirs']);
+//
+//        $ftpDir = $request['ftpDir'];
         $data = collect();
         $timeChunks = iterator_to_array(new DatePeriod(Carbon::now()->startOfDay(), new DateInterval('PT30M'), Carbon::now()));
 
         foreach ($dirList as $dir) {
-            $name = $dir->realpath;
-            $filesPath = $ftpDir . '/' . $name . '/today';
+            $name = $ftpDir . '/' . $dir;
+            $filesPath = $name . '/today';
 
             foreach (File::allFiles($filesPath) as $fileObj) {
                 $path = $fileObj->getPathName();
                 $lastModified = File::lastModified($path);
                 $data->push([
                     'time' => $lastModified,
-                    'name' => $dir->name,
+                    'name' => $dir,
                 ]);
             }
 
@@ -225,33 +228,22 @@ class ApiController extends Controller
 
     public function getTodayStats($type = 'today')
     {
-        $dirList = Cameras::all();
-        $allDirs = [];
+        $request = Http::get(env('REMOTE_HOST') . 'allfiles/')->json();
+        $dirList = array_keys($request['dirFiles']['dirs']);
         $dirFiles = collect();
-        $date = Carbon::now()->format('Ymd');
         foreach ($dirList as $dir) {
-            $name = $dir->name;
-            $this->createFolderIfNotExists($dir);
-
-            $filesPath = storage_path('ftp') . '/' . $dir->realpath . '/today';
-            $megaCamFilesPath = $filesPath . '/' . $date . '/images';
-            if (File::exists($megaCamFilesPath))
-                $modified = File::lastModified($megaCamFilesPath);
-            else
-                $modified = File::lastModified($filesPath);
-            $allDirs[] = $filesPath;
             $dirFiles->push([
-                'filescount' => count(File::allFiles($filesPath)),
-                'lastchanged' => Carbon::createFromTimestamp($modified)->toDateTimeString(),
-                'isOK' => time() - $modified,
-                'size' => PageController::human_folderSize($filesPath),
-                'camname' => $name
+                'filescount' => $request['dirFiles']['files_count'][$dir],
+                'lastchanged' => Carbon::createFromTimestamp($request['dirFiles']['changed'][$dir] + time())->toDateTimeString(),
+                'isOK' => $request['dirFiles']['changed'][$dir],
+                'size' => 0,
+                'camname' => $dir
             ]);
         }
         return response()->json([
             'data' => $dirFiles,
             'stats' => [
-                'alldirs' => PageController::getHumanFoldersSize($allDirs),
+                'alldirs' => 0,
                 'filescount' => $dirFiles->sum('filescount')
             ]
         ]);
@@ -261,22 +253,19 @@ class ApiController extends Controller
     {
         $result = collect();
         $allDirs = [];
-        foreach (Cameras::all() as $cam) {
-            $name = $cam->name;
-            $this->createFolderIfNotExists($cam);
-            $filesPath = storage_path('ftp') . '/' . $cam->realpath;
-            $allDirs[] = $filesPath;
-            $directories = File::directories($filesPath);
+        $request = Http::get(env('REMOTE_HOST') . 'allfiles/total')->json();
+        foreach ($request['data'] as $cam_stat) {
+
             $result->push([
-                'camname' => $name,
-                'dirs' => count($directories),
-                'size' => PageController::human_folderSize($filesPath)
+                'camname' => $cam_stat['camname'],
+                'dirs' => $cam_stat['dirs'],
+                'size' => 0
             ]);
         }
         return response()->json([
             'data' => $result,
             'stats' => [
-                'alldirs' => PageController::getHumanFoldersSize($allDirs),
+                'alldirs' => 0,
                 'dirscount' => $result->sum('dirs')]
         ]);
     }

@@ -26,11 +26,12 @@
                         <td>{{$count++}}</td>
                         @if(is_array($folder))
                             @php
+
                                 $href='/allfiles/details'.'?'.http_build_query(['q'=>'showfolderfiles', 'folder'=>$folderName, 'subfolder'=>class_basename($folder['origPath']) ]);
                             @endphp
                             <td><strong><a href="{{$href}}"> {{$folder['date']}}</a> </strong></td>
-                            <td>{{getSize($folder['origPath'])}}</td>
-                            <td>{{getQty($folder['origPath'])}}</td>
+                            <td>{{ 0 }}</td>
+                            <td>{{ $folder['size'] }}</td>
                         @endif
                     </tr>
                 @endforeach

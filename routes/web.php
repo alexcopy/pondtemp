@@ -28,12 +28,12 @@ Route::get('/home', [PageController::class, 'index'])->name('home');
 
 
 Route::get('/receiver/', 'ApiController@tempData');
-Route::get('/allfiles/', [PageController::class, 'allCamFiles']);
-Route::get('/', [PageController::class, 'index']);
 Route::get('/ping', [PageController::class, 'ping']);
 Route::get('/graph', [PageController::class, 'graph']);
 Route::get('/restoredata', [Controller::class, 'restoreData']);
 
+Route::get('/', [PageController::class, 'index']);
+Route::get('/allfiles/', [PageController::class, 'allCamFiles']);
 Route::get('/allfiles/details', [PageController::class, 'allFilesDetails']);
 
 Route::post('/api/v3/getdate', [ApiController::class, 'jsonGraph']);

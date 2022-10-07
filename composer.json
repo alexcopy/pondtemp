@@ -6,12 +6,13 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
-        "guzzlehttp/guzzle": "^7.2",
+        "ext-pdo": "*",
+        "guzzlehttp/guzzle": "^7.5",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.0",
-        "ext-pdo": "*"
+        "ext-http": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

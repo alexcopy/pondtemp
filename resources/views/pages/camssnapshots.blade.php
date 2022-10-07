@@ -3,7 +3,7 @@
     <h5>{{\Illuminate\Support\Str::title($title)}}</h5>
 @stop
 @section('content')
-    {{ $pictures->links() }}
+    {{ $pictures->render() }}
     <br/>
     @foreach($pictures->chunk(6) as $pictureRow)
         <div class="row">
@@ -13,11 +13,11 @@
                     <a href="#" data-toggle="modal" data-target="#trainpopup" class="trainpopup">
                         <img src="{{$picture['imgpath']}}" class="img-fluid img-thumbnail"
                              name="{{$picture['origPath']}}"  loading="lazy"
-                             date="{{$picture['date']->toDateTimeString()}}"
+                             date="{{$picture['date']}}"
                              style="border:1px solid #021a40;"/>
                     </a>
                     <div>
-                        <b>{{$picture['date']->toTimeString()}}</b>
+                        <b>{{date('d-m H:m', strtotime($picture['date']))  }}</b>
                     </div>
                 </div>
             @endforeach
