@@ -229,6 +229,7 @@ class ApiController extends Controller
     public function getTodayStats($type = 'today')
     {
         $request = Http::get(env('REMOTE_HOST') . 'allfiles/')->json();
+
         $dirList = array_keys($request['dirFiles']['dirs']);
         $dirFiles = collect();
         foreach ($dirList as $dir) {

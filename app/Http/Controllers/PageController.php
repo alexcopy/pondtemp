@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use phpDocumentor\Reflection\Types\Self_;
+use function Sodium\add;
 
 class PageController extends Controller
 {
@@ -73,7 +74,7 @@ class PageController extends Controller
 
     protected function showFiles($filesPath, Request $request)
     {
-        $pagesize = 60;
+        $pagesize = env('PER_PAGE', 60 );
         $page = $request->get('page', 0);
         $camFiles = new CamAlarmFilesFilters;
         $title = '  Show Folder ' . $request->get('folder', null)
@@ -86,9 +87,9 @@ class PageController extends Controller
         return view('pages.camssnapshots', compact(['pictures', 'title']));
     }
 
-    protected function showFolders($dir_props,$page)
+    protected function showFolders($dir_props, $page)
     {
-        $pageSize = 10;
+        $pageSize = env('FOLDERS_PAGE',10);
         $folderName = $dir_props['folderName'];
         $camFiles = new CamAlarmFilesFilters;
         $result = $camFiles->paginate($dir_props['result'], $pageSize, $page, [
@@ -101,17 +102,18 @@ class PageController extends Controller
     public function allFilesDetails(Request $request)
     {
         $query = $request->get('q', null);
+        $page_size = env('PER_PAGE', 30);
         $folder = $request->get('folder', null);
-            $page_num = $request->query->get('page');
-            $request->query->remove('page');
+        $page_num = $request->query->get('page');
+        $request->query->remove('page');
 
         $camFiles = new CamAlarmFilesFilters;
         if (in_array($query, ['showtoday', 'showfolderfiles'])) {
-            $req = Http::get(env('REMOTE_HOST').'allfiles/details', $request->all())->json();
+            $req = Http::get(env('REMOTE_HOST') . 'allfiles/details', $request->all() + ['page_Size' => $page_size])->json();
             $resp_pict = $req['pictures'];
 
-            $pictures = $camFiles->paginate($resp_pict['data'], 30, $page_num)
-                ->setPath($request->url().'?'.http_build_query($request->query()));
+            $pictures = $camFiles->paginate($resp_pict['data'], $page_size, $page_num)
+                ->setPath($request->url() . '?' . http_build_query($request->query()));
 
             $title = $req['title'];
             return view('pages.camssnapshots', compact(
@@ -120,8 +122,8 @@ class PageController extends Controller
                 ]
             ));
 
-        } elseif ($query == 'showfolders' && $folder !==null) {
-            $req = Http::get(env('REMOTE_HOST').'showfolder/'.$folder, $request->all())->json();
+        } elseif ($query == 'showfolders' && $folder !== null) {
+            $req = Http::get(env('REMOTE_HOST') . 'showfolder/' . $folder, $request->all()+ ['page_size'=>$page_size])->json();
 
             return $this->showFolders($req, $page_num);
         }
