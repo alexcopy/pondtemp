@@ -30,8 +30,8 @@
                                 $href='/allfiles/details'.'?'.http_build_query(['q'=>'showfolderfiles', 'folder'=>$folderName, 'subfolder'=>class_basename($folder['origPath']) ]);
                             @endphp
                             <td><strong><a href="{{$href}}"> {{$folder['date']}}</a> </strong></td>
-                            <td>{{ 0 }}</td>
-                            <td>{{ $folder['size'] }}</td>
+                            <td>{{$folder['size'] }}</td>
+                            <td>{{ $folder['qty'] }}</td>
                         @endif
                     </tr>
                 @endforeach
