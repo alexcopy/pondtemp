@@ -125,26 +125,11 @@ class PageController extends Controller
             ));
 
         } elseif ($query == 'showfolders' && $folder !== null) {
-            $response = Http::get(env('REMOTE_HOST') . 'showfolder/' . $folder, $request->all() + ['page_size' => $page_size]);
-
+            $response = Http::get(env('REMOTE_HOST') . 'showfolder/' . $folder, $request->all() + ['page_size' => env('FOLDERS_PAGE', 10)]);
             return $this->showFolders($request, $response, $page_num);
         }
 
     }
 
-    public static function human_folderSize($path, $h = 'h', $total = ' ')
-    {
-// $total='--total'
-        if (!in_array(trim($total), [' ', '', '--total'])) return '0 KB';
-//        $io = exec('/usr/bin/du -sk' . $h . '  ' . $total . ' ' . $path);
-//        $sizes = explode("\t", $io);
-        return 0;
-    }
 
-    public static function getHumanFoldersSize(array $folders)
-    {
-        if (empty($folders)) return '0 kb';
-        $path = implode('  ', $folders);
-        return self::human_folderSize($path, 'h', ' --total');
-    }
 }
