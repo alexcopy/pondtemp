@@ -75,7 +75,7 @@ class PageController extends Controller
 
     protected function showFiles($filesPath, Request $request)
     {
-        $pagesize = env('PER_PAGE', 60 );
+        $pagesize = env('PER_PAGE', 60);
         $page = $request->get('page', 0);
         $camFiles = new CamAlarmFilesFilters;
         $title = '  Show Folder ' . $request->get('folder', null)
@@ -88,20 +88,16 @@ class PageController extends Controller
         return view('pages.camssnapshots', compact(['pictures', 'title']));
     }
 
-    protected function showFolders(Request $request, Response $response )
+    protected function showFolders(Request $request, Response $response, $page_num)
     {
-        $pageSize = env('FOLDERS_PAGE',10);
-        $page_num = $request->query->get('page');
+        $pageSize = env('FOLDERS_PAGE', 10);
         $json_response = $response->json();
         $folderName = $json_response['folderName'];
         $camFiles = new CamAlarmFilesFilters;
-
-        $result = $camFiles->paginate($json_response["result"], 3, $page_num,[
-            'query'=> $request->toArray(),
+        $result = $camFiles->paginate($json_response["result"], $pageSize, $page_num, [
+            'query' => $request->toArray(),
             'path' => '/' . $request->path(),
         ]);
-
-
         return view('pages.deatails', compact(['result', 'folderName']));
     }
 
@@ -129,9 +125,9 @@ class PageController extends Controller
             ));
 
         } elseif ($query == 'showfolders' && $folder !== null) {
-            $response = Http::get(env('REMOTE_HOST') . 'showfolder/' . $folder, $request->all()+ ['page_size'=>$page_size]);
+            $response = Http::get(env('REMOTE_HOST') . 'showfolder/' . $folder, $request->all() + ['page_size' => $page_size]);
 
-            return $this->showFolders($request, $response);
+            return $this->showFolders($request, $response, $page_num);
         }
 
     }

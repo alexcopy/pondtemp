@@ -7,7 +7,8 @@
 @stop
 @php $count=1; @endphp
 @section('content')
-    {{ $result->links() }}
+    {{ $result->render() }}
+
 
     <div class="row">
         <div class="col-sm-6">
