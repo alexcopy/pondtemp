@@ -13,6 +13,7 @@ use App\Http\Models\WeatherReading;
 use App\Http\Services\CamAlarmFilesFilters;
 use Carbon\Carbon;
 use DateTime;
+use Illuminate\Http\Client\Response as Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
@@ -87,14 +88,19 @@ class PageController extends Controller
         return view('pages.camssnapshots', compact(['pictures', 'title']));
     }
 
-    protected function showFolders($dir_props, $page)
+    protected function showFolders(Request $request, Response $response )
     {
         $pageSize = env('FOLDERS_PAGE',10);
-        $folderName = $dir_props['folderName'];
+        $page_num = $request->query->get('page');
+        $json_response = $response->json();
+        $folderName = $json_response['folderName'];
         $camFiles = new CamAlarmFilesFilters;
-        $result = $camFiles->paginate($dir_props['result'], $pageSize, $page, [
-            'query' => $dir_props,
+
+        $result = $camFiles->paginate($json_response["result"], 3, $page_num,[
+            'query'=> $request->toArray(),
+            'path' => '/' . $request->path(),
         ]);
+
 
         return view('pages.deatails', compact(['result', 'folderName']));
     }
@@ -123,9 +129,9 @@ class PageController extends Controller
             ));
 
         } elseif ($query == 'showfolders' && $folder !== null) {
-            $req = Http::get(env('REMOTE_HOST') . 'showfolder/' . $folder, $request->all()+ ['page_size'=>$page_size])->json();
+            $response = Http::get(env('REMOTE_HOST') . 'showfolder/' . $folder, $request->all()+ ['page_size'=>$page_size]);
 
-            return $this->showFolders($req, $page_num);
+            return $this->showFolders($request, $response);
         }
 
     }
