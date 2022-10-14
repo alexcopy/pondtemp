@@ -125,7 +125,11 @@ class PageController extends Controller
             ));
 
         } elseif ($query == 'showfolders' && $folder !== null) {
-            $response = Http::get(env('REMOTE_HOST') . 'showfolder/' . $folder, $request->all() + ['page_size' => env('FOLDERS_PAGE', 10)]);
+            $response = Http::get(env('REMOTE_HOST') . 'showfolder/' . $folder, $request->all() + [
+                    'page_size' => env('FOLDERS_PAGE', 10),
+                    'page' => $page_num
+                ]);
+
             return $this->showFolders($request, $response, $page_num);
         }
 
