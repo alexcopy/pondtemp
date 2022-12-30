@@ -88,16 +88,12 @@ class PageController extends Controller
         return view('pages.camssnapshots', compact(['pictures', 'title']));
     }
 
-    protected function showFolders(Request $request, Response $response, $page_num)
+    protected function showFolders(Response $response)
     {
-        $pageSize = env('FOLDERS_PAGE', 10);
-        $json_response = $response->json();
-        $folderName = $json_response['folderName'];
-        $camFiles = new CamAlarmFilesFilters;
-        $result = $camFiles->paginate($json_response["result"], $pageSize, $page_num, [
-            'query' => $request->toArray(),
-            'path' => '/' . $request->path(),
-        ]);
+
+        $result = $response->json();
+        $folderName = $result['folderName'];
+
         return view('pages.deatails', compact(['result', 'folderName']));
     }
 
@@ -130,7 +126,7 @@ class PageController extends Controller
                     'page' => $page_num
                 ]);
 
-            return $this->showFolders($request, $response, $page_num);
+            return $this->showFolders($response);
         }
 
     }
