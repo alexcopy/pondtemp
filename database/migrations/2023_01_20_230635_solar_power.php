@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->increments('id');
             $table->tinyInteger('meter_id');  //foreign key to meters table
             $table->char('value_type',10); // like ampers volts watts
-            $table->float('hourly_value');
+            $table->float('avg_value');
             $table->tinyInteger('inverter_status');
             $table->longText('serialized');
             $table->timestamps();

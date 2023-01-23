@@ -11,7 +11,7 @@ class SolarPower extends Model
     public $timestamps = true;
     protected $fillable = [
         'meter_id',
-        'hourly_value',
+        'avg_value',
         'serialized',
         'value_type'
     ];
