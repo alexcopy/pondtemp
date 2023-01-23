@@ -13,6 +13,7 @@ class SolarPower extends Model
         'meter_id',
         'avg_value',
         'serialized',
+        'inverter_status',
         'value_type'
     ];
 }
