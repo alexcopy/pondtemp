@@ -30,7 +30,6 @@ class SolarPowerController extends Controller
      */
     public function store(Request $request)
     {
-
         $solar_meter = SolarMeter::firstOrCreate([
             'name' => $request->name,
             'units' => $request->value_type,
@@ -38,6 +37,9 @@ class SolarPowerController extends Controller
         ]);
         $all_params = $request->all();
         $all_params['meter_id']=$solar_meter->id;
+        if (!is_string($all_params['serialized'])){
+            $all_params['serialized']=json_encode($all_params['serialized']);
+        }
         $res = SolarPower::create($all_params);
 
         return response()->json([
