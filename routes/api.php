@@ -1,6 +1,10 @@
 <?php
 
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\FilterFlashController;
+use App\Http\Controllers\SolarController;
+use App\Http\Controllers\SolarPowerController;
+use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,12 +24,17 @@ use Illuminate\Support\Facades\Route;
 //});
 
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+//Route::middleware('auth:api')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
 
 Route::get('/getMeters', [ApiController::class, 'getMeters']);
 Route::get('/getPonds', [ApiController::class, 'getPonds']);
 Route::get('/getTypes', [ApiController::class, 'getTypes']);
 Route::get('/metersData', [ApiController::class, 'metersData']);
 Route::get('/getFeeds', [ApiController::class, 'getFeeds']);
+
+
+Route::resource('solarpower', SolarPowerController::class);
+Route::resource('solar', SolarController::class);
+Route::resource('fflash', FilterFlashController::class);
