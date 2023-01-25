@@ -14,6 +14,7 @@ class SolarPower extends Model
         'avg_value',
         'serialized',
         'inverter_status',
-        'value_type'
+        'value_type',
+        'timestamp'
     ];
 }

@@ -37,6 +37,7 @@ class SolarPowerController extends Controller
         ]);
         $all_params = $request->all();
         $all_params['meter_id']=$solar_meter->id;
+        $all_params['timestamp']=time();
         if (!is_string($all_params['serialized'])){
             $all_params['serialized']=json_encode($all_params['serialized']);
         }

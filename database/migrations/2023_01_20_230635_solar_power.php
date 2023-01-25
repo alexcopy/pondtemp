@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->float('avg_value');
             $table->tinyInteger('inverter_status');
             $table->longText('serialized');
+            $table->unsignedInteger('timestamp');
             $table->timestamps();
         });
     }
