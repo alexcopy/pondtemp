@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Models\SolarMeter;
-use App\Http\Models\SolarPower;
+use App\Http\Models\DeviceTypes;
+use App\Http\Models\PondPumpStats;
 use App\Http\Requests\StorePondPumpRequest;
 use Illuminate\Http\Request;
 
-class SolarPowerController extends Controller
+class PondPumpStatsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +17,7 @@ class SolarPowerController extends Controller
     public function index()
     {
         return response()->json([
-            'payload' => [SolarPower::all()],
+            'payload' => [PondPumpStats::all()],
             'errors' => ['non']
         ]);
     }
@@ -30,18 +30,15 @@ class SolarPowerController extends Controller
      */
     public function store(Request $request)
     {
-        $solar_meter = SolarMeter::firstOrCreate([
+        $pond_pump = DeviceTypes::firstOrCreate([
             'name' => $request->name,
-            'units' => $request->value_type,
-            'description'=>''
+            'pond_id' => 1,
+            'description'=>'Variable speed PondPump'
         ]);
         $all_params = $request->all();
-        $all_params['meter_id']=$solar_meter->id;
+        $all_params['device_id']=$pond_pump->id;
         $all_params['timestamp']=time();
-        if (!is_string($all_params['serialized'])){
-            $all_params['serialized']=json_encode($all_params['serialized']);
-        }
-        $res = SolarPower::create($all_params);
+        $res = PondPumpStats::create($all_params);
 
         return response()->json([
             'payload' => [$res],

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\FilterFlashController;
+use App\Http\Controllers\PondPumpStatsController;
 use App\Http\Controllers\SolarController;
 use App\Http\Controllers\SolarPowerController;
 use App\Http\Middleware\VerifyCsrfToken;
@@ -38,3 +39,4 @@ Route::get('/getFeeds', [ApiController::class, 'getFeeds']);
 Route::resource('solarpower', SolarPowerController::class);
 Route::resource('solar', SolarController::class);
 Route::resource('fflash', FilterFlashController::class);
+Route::resource('pondpump', PondPumpStatsController::class);
