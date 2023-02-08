@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->unsignedTinyInteger('feeding'); //true or false if pump feeding
             $table->unsignedTinyInteger('flow_speed'); //The speed of pumping max 100 P
             $table->unsignedTinyInteger('mode'); // preset working mode
+            $table->unsignedTinyInteger('from_main'); // energy comes from
             $table->unsignedInteger('power_show'); // preset working mode
             $table->unsignedInteger('voltage'); // preset working mode
             $table->unsignedInteger('rotating_speed'); // preset working mode

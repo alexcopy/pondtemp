@@ -15,6 +15,7 @@ class PondPumpStats extends Model
         'flow_speed',
         'mode',
         'power_show',
+        'from_main',
         'voltage',
         'rotating_speed',
         'timer_power',
