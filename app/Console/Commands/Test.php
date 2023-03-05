@@ -7,6 +7,7 @@ use App\Http\Controllers\Pond\FeedController;
 use App\Http\Models\Camalarms;
 use App\Http\Models\FishFeed;
 use App\Http\Models\MeterReadings;
+use App\Http\Models\PondPumpStats;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Console\Command;
@@ -49,34 +50,5 @@ class Test extends Command
     {
 
 
-        dd(     json_encode([
-            [
-                "scheduleIds" => [214],
-                "url" => "https=>//www.youtube.com/watch?v=hOo69bmxKhE",
-                "provider" => "Kodi Addon 1",
-                "abstract" => "Lorem ipsum ",
-                "history" => ["history url 1.1", "history url 1.2", "history url 1.3"]
-            ],[
-                "scheduleIds" => [218],
-                "url" => "https=>//www.youtube.com/watch?v=hOo69bmxKhE",
-                "provider" => "Kodi Addon 1",
-                "abstract" => "Lorem ipsum ",
-                "history" => ["history url 1.1", "history url 1.2", "history url 1.3"]
-            ]
-        ]));
-
-        $all = MeterReadings::all();
-        foreach ($all as $item) {
-            $item->cratedAt;
-
-
-            $timestamp = $item->created_at->timestamp;
-            $item->timestamp = $timestamp;
-            $item->save();
-
-        }
-
-
     }
-
 }
