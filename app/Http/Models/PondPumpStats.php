@@ -28,12 +28,12 @@ class PondPumpStats extends Model
 
     /**
      * @param $input_data
-     * @param $fields_to_validate
+     * @param array $fields_to_validate
      * @param $deviation
      * @return bool
      * @throws Exception
      */
-    public function validateInputData($input_data, $fields_to_validate = ['power_show', 'voltage', 'rotating_speed'], $deviation = 20)
+    public function validateInputData($input_data, array $fields_to_validate = ['power_show', 'voltage', 'rotating_speed'], $deviation = 40)
     {
         $all_data = self::select($fields_to_validate)
             ->where(['flow_speed' => $input_data['flow_speed']])
