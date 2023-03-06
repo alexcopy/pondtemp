@@ -39,10 +39,9 @@ class PondPumpStatsController extends Controller
         $all_params = $request->all();
         $all_params['device_id'] = $pond_pump->id;
         $all_params['timestamp'] = time();
+        $res=$all_params;
 
-
-        // todo: temp  adhoc to write proper values into table remove later and add proper Verification class (have no time now to do it)
-
+        // todo: this is a temp  adhoc to write proper values into table remove later and add proper Verification class (have no time now to do it)
         $pps = new PondPumpStats();
         $validateInputData = $pps->validateInputData($all_params);
         if ($validateInputData) {
@@ -50,7 +49,7 @@ class PondPumpStatsController extends Controller
         }
 
         return response()->json([
-            'payload' => $validateInputData,
+            'payload' => $res,
             'errors' => !$validateInputData
         ]);
     }
