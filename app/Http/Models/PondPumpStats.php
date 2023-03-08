@@ -33,10 +33,13 @@ class PondPumpStats extends Model
      * @return bool
      * @throws Exception
      */
-    public function validateInputData($input_data, array $fields_to_validate = ['power_show', 'voltage', 'rotating_speed'], $deviation = 40)
+    public function validateInputData($input_data, array $fields_to_validate = ['power_show', 'voltage', 'rotating_speed'], $deviation = 30)
     {
         $all_data = self::select($fields_to_validate)
-            ->where(['flow_speed' => $input_data['flow_speed']])
+            ->where([
+                'flow_speed' => $input_data['flow_speed'],
+                'from_main' => $input_data['from_main'],
+            ])
             ->offset(0)->limit(10000)->get();
         foreach ($fields_to_validate as $field) {
             $avg_val = $all_data->avg($field);
