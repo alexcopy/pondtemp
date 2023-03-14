@@ -29,11 +29,11 @@ class PondPumpStats extends Model
     /**
      * @param $input_data
      * @param array $fields_to_validate
-     * @param $deviation
-     * @return bool
+     * @param int $deviation
+     * @return array
      * @throws Exception
      */
-    public function validateInputData($input_data, array $fields_to_validate = ['power_show', 'voltage', 'rotating_speed'], $deviation = 30)
+    public function validateInputData($input_data, array $fields_to_validate = ['power_show', 'voltage', 'rotating_speed'], int $deviation = 50)
     {
         $all_data = self::select($fields_to_validate)
             ->where([
@@ -55,11 +55,21 @@ class PondPumpStats extends Model
                 )
             );
             if (!$chek_val) {
-                return false;
+                return [
+                    'errors' => true,
+                    'error_msg' => [
+                        'field' => $field,
+                        'avg_in_db' => $avg_val,
+                        'avg_received' => $input_data[$field],
+                        'deviation' => $deviation
+                    ]
+                ];
             }
-
         }
-        return true;
+        return [
+            'errors' => false,
+            'error_msg' => 'NO ERRORS'
+        ];
     }
 
 }
