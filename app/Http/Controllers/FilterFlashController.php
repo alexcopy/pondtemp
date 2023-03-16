@@ -33,14 +33,32 @@ class FilterFlashController extends Controller
         $req_data = $request->all();
         $solar = SolarMeter::firstOrCreate([
             'name' => $request->name,
-            'units' => "Amp",
+            'units' => "A",
             'description' => ''
         ]);
+
+        $payload = $req_data;
+
         $req_data['meter_id'] = $solar->id;
-        $all_flashes = FilterFlash::create($req_data);
+        $max_current = $req_data['max_current'];
+        $duration = $req_data['duration'];
+
+        if ($max_current < 15000 || $duration < 7) {
+            $errors = [
+                'errors' => true,
+                'error_msg' => 'Check Duration and MAX Current, something is wrong'
+            ];
+
+        } else {
+            $payload = FilterFlash::create($req_data);
+            $errors = [
+                'errors' => false,
+                'error_msg' => 'NO ERRORS'
+            ];
+        }
         return response()->json([
-            'payload' => [$all_flashes],
-            'errors' => []
+            'payload' => $payload,
+            $errors
         ]);
     }
 
