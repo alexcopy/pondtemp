@@ -38,7 +38,6 @@ class FilterFlashController extends Controller
         ]);
 
         $payload = $req_data;
-
         $req_data['meter_id'] = $solar->id;
         $max_current = $req_data['max_current'];
         $duration = $req_data['duration'];
@@ -48,7 +47,6 @@ class FilterFlashController extends Controller
                 'errors' => true,
                 'error_msg' => 'Check Duration and MAX Current, something is wrong'
             ];
-
         } else {
             $payload = FilterFlash::create($req_data);
             $errors = [
@@ -56,10 +54,8 @@ class FilterFlashController extends Controller
                 'error_msg' => 'NO ERRORS'
             ];
         }
-        return response()->json([
-            'payload' => $payload,
-            $errors
-        ]);
+        return response()->json(array_merge([
+            'payload' => $payload],$errors));
     }
 
     /**

@@ -1,0 +1,78 @@
+switch_1	Boolean	 "{true,false}"
+
+countdown_1	Integer
+{
+  "unit": "s",
+  "min": 0,
+  "max": 86400,
+  "scale": 0,
+  "step": 1
+}
+
+add_ele	Integer
+{
+  "unit": "kW·h",
+  "min": 0,
+  "max": 50000,
+  "scale": 3,
+  "step": 100
+}
+
+cur_current	Integer
+{
+  "unit": "mA",
+  "min": 0,
+  "max": 30000,
+  "scale": 0,
+  "step": 1
+}
+
+cur_power	Integer
+{
+  "unit": "W",
+  "min": 0,
+  "max": 50000,
+  "scale": 1,
+  "step": 1
+}
+
+cur_voltage	Integer
+{
+  "unit": "V",
+  "min": 0,
+  "max": 5000,
+  "scale": 1,
+  "step": 1
+}
+
+test_bit	Integer
+{
+  "min": 0,
+  "max": 5,
+  "scale": 0,
+  "step": 1
+}
+
+relay_status	Enum
+{
+  "range": [
+    "0",
+    "1",
+    "2"
+  ]
+}
+
+random_time	String
+{
+  "maxlen": 255
+}
+
+cycle_time	String
+{
+  "maxlen": 255
+}
+
+switch_inching	String
+{
+  "maxlen": 255
+}

@@ -1,0 +1,44 @@
+{
+    "commands": [
+        {
+            "code": "Power",
+            "value": true
+        },
+        {
+            "code": "feeding",
+            "value": false
+        },
+        {
+            "code": "P",
+            "value": 100
+        },
+        {
+            "code": "customize",
+            "value": "0000070600070C000A12000F150007"
+        },
+        {
+            "code": "day_and_night",
+            "value": "03004107003C0900500B00640B28550C004B0C2D640D0F41"
+        },
+        {
+            "code": "spring_and_autumn",
+            "value": "00001E0900320A00230E00230F002315001E"
+        },
+        {
+            "code": "summer",
+            "value": "0000010600010C0001120001"
+        },
+        {
+            "code": "winter",
+            "value": "00000A0900140C000F12000A"
+        },
+        {
+            "code": "mode",
+            "value": "6"
+        },
+        {
+            "code": "timer_power",
+            "value": 0
+        }
+    ]
+}
