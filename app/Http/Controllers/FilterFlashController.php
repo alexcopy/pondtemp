@@ -41,11 +41,12 @@ class FilterFlashController extends Controller
         $req_data['meter_id'] = $solar->id;
         $max_current = $req_data['max_current'];
         $duration = $req_data['duration'];
+        $difference = intval($req_data['current_diff']);
 
-        if ($max_current < 15000 || $duration < 7) {
+        if ($difference < 5000 || $duration < 7 || $max_current < 11000) {
             $errors = [
                 'errors' => true,
-                'error_msg' => 'Check Duration and MAX Current, something is wrong'
+                'error_msg' => "Check Duration and\n MAX Current: {$max_current}, \nduration: {$duration}, \nDifference: {$difference} \n something is wrong"
             ];
         } else {
             $payload = FilterFlash::create($req_data);
@@ -55,7 +56,7 @@ class FilterFlashController extends Controller
             ];
         }
         return response()->json(array_merge([
-            'payload' => $payload],$errors));
+            'payload' => $payload], $errors));
     }
 
     /**
