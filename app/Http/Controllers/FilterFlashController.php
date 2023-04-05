@@ -43,7 +43,7 @@ class FilterFlashController extends Controller
         $duration = $req_data['duration'];
         $difference = intval($req_data['current_diff']);
 
-        if ($difference < 5000 || $duration < 7 || $max_current < 11000) {
+        if ( $duration < 7 || $max_current < 11000) {
             $errors = [
                 'errors' => true,
                 'error_msg' => "Check Duration and\n MAX Current: {$max_current}, \nduration: {$duration}, \nDifference: {$difference} \n something is wrong"
