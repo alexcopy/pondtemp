@@ -39,9 +39,8 @@ class PondWeatherController extends Controller
         $err_msg = '';
         try {
             $all_params = $request->all();
-            $all_params['timestamp'] = time();
-
             $dublicate_id = PondWeather::check_dublicates($all_params);
+            $all_params['timestamp'] = time();
             if (!$dublicate_id) {
                 $res = PondWeather::create($all_params);
             } else {
