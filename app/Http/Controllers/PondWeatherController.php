@@ -44,8 +44,7 @@ class PondWeatherController extends Controller
             if (!$dublicate_id) {
                 $res = PondWeather::create($all_params);
             } else {
-
-                $res = PondWeather::find($dublicate_id)->update($all_params);
+                PondWeather::find($dublicate_id)->update($all_params);
                 $res=$all_params;
             }
 
