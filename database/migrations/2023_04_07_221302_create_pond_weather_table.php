@@ -41,3 +41,5 @@ return new class extends Migration {
         Schema::dropIfExists('pond_weather');
     }
 };
+
+
