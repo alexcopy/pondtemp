@@ -14,7 +14,7 @@ return new class extends Migration {
     {
         Schema::create('pond_weather', function (Blueprint $table) {
             $table->id();
-            $table->char('town', 15);
+            $table->char('town', 30);
             $table->tinyInteger('temperature');
             $table->tinyInteger('feels_like');
             $table->unsignedTinyInteger('wind_speed');
@@ -23,9 +23,9 @@ return new class extends Migration {
             $table->unsignedTinyInteger('humidity');
             $table->float('precipitation');
             $table->float('pressure');
-            $table->char('type', 30);
-            $table->char('wind_direction', 5);
-            $table->char('description', 10);
+            $table->char('type', 50);
+            $table->char('wind_direction', 20);
+            $table->char('description', 50);
             $table->unsignedInteger('timestamp');
             $table->timestamps();
         });
