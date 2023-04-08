@@ -23,7 +23,7 @@ return new class extends Migration {
             $table->unsignedTinyInteger('humidity');
             $table->float('precipitation');
             $table->float('pressure');
-            $table->char('type', 10);
+            $table->char('type', 30);
             $table->char('wind_direction', 5);
             $table->char('description', 10);
             $table->unsignedInteger('timestamp');
