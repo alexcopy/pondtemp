@@ -36,7 +36,7 @@ class PondWeather extends Model
         foreach ($params as $field => $value) {
             $query->where($field, $value);
         }
-        $results = $query->get()->last()->id;
+        $results = optional($query->get()->last())->id;
         $last_rec = PondWeather::latest()->first()->id;
         if ($last_rec == $results)
             return $last_rec;
