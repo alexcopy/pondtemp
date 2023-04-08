@@ -19,6 +19,7 @@ class PondWeather extends Model
         'precipitation',
         'pressure',
         'type',
+        'town',
         'wind_direction',
         'feels_like',
         'description',
