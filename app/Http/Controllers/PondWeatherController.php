@@ -38,6 +38,7 @@ class PondWeatherController extends Controller
         $error = false;
         $err_msg = '';
         try {
+            $all_params = $request->all();
             $all_params['timestamp'] = time();
             $res = PondWeather::create($all_params);
         } catch (\Exception $e) {
