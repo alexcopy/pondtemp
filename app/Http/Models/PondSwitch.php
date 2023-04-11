@@ -28,6 +28,9 @@ class PondSwitch extends Model
         if (isset($params['timestamp'])) {
             unset($params['timestamp']);
         }
+        if (isset($params['switch_1'])) {
+            unset($params['switch_1']);
+        }
         $query = DB::table('pond_switches');
         foreach ($params as $field => $value) {
             $query->where($field, $value);
