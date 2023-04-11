@@ -25,14 +25,10 @@ class PondSwitch extends Model
 
     static public function check_duplicates($switch_id, array $params): int
     {
-        if (isset($params['timestamp'])) {
-            unset($params['timestamp']);
-        }
-        if (isset($params['switch_1'])) {
-            unset($params['switch_1']);
-        }
+        $in_db=['switch_id'=>'', 'status'=>'', 'add_ele'=>'', 'cur_power'=>'', 'cur_current'=>'', 'cur_voltage'=>"", 'relay_status'=>"", 'from_main'=>""];
+        $filtered = array_intersect_key($params, $in_db);
         $query = DB::table('pond_switches');
-        foreach ($params as $field => $value) {
+        foreach ($filtered as $field => $value) {
             $query->where($field, $value);
         }
         $results = optional($query->get()->last())->id;
