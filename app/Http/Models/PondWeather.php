@@ -27,7 +27,7 @@ class PondWeather extends Model
         'timestamp',
     ];
 
-    static public function check_dublicates(array $params)
+    static public function check_duplicates(array $params): int
     {
         if (isset($params['timestamp'])) {
             unset($params['timestamp']);
@@ -40,7 +40,7 @@ class PondWeather extends Model
         $last_rec = PondWeather::latest()->first()->id;
         if ($last_rec == $results)
             return $last_rec;
-        return false;
+        return 0;
     }
 
 }

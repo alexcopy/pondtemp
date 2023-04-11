@@ -39,12 +39,12 @@ class PondWeatherController extends Controller
         $err_msg = '';
         try {
             $all_params = $request->all();
-            $dublicate_id = PondWeather::check_dublicates($all_params);
+            $check_duplicates = PondWeather::check_duplicates($all_params);
             $all_params['timestamp'] = time();
-            if (!$dublicate_id) {
+            if (!$check_duplicates) {
                 $res = PondWeather::create($all_params);
             } else {
-                PondWeather::find($dublicate_id)->update($all_params);
+                PondWeather::find($check_duplicates)->update($all_params);
                 $res=$all_params;
             }
 

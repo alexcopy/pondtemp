@@ -47,7 +47,14 @@ class PondSwitchController extends Controller
             $all_params = $request->all();
             $all_params['switch_id'] = $pond_pump->id;
             $all_params['timestamp'] = time();// todo: this is a temp  adhoc to write proper values into table remove later and add proper Verification class (have no time now to do it)
-            $res = PondSwitch::create($all_params);
+            $duplicates = PondSwitch::check_duplicates($pond_pump->id, $all_params);
+            if (!$duplicates) {
+                $res = PondSwitch::create($all_params);
+            } else {
+                PondSwitch::find($duplicates)->update($all_params);
+                $res = $all_params;
+            }
+
         } catch (\Exception $e) {
             $res = $request->all();
             $error = true;
