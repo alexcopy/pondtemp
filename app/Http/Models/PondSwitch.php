@@ -31,8 +31,13 @@ class PondSwitch extends Model
         foreach ($filtered as $field => $value) {
             $query->where($field, $value);
         }
-        $results = optional($query->get()->last())->id;
-        $last_rec = PondSwitch::where('switch_id', $switch_id)->latest()->first()->id;
+
+        try {
+            $results = optional($query->get()->last())->id;
+            $last_rec = PondSwitch::where('switch_id', $switch_id)->latest()->first()->id;
+        } catch (\Exception $e) {
+            return 0;
+        }
         if ($last_rec == $results)
             return $last_rec;
         return 0;

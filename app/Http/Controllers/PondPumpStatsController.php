@@ -51,13 +51,13 @@ class PondPumpStatsController extends Controller
             return response()->json([
                 'payload' => $res,
                 'errors' => true,
-                'errors_msg' => "PondPumpStatsController:".$e->getMessage()
+                'errors_msg' => "PondPumpStatsController: ".$e->getMessage()
             ]);
         }
         return response()->json([
             'payload' => $res,
             'errors' => $validateInputData['errors'],
-            'errors_msg' => "PondPumpStatsController:".$validateInputData['error_msg']
+            'errors_msg' => "PondPumpStatsController: ".$validateInputData['error_msg']
         ]);
     }
 
