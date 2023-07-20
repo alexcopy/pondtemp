@@ -31,21 +31,28 @@ class PondPumpStatsController extends Controller
      */
     public function store(Request $request)
     {
-        $pond_pump = DeviceTypes::firstOrCreate([
-            'name' => $request->name,
-            'pond_id' => 1,
-            'description' => 'Variable speed PondPump'
-        ]);
-        $all_params = $request->all();
-        $all_params['device_id'] = $pond_pump->id;
-        $all_params['timestamp'] = time();
-        $res = $all_params;
 
-        // todo: this is a temp  adhoc to write proper values into table remove later and add proper Verification class (have no time now to do it)
-        $pps = new PondPumpStats();
-        $validateInputData = $pps->validateInputData($all_params);
-        if (!$validateInputData['errors']) {
-            $res = PondPumpStats::create($all_params);
+        try {
+            $pond_pump = DeviceTypes::firstOrCreate([
+                'name' => $request->name,
+                'pond_id' => 1,
+                'description' => 'Variable speed PondPump'
+            ]);
+            $all_params = $request->all();
+            $all_params['device_id'] = $pond_pump->id;
+            $all_params['timestamp'] = time();
+            $res = $all_params;// todo: this is a temp  adhoc to write proper values into table remove later and add proper Verification class (have no time now to do it)
+            $pps = new PondPumpStats();
+            $validateInputData = $pps->validateInputData($all_params);
+            if (!$validateInputData['errors']) {
+                $res = PondPumpStats::create($all_params);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'payload' => $res,
+                'errors' => true,
+                'errors_msg' => "PondPumpStatsController:".$e->getMessage()
+            ]);
         }
         return response()->json([
             'payload' => $res,
