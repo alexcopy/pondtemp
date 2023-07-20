@@ -58,13 +58,13 @@ class PondSwitchController extends Controller
         } catch (\Exception $e) {
             $res = $request->all();
             $error = true;
-            $err_msg = $e->getMessage();
+            $err_msg = "PondSwitchController".$e->getMessage();
         }
 
         return response()->json([
             'payload' => $res,
             'errors' => $error,
-            'errors_msg' => $err_msg
+            'errors_msg' =>  $err_msg
         ]);
     }
 

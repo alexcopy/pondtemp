@@ -51,7 +51,7 @@ class PondWeatherController extends Controller
         } catch (\Exception $e) {
             $res = $request->all();
             $error = true;
-            $err_msg = $e->getMessage();
+            $err_msg = 'PondWeatherController: '.$e->getMessage();
         }
 
         return response()->json([
