@@ -42,7 +42,7 @@ class PondSwitchController extends Controller
             $pond_pump = DeviceTypes::firstOrCreate([
                 'name' => $request->device_id,
                 'pond_id' => 1,
-                'description' => $request->name
+                'description' => 'Switch in pond'
             ]);
             $all_params = $request->all();
             $all_params['switch_id'] = $pond_pump->id;
