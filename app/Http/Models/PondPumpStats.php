@@ -35,12 +35,23 @@ class PondPumpStats extends Model
      */
     public function validateInputData($input_data, array $fields_to_validate = ['power_show', 'voltage', 'rotating_speed'], int $deviation = 50)
     {
-        $all_data = self::select($fields_to_validate)
-            ->where([
-                'flow_speed' => $input_data['flow_speed'],
-                'from_main' => $input_data['from_main'],
-            ])
-            ->offset(0)->limit(10000)->get();
+        try {
+            $all_data = self::select($fields_to_validate)
+                ->where([
+                    'flow_speed' => $input_data['flow_speed'],
+                    'from_main' => $input_data['from_main'],
+                ])
+                ->offset(0)->limit(10000)->get();
+        } catch (Exception $e) {
+            return [
+                'errors' => true,
+                'error_msg' => [
+                    'field' => $e->getMessage(),
+                    'line' => $e->getLine(),
+
+                ]
+            ];
+        }
         foreach ($fields_to_validate as $field) {
             $avg_val = $all_data->avg($field);
             $korridor = $avg_val * ($deviation / 100);

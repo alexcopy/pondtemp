@@ -39,6 +39,9 @@ class PondWeatherController extends Controller
         $err_msg = '';
         try {
             $all_params = $request->all();
+            if (isset($all_params['is_valid'])){
+                unlink($all_params['is_valid']);
+            }
             $check_duplicates = PondWeather::check_duplicates($all_params);
             $all_params['timestamp'] = time();
             if (!$check_duplicates) {
