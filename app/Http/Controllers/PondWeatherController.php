@@ -36,10 +36,10 @@ class PondWeatherController extends Controller
     public function store(Request $request)
     {
         $error = false;
-        $err_msg = '';
+        $err_msg = 'NO ERROR';
         try {
             $all_params = $request->all();
-            if (isset($all_params['is_valid'])){
+            if (isset($all_params['is_valid'])) {
                 unset($all_params['is_valid']);
             }
             $check_duplicates = PondWeather::check_duplicates($all_params);
@@ -48,7 +48,7 @@ class PondWeatherController extends Controller
                 $res = PondWeather::create($all_params);
             } else {
                 PondWeather::find($check_duplicates)->update($all_params);
-                $res=$all_params;
+                $res = $all_params;
             }
 
         } catch (\Exception $e) {
@@ -58,7 +58,7 @@ class PondWeatherController extends Controller
         }
 
         return response()->json([
-            'payload' => $res,
+            'payload' => json_encode($res),
             'errors' => $error,
             'errors_msg' => $err_msg
         ]);
