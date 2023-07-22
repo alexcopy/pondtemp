@@ -68,12 +68,12 @@ class PondPumpStats extends Model
             if (!$chek_val) {
                 return [
                     'errors' => true,
-                    'error_msg' => [
+                    'error_msg' => json_encode([
                         'field' => $field,
                         'avg_in_db' => $avg_val,
                         'avg_received' => $input_data[$field],
                         'deviation' => $deviation
-                    ]
+                    ])
                 ];
             }
         }
