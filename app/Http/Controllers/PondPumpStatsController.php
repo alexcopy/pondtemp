@@ -31,6 +31,8 @@ class PondPumpStatsController extends Controller
      */
     public function store(Request $request)
     {
+        $all_params = $request->all();
+        $res = $all_params;// todo: this is a temp  adhoc to write proper values into table remove later and add proper Verification class (have no time now to do it)
 
         try {
             $pond_pump = DeviceTypes::firstOrCreate([
@@ -38,10 +40,8 @@ class PondPumpStatsController extends Controller
                 'pond_id' => 1,
                 'description' => 'Variable speed PondPump'
             ]);
-            $all_params = $request->all();
             $all_params['device_id'] = $pond_pump->id;
             $all_params['timestamp'] = time();
-            $res = $all_params;// todo: this is a temp  adhoc to write proper values into table remove later and add proper Verification class (have no time now to do it)
             $pps = new PondPumpStats();
             $validateInputData = $pps->validateInputData($all_params);
             if (!$validateInputData['errors']) {
@@ -51,13 +51,13 @@ class PondPumpStatsController extends Controller
             return response()->json([
                 'payload' => $res,
                 'errors' => true,
-                'errors_msg' => "PondPumpStatsController: ".$e->getMessage()
+                'errors_msg' => "PondPumpStatsController: " . $e->getMessage()
             ]);
         }
         return response()->json([
             'payload' => $res,
             'errors' => $validateInputData['errors'],
-            'errors_msg' => "PondPumpStatsController: ".$validateInputData['error_msg']
+            'errors_msg' => "PondPumpStatsController: " . $validateInputData['error_msg']
         ]);
     }
 
