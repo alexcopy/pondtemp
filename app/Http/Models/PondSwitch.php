@@ -25,12 +25,19 @@ class PondSwitch extends Model
 
     static public function check_duplicates($switch_id, array $params): int
     {
-        $in_db=['switch_id'=>'', 'status'=>'', 'add_ele'=>'', 'cur_power'=>'', 'cur_current'=>'', 'cur_voltage'=>"", 'relay_status'=>"", 'from_main'=>""];
+        $in_db = ['switch_id' => '', 'status' => '', 'add_ele' => '', 'cur_power' => '', 'cur_current' => '', 'cur_voltage' => "", 'relay_status' => "", 'from_main' => ""];
         $filtered = array_intersect_key($params, $in_db);
         $query = DB::table('pond_switches');
         foreach ($filtered as $field => $value) {
             $query->where($field, $value);
         }
+
+        $columnNames = self::getColumnNames();
+        array_walk($columnNames, function ($val) use (&$params) {
+            if (!isset($params[$val])) {
+                $params[$val] = 0;
+            }
+        });
 
         try {
             $results = optional($query->get()->last())->id;
@@ -41,5 +48,17 @@ class PondSwitch extends Model
         if ($last_rec == $results)
             return $last_rec;
         return 0;
+    }
+
+    public static function getColumnNames()
+    {
+        $tableName = with(new static)->getTable();
+        $connection = DB::connection(static::getConnectionName());
+        $columns = $connection->getSchemaBuilder()->getColumnListing($tableName);
+        // Удалить стандартные поля id, created_at и updated_at
+        $exceptions = ['id', 'created_at', 'updated_at', 'timestamp', 'switch_id'];
+        $columns = array_diff($columns, $exceptions);
+
+        return $columns;
     }
 }
