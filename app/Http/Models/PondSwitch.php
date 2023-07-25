@@ -52,8 +52,9 @@ class PondSwitch extends Model
 
     public static function getColumnNames()
     {
-        $tableName = with(new static)->getTable();
-        $connection = DB::connection(static::getConnectionName());
+        $modelInstance = new static;
+        $tableName = $modelInstance->getTable();
+        $connection = DB::connection($modelInstance->getConnectionName());
         $columns = $connection->getSchemaBuilder()->getColumnListing($tableName);
         // Удалить стандартные поля id, created_at и updated_at
         $exceptions = ['id', 'created_at', 'updated_at', 'timestamp', 'switch_id'];
