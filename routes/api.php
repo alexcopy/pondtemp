@@ -44,3 +44,4 @@ Route::resource('fflash', FilterFlashController::class);
 Route::resource('pondpump', PondPumpStatsController::class);
 Route::resource('pondswitch', PondSwitchController::class);
 Route::resource('pondweather', PondWeatherController::class);
+Route::resource('power_averages', PowerDeviceController::class);
