@@ -5,6 +5,7 @@ use App\Http\Controllers\FilterFlashController;
 use App\Http\Controllers\PondPumpStatsController;
 use App\Http\Controllers\PondSwitchController;
 use App\Http\Controllers\PondWeatherController;
+use App\Http\Controllers\PowerDeviceController;
 use App\Http\Controllers\SolarController;
 use App\Http\Controllers\SolarPowerController;
 use App\Http\Middleware\VerifyCsrfToken;
