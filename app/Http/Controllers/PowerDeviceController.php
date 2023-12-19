@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Models\PowerDevice;
 use Illuminate\Http\Request;
 
 class PowerDeviceController extends Controller
@@ -40,8 +41,11 @@ class PowerDeviceController extends Controller
      */
     public function store(Request $request)
     {
+        $all_params = $request->all();
+        $all_params['timestamp']=time();
+        $vals =PowerDevice::firstOrCreate($all_params);
          return response()->json([
-            'payload' => ["ALL GOOD"],
+            'payload' => [$vals],
             'errors' => []
         ]);
     }

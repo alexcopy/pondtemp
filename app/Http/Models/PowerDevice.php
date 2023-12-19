@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class PowerDevice extends Model
 {
     use HasFactory;
+    public $timestamps = true;
     protected $fillable = [
         'name',
         'type',
-        'value',
+        'average',
         'timestamp',
         'created_at'
     ];

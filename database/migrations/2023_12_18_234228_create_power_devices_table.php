@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->char('name', 100);
             $table->char('type', 100);
-            $table->float('value');
+            $table->float('average');
             $table->unsignedInteger('timestamp');
             $table->timestamps();
         });
