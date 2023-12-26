@@ -6,17 +6,22 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\QueryException;
 
-class PowerDevice extends Model
+class PowerUsageTenMinutes extends Model
 {
     use HasFactory;
-    public $timestamps = true;
+
     protected $fillable = [
         'name',
         'type',
         'average',
         'timestamp',
-        'created_at'
     ];
+
+    protected $casts = [
+        'timestamp' => 'integer',
+        'average' => 'float',
+    ];
+
 
     public static function createOrUpdateRecord($requestData)
     {
@@ -38,7 +43,7 @@ class PowerDevice extends Model
                 'name' => $requestData['name'],
                 'type' => $requestData['type'],
                 'average' => $requestData['average'],
-                'timestamp' => time(), // Adjust as per your timestamp requirement
+                'timestamp' => time(),
             ]);
 
             return ['message' => 'Created new record'];
