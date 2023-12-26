@@ -27,10 +27,10 @@ class PowerUsageTenMinutes extends Model
     public static function createOrUpdateRecord($requestData)
     {
         try {
-            $sixHoursAgo = Carbon::now()->subHours(6);
+            $sixHoursAgo = Carbon::now()->subHours(6)->timestamp;
             $latestRecords = self::where('name', $requestData['name'])
                 ->where('average', $requestData['average'])
-                ->whereBetween('timestamp', [$sixHoursAgo, Carbon::now()])
+                ->where('timestamp', '>=', $sixHoursAgo)
                 ->orderBy('id', 'desc')
                 ->get();
 
