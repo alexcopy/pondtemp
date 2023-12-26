@@ -28,13 +28,10 @@ class PowerUsageTenMinutes extends Model
     {
         try {
             $sixHoursAgo = Carbon::now()->subHours(6);
-
             $latestRecords = self::where('name', $requestData['name'])
-                ->where('type', $requestData['type'])
                 ->where('average', $requestData['average'])
                 ->whereBetween('timestamp', [$sixHoursAgo, Carbon::now()])
                 ->latest('timestamp')
-                ->take(2)
                 ->get();
 
             if ($latestRecords->count() >= 2) {
