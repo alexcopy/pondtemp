@@ -2,6 +2,7 @@
 
 namespace App\Http\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\QueryException;
@@ -21,10 +22,13 @@ class PowerDevice extends Model
     public static function createOrUpdateRecord($requestData)
     {
         try {
-            $latestRecords = self::orderBy('id', 'desc')
-                ->where('name', $requestData['name'])
+            $sixHoursAgo = Carbon::now()->subHours(6);
+
+            $latestRecords = self::where('name', $requestData['name'])
                 ->where('type', $requestData['type'])
                 ->where('average', $requestData['average'])
+                ->whereBetween('timestamp', [$sixHoursAgo, Carbon::now()])
+                ->latest('timestamp')
                 ->take(2)
                 ->get();
 
