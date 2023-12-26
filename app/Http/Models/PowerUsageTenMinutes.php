@@ -31,7 +31,7 @@ class PowerUsageTenMinutes extends Model
             $latestRecords = self::where('name', $requestData['name'])
                 ->where('average', $requestData['average'])
                 ->whereBetween('timestamp', [$sixHoursAgo, Carbon::now()])
-                ->latest('timestamp')
+                ->orderBy('id', 'desc')
                 ->get();
 
             if ($latestRecords->count() >= 2) {
