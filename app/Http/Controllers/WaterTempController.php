@@ -64,7 +64,7 @@ class WaterTempController extends Controller
             // You might want to log the error or return a specific response
             return response()->json([
                 'payload' => [],
-                'errors' => ['An error occurred while creating the record.'],
+                'errors' => $e->getMessage(),
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
