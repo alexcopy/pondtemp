@@ -8,6 +8,7 @@ use App\Http\Controllers\PondWeatherController;
 use App\Http\Controllers\PowerDeviceController;
 use App\Http\Controllers\SolarController;
 use App\Http\Controllers\SolarPowerController;
+use App\Http\Controllers\WaterTempController;
 use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -41,6 +42,7 @@ Route::get('/getFeeds', [ApiController::class, 'getFeeds']);
 
 Route::resource('solarpower', SolarPowerController::class);
 Route::resource('solar', SolarController::class);
+Route::resource('watertemp', WaterTempController::class);
 Route::resource('fflash', FilterFlashController::class);
 Route::resource('pondpump', PondPumpStatsController::class);
 Route::resource('pondswitch', PondSwitchController::class);
