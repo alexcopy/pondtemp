@@ -40,7 +40,7 @@ class WaterTempController extends Controller
     {
         try {
 
-            $device = Devices::createDeviceWithTypes($request->pondId, $request->typeName, $request->deviceName, $request->description);
+            $device = Devices::createDeviceWithTypes($request->pond_id, $request->name, $request->name, $request->description);
             $tempCurrent = ($request->temp_current == 0) ? 0 : (int) $request->temp_current / 10.0;
 
             // Create a WaterTempSensor instance
