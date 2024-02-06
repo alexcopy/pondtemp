@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('temp_current', 8, 2);
             $table->char('temp_unit_convert', 5);
             $table->smallInteger('humidity_value')->default(0);
+            $table->unsignedSmallInteger('device_id');
             $table->integer('bright_value')->default(0);
             $table->tinyInteger('temp_calibration')->default(0);
             $table->unsignedInteger('timestamp');
