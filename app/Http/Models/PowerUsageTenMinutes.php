@@ -28,8 +28,9 @@ class PowerUsageTenMinutes extends Model
     {
         try {
             $sixHoursAgo = Carbon::now()->subHours(6)->timestamp;
+            $average = round($requestData['average'],0);
             $latestRecords = self::where('name', $requestData['name'])
-                ->where('average', $requestData['average'])
+                ->where('average', $average)
                 ->where('timestamp', '>=', $sixHoursAgo)
                 ->orderBy('id', 'desc')
                 ->get();
@@ -43,7 +44,7 @@ class PowerUsageTenMinutes extends Model
             self::create([
                 'name' => $requestData['name'],
                 'type' => $requestData['type'],
-                'average' => $requestData['average'],
+                'average' => $average,
                 'timestamp' => time(),
             ]);
 
